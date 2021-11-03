@@ -13,6 +13,7 @@ namespace StarterAssets
 		public bool jump;
 		public bool sprint;
 		public bool crouch;
+		public bool interact;
 
 		[Header("Movement Settings")]
 		public bool analogMovement;
@@ -46,9 +47,15 @@ namespace StarterAssets
 		{
 			SprintInput(value.isPressed);
 		}
+
 		public void OnCrouch(InputValue value)
 		{
 			CrouchInput(value.isPressed);
+		}
+
+		public void OnInteract(InputValue value)
+		{
+			InteractInput(value.isPressed);
 		}
 #else
 	// old input sys if we do decide to have it (most likely wont)...
@@ -74,9 +81,15 @@ namespace StarterAssets
 		{
 			sprint = newSprintState;
 		}
+
 		public void CrouchInput(bool newCrouchState)
 		{
 			crouch = newCrouchState;
+		}
+
+		public void InteractInput(bool newInteractState)
+		{
+			interact = newInteractState;
 		}
 
 #if !UNITY_IOS || !UNITY_ANDROID
