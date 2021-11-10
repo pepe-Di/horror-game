@@ -6,6 +6,9 @@ TagManager:
   tags:
   - CinemachineTarget
   - Chair
+  - Door
+  - Switch
+  - Lamp
   layers:
   - Default
   - TransparentFX

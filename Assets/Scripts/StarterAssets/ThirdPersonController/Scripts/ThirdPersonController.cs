@@ -2,6 +2,7 @@
 using UnityEngine;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 #endif
 
 /* Note: animations are called via the controller for both the character and capsule using animator null checks
@@ -91,13 +92,13 @@ namespace StarterAssets
 		private Animator _animator;
 		private CharacterController _controller;
 		private StarterAssetsInputs _input;
-		private GameObject _mainCamera;
+		public GameObject _mainCamera;
 		private const float _threshold = 0.01f;
-
+		Sprite Crosshair;
+		private Canvas canvas;
 		private bool _hasAnimator;
 		private void Awake()
 		{
-			
 			// get a reference to our main camera
 			if (_mainCamera == null)
 			{
@@ -106,6 +107,19 @@ namespace StarterAssets
 		}
 		private void Start()
 		{
+			canvas = GameObject.FindObjectOfType<Canvas>();
+			//canvas.gameObject.AddComponent<CanvasScaler>().uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+			//canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+			canvas.pixelPerfect = true;
+			//canvas.transform.SetParent(_mainCamera.transform);
+			canvas.transform.position = Vector3.zero;
+
+			Image crossHair = new GameObject("Crosshair").AddComponent<Image>();
+			crossHair.sprite = Crosshair;
+			crossHair.rectTransform.sizeDelta = new Vector2(10, 10);
+			crossHair.transform.SetParent(canvas.transform);
+			crossHair.transform.position = Vector3.zero;
+
 			_hasAnimator = TryGetComponent(out _animator);
 			_controller = GetComponent<CharacterController>();
 			_input = GetComponent<StarterAssetsInputs>();
@@ -127,18 +141,6 @@ namespace StarterAssets
 		public bool crouching=false;
 		private void LateUpdate()
 		{
-				//if (crouching)
-				//{
-				//	float step = 0.5f * Time.deltaTime;
-				//	CinemachineCameraTarget.transform.position = Vector3.MoveTowards(Standing_look.position, Crouching_Look.position, step);
-				//}
-				//else 
-				//{
-
-				//	float step = 0.5f * Time.deltaTime;
-				//	CinemachineCameraTarget.transform.position = Vector3.MoveTowards(Crouching_Look.position, Standing_look.position, step);
-				//}
-			
 		}
 		
 		private void AssignAnimationIDs()
@@ -166,7 +168,6 @@ namespace StarterAssets
 
 		public float turnSmoothTime = 0.1f;
 		float turnSmoothVelocity;
-		//public Transform cam;
 		private void CameraRotation()
 		{
 			//float horizontal = Input.GetAxisRaw("Horizontal");
@@ -295,26 +296,6 @@ namespace StarterAssets
 				}
 			}
 			C_running = false;
-		}
-		private void LookChange(bool b) 
-		{
-			float step = 0f;
-			if (b)
-			{
-				while (CinemachineCameraTarget.transform.position != Crouching_Look.position) {
-					Debug.Log("y"); step = 0.1f * Time.deltaTime;
-					CinemachineCameraTarget.transform.position = Vector3.MoveTowards(CinemachineCameraTarget.transform.position, Crouching_Look.position, step);
-				} }
-			if(!b)
-			{
-				Debug.Log("yes");
-				while (CinemachineCameraTarget.transform.position != Standing_look.position)
-				{
-					Debug.Log("a");
-					step = 0.1f * Time.deltaTime;
-					CinemachineCameraTarget.transform.position = Vector3.MoveTowards(CinemachineCameraTarget.transform.position, Standing_look.position, step);
-				}
-			}
 		}
 		private void JumpAndGravity()
 		{
