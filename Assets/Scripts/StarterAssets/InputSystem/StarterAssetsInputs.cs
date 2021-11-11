@@ -15,6 +15,8 @@ namespace StarterAssets
 		public bool crouch;
 		public bool interact;
 		public bool click;
+		public float mouseX;
+		public float mouseY;
 
 		[Header("Movement Settings")]
 		public bool analogMovement;
@@ -24,9 +26,14 @@ namespace StarterAssets
 		public bool cursorLocked = true;
 		public bool cursorInputForLook = true;
 #endif
+        private void Awake()
+        {
+			//Controls_ controls = new Controls_();
+			
 
+		}
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
-		public void OnMove(InputValue value)
+        public void OnMove(InputValue value)
 		{
 			MoveInput(value.Get<Vector2>());
 		}
@@ -36,6 +43,22 @@ namespace StarterAssets
 			if(cursorInputForLook)
 			{
 				LookInput(value.Get<Vector2>());
+			}
+		}
+
+		public void OnMouseX(InputValue value)
+		{
+			if (cursorInputForLook)
+			{
+				MouseXInput(value.Get<float>());
+			}
+		}
+
+		public void OnMouseY(InputValue value)
+		{
+			if (cursorInputForLook)
+			{
+				MouseYInput(value.Get<float>());
 			}
 		}
 
@@ -66,7 +89,15 @@ namespace StarterAssets
 #else
 	// old input sys if we do decide to have it (most likely wont)...
 #endif
+		public void MouseXInput(float newMouseXDirection)
+		{
+			mouseX = newMouseXDirection;
+		}
 
+		public void MouseYInput(float newMouseYDirection)
+		{
+			mouseY = newMouseYDirection;
+		}
 
 		public void MoveInput(Vector2 newMoveDirection)
 		{

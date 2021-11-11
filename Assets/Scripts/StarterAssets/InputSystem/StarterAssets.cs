@@ -73,6 +73,22 @@ public class @Controls_ : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Press(behavior=2)""
+                },
+                {
+                    ""name"": ""MouseX"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""4a41c83e-6a9d-47fa-a41f-62226bf663f9"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""MouseY"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""ea9aedab-9c98-4c75-811a-9f943f2c5ca7"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -317,6 +333,50 @@ public class @Controls_ : IInputActionCollection, IDisposable
                     ""action"": ""Click"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9794da0b-e736-491d-90d0-bc687ed65e84"",
+                    ""path"": ""<Mouse>/delta/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""MouseX"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7c1127b3-61d9-4d53-89ab-77b50ee1919b"",
+                    ""path"": ""<Gamepad>/rightStick/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""MouseX"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""378750d2-d043-410d-b3b9-94c9af75070b"",
+                    ""path"": ""<Mouse>/delta/y"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""MouseY"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""09251ad0-cd7b-4f8a-bda7-7a2c2043fcda"",
+                    ""path"": ""<Gamepad>/rightStick/y"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""MouseY"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -380,6 +440,8 @@ public class @Controls_ : IInputActionCollection, IDisposable
         m_Player_Crouch = m_Player.FindAction("Crouch", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
         m_Player_Click = m_Player.FindAction("Click", throwIfNotFound: true);
+        m_Player_MouseX = m_Player.FindAction("MouseX", throwIfNotFound: true);
+        m_Player_MouseY = m_Player.FindAction("MouseY", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -436,6 +498,8 @@ public class @Controls_ : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Crouch;
     private readonly InputAction m_Player_Interact;
     private readonly InputAction m_Player_Click;
+    private readonly InputAction m_Player_MouseX;
+    private readonly InputAction m_Player_MouseY;
     public struct PlayerActions
     {
         private @Controls_ m_Wrapper;
@@ -447,6 +511,8 @@ public class @Controls_ : IInputActionCollection, IDisposable
         public InputAction @Crouch => m_Wrapper.m_Player_Crouch;
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
         public InputAction @Click => m_Wrapper.m_Player_Click;
+        public InputAction @MouseX => m_Wrapper.m_Player_MouseX;
+        public InputAction @MouseY => m_Wrapper.m_Player_MouseY;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -477,6 +543,12 @@ public class @Controls_ : IInputActionCollection, IDisposable
                 @Click.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnClick;
                 @Click.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnClick;
                 @Click.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnClick;
+                @MouseX.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMouseX;
+                @MouseX.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMouseX;
+                @MouseX.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMouseX;
+                @MouseY.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMouseY;
+                @MouseY.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMouseY;
+                @MouseY.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMouseY;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -502,6 +574,12 @@ public class @Controls_ : IInputActionCollection, IDisposable
                 @Click.started += instance.OnClick;
                 @Click.performed += instance.OnClick;
                 @Click.canceled += instance.OnClick;
+                @MouseX.started += instance.OnMouseX;
+                @MouseX.performed += instance.OnMouseX;
+                @MouseX.canceled += instance.OnMouseX;
+                @MouseY.started += instance.OnMouseY;
+                @MouseY.performed += instance.OnMouseY;
+                @MouseY.canceled += instance.OnMouseY;
             }
         }
     }
@@ -551,5 +629,7 @@ public class @Controls_ : IInputActionCollection, IDisposable
         void OnCrouch(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
         void OnClick(InputAction.CallbackContext context);
+        void OnMouseX(InputAction.CallbackContext context);
+        void OnMouseY(InputAction.CallbackContext context);
     }
 }

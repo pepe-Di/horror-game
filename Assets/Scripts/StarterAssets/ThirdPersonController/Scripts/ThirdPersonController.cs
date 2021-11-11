@@ -71,7 +71,7 @@ namespace StarterAssets
 
 		// player
 		private float _speed;
-		private float _animationBlend;
+		private float _animationBlend =0f;
 		private float _targetRotation = 0.0f;
 		private float _rotationVelocity;
 		private float _verticalVelocity;
@@ -108,10 +108,7 @@ namespace StarterAssets
 		private void Start()
 		{
 			canvas = GameObject.FindObjectOfType<Canvas>();
-			//canvas.gameObject.AddComponent<CanvasScaler>().uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-			//canvas.renderMode = RenderMode.ScreenSpaceOverlay;
 			canvas.pixelPerfect = true;
-			//canvas.transform.SetParent(_mainCamera.transform);
 			canvas.transform.position = Vector3.zero;
 
 			Image crossHair = new GameObject("Crosshair").AddComponent<Image>();
@@ -139,9 +136,6 @@ namespace StarterAssets
 			Move();
 		}
 		public bool crouching=false;
-		private void LateUpdate()
-		{
-		}
 		
 		private void AssignAnimationIDs()
 		{
@@ -168,32 +162,7 @@ namespace StarterAssets
 
 		public float turnSmoothTime = 0.1f;
 		float turnSmoothVelocity;
-		private void CameraRotation()
-		{
-			//float horizontal = Input.GetAxisRaw("Horizontal");
-			//float vertical = Input.GetAxisRaw("Vertical"); 
-			//Vector3 direction = new Vector3(horizontal, 0f, vertical).normalized;
-			//if (direction.magnitude >= 0.1f)
-			//{
-			//	float targerAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + _mainCamera.transform.eulerAngles.y;
-			//	float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targerAngle, ref turnSmoothVelocity, turnSmoothTime);
-			//	transform.rotation = Quaternion.Euler(0f, angle, 0f);
-			//}
-				// if there is an input and camera position is not fixed
-				//if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition)
-				//{
-				//    _cinemachineTargetYaw += _input.look.x * Time.deltaTime;
-				//    _cinemachineTargetPitch += _input.look.y * Time.deltaTime;
-				//}
-
-				//// clamp our rotations so our values are limited 360 degrees
-				//_cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
-				//_cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
-
-				//// Cinemachine will follow this target
-				//CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride, _cinemachineTargetYaw, 0.0f);
-			}
-
+		
 		//public int counter = 0;
 		public bool C_running=false;
 		private void Move()
@@ -236,25 +205,30 @@ namespace StarterAssets
 			// normalise input direction
 			Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
 
-			// note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
-			// if there is a move input rotate player when the player is moving
-			if (_input.move != Vector2.zero)
-			{
-				_targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + _mainCamera.transform.eulerAngles.y;
-				float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity, RotationSmoothTime);
-
-				// rotate to face input direction relative to camera position
-				transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
-			}
+            // note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
+            // if there is a move input rotate player when the player is moving
 
 
-			Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
+            if (_input.move != Vector2.zero)
+            {
+                _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + _mainCamera.transform.eulerAngles.y;
+                float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity, RotationSmoothTime);
 
-			// move the player
-			_controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+                // rotate to face input direction relative to camera position
+                //transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+            }
 
-			// update animator if using character
-			if (_hasAnimator)
+
+            Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
+
+            //// move the player
+            //_controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+
+            Vector3 horizontalVelocity = (transform.right * _input.move.x + transform.forward * _input.move.y) * _speed;
+            _controller.Move(horizontalVelocity * Time.deltaTime);
+
+            // update animator if using character
+            if (_hasAnimator)
 			{
 				if (_input.crouch)
 				{
@@ -353,6 +327,7 @@ namespace StarterAssets
 						// update animator if using character
 						if (_hasAnimator)
 						{
+							Debug.Log("a");
 							_animator.SetBool(_animIDFreeFall, true);
 						}
 					}

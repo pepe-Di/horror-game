@@ -5,13 +5,13 @@ using UnityEngine;
 
 public class PlayerInteract : MonoBehaviour
 {
-    private ThirdPersonController controller;
+    private FPersonController controller;
     private StarterAssetsInputs _input;
     private Animator _animator;
     private Transform player;
     private void Awake()
     {
-        controller = GetComponent<ThirdPersonController>();
+        controller = GetComponent<FPersonController>();
         _input = GetComponent<StarterAssetsInputs>();
         _animator = GetComponent<Animator>();
         player = GetComponent<Transform>();
@@ -61,10 +61,11 @@ public class PlayerInteract : MonoBehaviour
         {
             if (_input.click)
             {
-                Debug.Log("click");
-                Ray ray = new Ray(controller._mainCamera.transform.position, controller.transform.forward);
+                int layerMask = 1 << 5;
+                Debug.Log("click"); layerMask = ~layerMask;
+                Ray ray = controller._mainCamera.GetComponent<Camera>().ViewportPointToRay(new Vector3(0.5f, 0.5F, 0));
                 RaycastHit hit;
-                if (Physics.Raycast(ray, out hit))
+                if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
                 {
                     Debug.DrawLine(ray.origin, hit.point, Color.red);
                     Debug.Log(hit.transform.name);
@@ -111,10 +112,10 @@ public class PlayerInteract : MonoBehaviour
         C_running = true;
         CharacterController c = player.GetComponent<CharacterController>();
         float step = 0f;
-        Transform cam = controller.CinemachineCameraTarget.transform;
+        Transform cam = controller._mainCamera.transform;
         if (_animator.GetBool("Sit"))
         {
-            Transform sit_look = controller.Crouching_Look;
+            Transform sit_look = controller.Sit_Look;
             c.enabled = false;
             place.GetComponent<BoxCollider>().enabled = false;
             player.rotation = place.rotation;

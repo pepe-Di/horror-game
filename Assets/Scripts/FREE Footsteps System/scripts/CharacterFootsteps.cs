@@ -6,6 +6,7 @@
 
 // DISCLAIMER : THIS SCRIPT CAN BE USED IN ANY WAY, MENTIONING MY WORK WILL BE GREATLY APPRECIATED BUT NOT REQUIRED.
 
+using StarterAssets;
 using UnityEngine;
 
 namespace Footsteps {
@@ -61,7 +62,13 @@ namespace Footsteps {
 		float lastPlayTime;
 		bool previouslyGrounded;
 		bool isGrounded;
-
+		StarterAssetsInputs _input;
+		FPersonController fps;
+		private void Awake()
+		{
+			fps = GetComponent<FPersonController>();
+			_input = GetComponent<StarterAssetsInputs>();
+		}
 
 		void Start() {
 			if(groundLayers.value == 0) {
@@ -86,8 +93,9 @@ namespace Footsteps {
 			CheckGround();
 
 			if(triggeredBy == TriggeredBy.TRAVELED_DISTANCE) {
-				float speed = (characterController ? characterController.velocity : characterRigidbody.velocity).magnitude;
-				
+				//float speed = (characterController ? characterController.velocity : characterRigidbody.velocity).magnitude;
+				float speed = fps.speed;
+				//Debug.Log(speed);
 				if(isGrounded) {
 					// Advance the step cycle only if the character is grounded.
 					AdvanceStepCycle(speed * Time.deltaTime);
@@ -117,7 +125,6 @@ namespace Footsteps {
 		void PlayFootstep() {
 			AudioClip randomFootstep = SurfaceManager.singleton.GetFootstep(currentGroundInfo.collider, currentGroundInfo.point);
 			float randomVolume = Random.Range(minVolume, maxVolume);
-			//Debug.Log("bruh ");
 			if (randomFootstep) {
 				audioSource.PlayOneShot(randomFootstep, randomVolume);
 			}
