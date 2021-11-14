@@ -17,6 +17,8 @@ namespace StarterAssets
 		public bool click;
 		public float mouseX;
 		public float mouseY;
+		public bool esc;
+		public bool zoom;
 
 		[Header("Movement Settings")]
 		public bool analogMovement;
@@ -67,6 +69,16 @@ namespace StarterAssets
 			JumpInput(value.isPressed);
 		}
 
+		public void OnZoom(InputValue value)
+		{
+			ZoomInput(value.isPressed);
+		}
+
+		public void OnEsc(InputValue value)
+		{
+			EscInput(value.isPressed);
+		}
+
 		public void OnSprint(InputValue value)
 		{
 			SprintInput(value.isPressed);
@@ -112,6 +124,16 @@ namespace StarterAssets
 		public void JumpInput(bool newJumpState)
 		{
 			jump = newJumpState;
+		}
+
+		public void ZoomInput(bool newZoomState)
+		{
+			zoom = newZoomState;
+		}
+
+		public void EscInput(bool newEscState)
+		{
+			esc = newEscState;
 		}
 
 		public void SprintInput(bool newSprintState)

@@ -105,16 +105,14 @@ public class FPersonController : MonoBehaviour
         {
             targetSpeed = SprintSpeed;
         }
-        if (_input.move == Vector2.zero) targetSpeed = 0.0f;
+        if (_input.move == Vector2.zero||_animator.GetBool("Sit")) targetSpeed = 0.0f;
         speed = targetSpeed;
-        //float currentHorizontalSpeed = new Vector3(controller.velocity.x, 0.0f, controller.velocity.z).magnitude;
-        //float speedOffset = 0.1f;
         float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
         _animationBlend = Mathf.Lerp(_animationBlend, targetSpeed, Time.deltaTime * SpeedChangeRate);
         Vector3 horizontalVelocity = (transform.right * _input.move.x + transform.forward * _input.move.y) * targetSpeed;
         controller.Move(horizontalVelocity * Time.deltaTime);
 
-        if (!_input.crouch && _input.jump)
+        if (!_input.crouch && _input.jump&&!_animator.GetBool("Sit"))
         {
             if (isGrounded)
             {

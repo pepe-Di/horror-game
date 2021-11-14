@@ -5,12 +5,15 @@ using UnityEngine;
 
 public class PlayerInteract : MonoBehaviour
 {
+    AudioSource audioSource; 
+    private float volume = 0.3f;
     private FPersonController controller;
     private StarterAssetsInputs _input;
     private Animator _animator;
     private Transform player;
     private void Awake()
     {
+        audioSource = gameObject.AddComponent<AudioSource>();
         controller = GetComponent<FPersonController>();
         _input = GetComponent<StarterAssetsInputs>();
         _animator = GetComponent<Animator>();
@@ -49,7 +52,7 @@ public class PlayerInteract : MonoBehaviour
         {
             if (_input.click)
             {
-                Ray ray = controller._mainCamera.GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
+                Ray ray = controller._mainCamera.GetComponent<Camera>().ViewportPointToRay(new Vector3(0.5f, 0.5F, 0));
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit) && hit.transform.tag == "Door" && !C_running)
                 {
@@ -90,8 +93,8 @@ public class PlayerInteract : MonoBehaviour
     {
         C_running = true;
         Quaternion newRotation = new Quaternion(door.rotation.x, door.rotation.y, door.rotation.z, door.rotation.w);
-        if (door.GetComponent<Door>().opened) { newRotation *= Quaternion.Euler(0, -90, 0); }
-        else { newRotation *= Quaternion.Euler(0, 90, 0); }
+        if (door.GetComponent<Door>().opened) { audioSource.PlayOneShot(Resources.Load("Sounds/door2") as AudioClip, volume); newRotation *= Quaternion.Euler(0, -90, 0); }
+        else { audioSource.PlayOneShot(Resources.Load("Sounds/door1") as AudioClip, volume); newRotation *= Quaternion.Euler(0, 90, 0); }
         door.GetComponent<Door>().opened = !door.GetComponent<Door>().opened;
         Debug.Log(door.GetComponent<Door>().opened);
         while (door.rotation!=newRotation) 

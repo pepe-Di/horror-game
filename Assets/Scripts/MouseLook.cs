@@ -13,6 +13,10 @@ public class MouseLook : MonoBehaviour
     [SerializeField] Transform playerCamera;
     [SerializeField] float xClamp = 85f;
     float xRotation = 0f;
+    int zoom = 20;
+    int normal = 47;
+    float smooth = 5f;
+    private bool isZoomed = false;
 
     private void Start()
     {
@@ -20,9 +24,23 @@ public class MouseLook : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
-
+    IEnumerator Zoom(int i) 
+    {
+        C_running = true;
+        GetComponentInChildren<Camera>().fieldOfView = Mathf.Lerp(GetComponentInChildren<Camera>().fieldOfView, i, Time.deltaTime * smooth);
+        yield return new WaitForEndOfFrame();
+        C_running = false;
+    }
+    bool C_running = false;
     private void Update()
     {
+        if (_input.zoom) 
+        {
+            isZoomed = !isZoomed;
+            _input.zoom = false;
+        }
+        if (isZoomed && !C_running) StartCoroutine(Zoom(zoom));
+        else if (!C_running) StartCoroutine(Zoom(normal));
         transform.Rotate(Vector3.up, _input.mouseX * sensitivityX*Time.deltaTime);
         xRotation -= _input.mouseY* sensitivityY;
         xRotation = Mathf.Clamp(xRotation, -xClamp, xClamp);
