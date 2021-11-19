@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
     }
     public void BackToMenu() //and save
     {
-        SceneManager.LoadScene("0");
+        Transition.LoadScene("0");
     }
     void Update()
     {
@@ -45,7 +45,12 @@ public class GameManager : MonoBehaviour
              if (_input.esc&&!C_running)
              {
                 StartCoroutine(OpenMenu());
+                //Transition.LoadScene("0");
              }
+            // else if (Input.GetKeyDown(KeyCode.I))
+            //{
+               
+            //}
         }
     }
     bool C_running = false;
