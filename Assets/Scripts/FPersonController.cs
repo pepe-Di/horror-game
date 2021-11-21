@@ -39,6 +39,7 @@ public class FPersonController : MonoBehaviour
     private float _jumpTimeoutDelta;
     private float _fallTimeoutDelta;
 
+    public Image cross;
     public GameObject _mainCamera;
     private StarterAssetsInputs _input;
     public Animator _animator;
@@ -69,10 +70,12 @@ public class FPersonController : MonoBehaviour
         canvas.transform.position = Vector3.zero;
 
         Image crossHair = new GameObject("Crosshair").AddComponent<Image>();
-        crossHair.sprite = Crosshair;
+       // crossHair.sprite = Crosshair;
+        crossHair.sprite = Resources.Load("ui/Reticle")as Sprite;
         crossHair.rectTransform.sizeDelta = new Vector2(10, 10);
         crossHair.transform.SetParent(canvas.transform);
         crossHair.transform.position = Vector3.zero;
+
         _animator = GetComponent<Animator>();
         _hasAnimator = TryGetComponent(out _animator);
         controller = GetComponent<CharacterController>();

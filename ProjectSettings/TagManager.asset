@@ -9,6 +9,7 @@ TagManager:
   - Door
   - Switch
   - Lamp
+  - Type
   layers:
   - Default
   - TransparentFX

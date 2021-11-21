@@ -22,6 +22,11 @@ public class MenuManager : MonoBehaviour
         //menu.SetActive(false);
        // SceneManager.GetActiveScene().name
     }
+    public void LoadGame()
+    {
+        try { GameManager.instance.LoadData(); }
+        catch { Debug.LogError(""); }
+    }
     public void SelectedUI(Transform button)
     {
         //icon.transform.position =new Vector3(icon.transform.position.x, button.position.y,0);
@@ -43,7 +48,6 @@ public class MenuManager : MonoBehaviour
     }
     public void OnStart()
     {
-        Transition.LoadScene("3");
     }
     public void SelectButton(GameObject gm)
     {
@@ -78,6 +82,5 @@ public class MenuManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
     }
 }
