@@ -30,27 +30,7 @@ public class Item
     }
 }
 
-[System.Serializable]
-public class PlayerData
-{
-    public string name;
-    public float hp;
-    public float stamina;
-    public int sceneIndex; 
-    public float[] position;
-    //public List<Item> items = new List<Item>();
-    public PlayerData(Player player)
-    {
-        sceneIndex = GameManager.instance.GetSceneIndex();
-        hp = player.hp;
-        stamina = player.stamina;
-        name = player.name_;
-        position = new float[3];
-        position[0] = player.transform.position.x;
-        position[1] = player.transform.position.y;
-        position[2] = player.transform.position.z;
-    }
-}
+
 
 [System.Serializable]
 public class EnemyData 

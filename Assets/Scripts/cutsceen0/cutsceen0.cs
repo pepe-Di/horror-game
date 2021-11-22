@@ -35,7 +35,8 @@ public class cutsceen0 : MonoBehaviour
         {
             typer.state = TxtState.Typing;
             PlayerPrefs.SetString("name", input.text);
-            lv.LoadLevel(2);
+            //lv.LoadLevel(2);
+            DataManager.instance.NewGame();
         }
     }
     //IEnumerator LoadScene()

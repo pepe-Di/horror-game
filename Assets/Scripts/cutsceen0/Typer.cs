@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class Typer : MonoBehaviour
 {
     public List<Type> txt = new List<Type>();
-    public float speed = 0.1f;
+    public float speed = 10f;
     public char[] lts;
     public int currentIndex = 0;
     public TxtState state; 

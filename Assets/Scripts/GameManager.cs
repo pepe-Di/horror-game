@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         instance = this;
-        DontDestroyOnLoad(instance.gameObject);
+      //  DontDestroyOnLoad(instance.gameObject);
         if (_mainCamera == null)
         {
             _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour
         Player = GameObject.Find("Player");
       //  Player.SetActive(true); 
         menu.SetActive(false);
+        if (DataManager.instance.loaded) { LoadData(); DataManager.instance.loaded = false; }
     }
     // Update is called once per frame
     public int GetSceneIndex()
@@ -35,13 +36,12 @@ public class GameManager : MonoBehaviour
     }
     public void SaveData()
     {
-        SaveSystem.SavePlayer(Player.GetComponent<Player>());
+        DataManager.instance.SaveData(); 
     }
     public void LoadData()
     {
-        PlayerData data = SaveSystem.LoadPlayer();
-        lv.LoadLevel(data.sceneIndex);
-        Player.GetComponent<Player>().LoadData(data);
+        SaveSlot data = SaveSystem.LoadPlayer();
+        Player.GetComponent<Player>().LoadData(data.playerData);
     }
     public void ContinueButton()
     {
