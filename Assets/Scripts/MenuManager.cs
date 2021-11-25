@@ -3,9 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-
+using UnityEngine.Audio;
 public class MenuManager : MonoBehaviour
 {
+    public AudioMixer audioMixer;
+    //public Dropdown qualityDropdown;
+    public Slider volumeSlider;
+    float currentVolume;
+    Resolution[] resolutions;
+    public Dropdown resDrop;
     private GameObject menu;
     private GameObject _mainCamera;
     public GameObject icon;
@@ -14,6 +20,22 @@ public class MenuManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        resolutions = Screen.resolutions;
+        resDrop.ClearOptions();
+        List<string> options = new List<string>();
+        int curRes = 0;
+        for(int i=0; i < resolutions.Length; i++)
+        {
+            string option = resolutions[i].width + "x" + resolutions[i].height;
+            options.Add(option);
+            if (resolutions[i].width == Screen.currentResolution.width&& resolutions[i].height == Screen.currentResolution.height)
+            {
+                curRes = i;
+            }
+        }
+        resDrop.AddOptions(options);
+        resDrop.value = curRes;
+        resDrop.RefreshShownValue();
         var obj = FindObjectsOfType<DataManager>();
         if (obj.Length > 1)
         {
@@ -33,14 +55,53 @@ public class MenuManager : MonoBehaviour
         {
             if (j == 4) j = 0;
             slot.name = j.ToString();
-                //DataManager.saveSlots[j].name;
             slot.GetComponentInChildren<Text>().text = DataManager.saveSlots[j].text;
             j++;
         }
     }
-    public void ClearSlot()
+    public void SetQuality(int index)
+    {
+        QualitySettings.SetQualityLevel(index);
+    }
+    public void SetResolution(int resolutionIndex)
+    {
+        Resolution resolution = resolutions[resolutionIndex];
+        Screen.SetResolution(resolution.width,
+                  resolution.height, Screen.fullScreen);
+    }
+    public void SetVolume(float volume)
+    {
+        audioMixer.SetFloat("master", Mathf.Log10(volume)*20);
+        currentVolume = volume;
+    }
+    public void SetMusicVolume(float volume)
+    {
+        audioMixer.SetFloat("music", Mathf.Log10(volume) * 20);
+        currentVolume = volume;
+    }
+    public void SetEffectsVolume(float volume)
+    {
+        audioMixer.SetFloat("effects", Mathf.Log10(volume) * 20);
+        currentVolume = volume;
+    }
+    public void SetFullscreen(bool isFullscreen)
+    {
+        Screen.fullScreen = isFullscreen;
+    }
+    public void ApplySettings()
     {
 
+    }
+    public void ClearSlot()
+    {
+        if (selectedSlot != -1)
+        {
+            SaveSystem.ClearSlot(selectedSlot);
+            DataManager.saveSlots[selectedSlot].Clear();
+            DataManager.saveSlots[selectedSlot].text = DataManager.instance.text[selectedSlot];
+            slots[selectedSlot].GetComponentInChildren<Text>().text = DataManager.instance.text[selectedSlot];
+            slots[selectedSlot+4].GetComponentInChildren<Text>().text = DataManager.instance.text[selectedSlot];
+        }
     }
     public void LoadGame()
     {

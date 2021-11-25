@@ -2,21 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Save : MonoBehaviour
+[CreateAssetMenu(menuName = "GameData", fileName = "new GameData")]
+public class GameData : ScriptableObject
 {
-    //[SerializeField] private PlayerData playerData = new PlayerData();
-    public static Save instance;
-    private void Start()
+    public string _name;
+    public float hp;
+    public float stamina;
+    public int sceneIndex;
+    public float[] position;
+    public string time;
+    public GameData(Player player)
     {
-        instance = this;
-    }
-    public void SaveData()
-    {
-       // SaveSystem.SavePlayer(this);
-    }
-    public void LoadData()
-    {
-        
+        time = System.DateTime.Now.ToString();
+        sceneIndex = 2;
+        //GameManager.instance.GetSceneIndex();
+        hp = player.hp;
+        stamina = player.stamina;
+        name = player.name_;
+        position = new float[3];
+        position[0] = player.transform.position.x;
+        position[1] = player.transform.position.y;
+        position[2] = player.transform.position.z;
     }
 }
 [System.Serializable]

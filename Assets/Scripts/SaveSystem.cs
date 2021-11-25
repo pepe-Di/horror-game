@@ -27,6 +27,23 @@ public static class SaveSystem
             }
         }
     }
+    public static void ClearSlot(int selectedSlot)
+    {
+        string path = Application.persistentDataPath + selectedSlot + "save.ini";
+        if (File.Exists(path))
+        {
+            File.Delete(path);
+            //BinaryFormatter formatter = new BinaryFormatter();
+            //FileStream stream = new FileStream(path, FileMode.);
+            //SaveSlot data = formatter.Deserialize(stream) as SaveSlot; Debug.Log(data.name);
+            //stream.Close();
+            Debug.Log("deleted");
+        }
+        else
+        {
+            Debug.LogError("Save file not found in " + path);
+        }
+    }
     public static void SavePlayer(Player player)
     {
         BinaryFormatter formatter = new BinaryFormatter();
@@ -96,6 +113,11 @@ public class SaveSlot
         name = playerData.name+"'s slot";
         text = playerData.name + " " + playerData.time;
         this.playerData = playerData;
+    }
+    public void Clear()
+    {
+        name = "Empty slot";
+        playerData = null;
     }
     public SaveSlot(PlayerData playerData)
     {
