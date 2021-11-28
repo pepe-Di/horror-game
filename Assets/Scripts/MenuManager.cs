@@ -6,22 +6,38 @@ using UnityEngine.UI;
 using UnityEngine.Audio;
 public class MenuManager : MonoBehaviour
 {
+    public AudioSource sfx;
+    private AudioSource audio_;
+    public GameData gameData;
     public AudioMixer audioMixer;
-    //public Dropdown qualityDropdown;
-    public Slider volumeSlider;
     float currentVolume;
     Resolution[] resolutions;
     public Dropdown resDrop;
+    public Dropdown qaDrop;
+    public Toggle fullToggle;
+    public Slider master,music,effects;
     private GameObject menu;
     private GameObject _mainCamera;
     public GameObject icon;
     public List<GameObject> buttons;
     public List<GameObject> slots;
     // Start is called before the first frame update
+    private void Awake()
+    {
+    }
     void Start()
     {
+        audio_ = GetComponent<AudioSource>();
+        qaDrop.value = QualitySettings.GetQualityLevel();
+        fullToggle.isOn = Screen.fullScreen;
         resolutions = Screen.resolutions;
         resDrop.ClearOptions();
+        audioMixer.SetFloat("master", gameData.master_vol);
+        audioMixer.SetFloat("music", gameData.music_vol);
+        audioMixer.SetFloat("effects", gameData.effects_vol);
+        master.value = gameData.vol; 
+        music.value = gameData.vol1; 
+        effects.value = gameData.vol2;
         List<string> options = new List<string>();
         int curRes = 0;
         for(int i=0; i < resolutions.Length; i++)
@@ -74,6 +90,13 @@ public class MenuManager : MonoBehaviour
         audioMixer.SetFloat("master", Mathf.Log10(volume)*20);
         currentVolume = volume;
     }
+    public void PlaySfxSound()
+    {
+        var gm = GameObject.Find("options");
+        if (gm == null) return;
+        sfx.gameObject.SetActive(true);
+        sfx.Play();
+    }
     public void SetMusicVolume(float volume)
     {
         audioMixer.SetFloat("music", Mathf.Log10(volume) * 20);
@@ -90,7 +113,16 @@ public class MenuManager : MonoBehaviour
     }
     public void ApplySettings()
     {
-
+        gameData.vol = master.value;
+        gameData.vol1 = music.value;
+        gameData.vol2 = effects.value;
+        audioMixer.GetFloat("master", out float vol);
+        gameData.master_vol = vol;
+        audioMixer.GetFloat("music", out float vol2);
+        gameData.music_vol = vol2;
+        audioMixer.GetFloat("effects", out float vol3);
+        gameData.effects_vol = vol3;
+        gameData.ForceSerialization();
     }
     public void ClearSlot()
     {

@@ -27,7 +27,8 @@ public class GameManager : MonoBehaviour
         Player = GameObject.Find("Player");
       //  Player.SetActive(true); 
         menu.SetActive(false);
-        if (DataManager.instance.loaded) { LoadData(); DataManager.instance.loaded = false; }
+        try { if (DataManager.instance.loaded) { LoadData(); DataManager.instance.loaded = false; } }
+        catch { }
     }
     // Update is called once per frame
     public int GetSceneIndex()

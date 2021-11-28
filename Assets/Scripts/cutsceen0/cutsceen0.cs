@@ -5,12 +5,14 @@ using UnityEngine.UI;
 
 public class cutsceen0 : MonoBehaviour
 {
+    private Animator ac;
     private GameObject panel;
     private InputField input;
     private LevelLoader lv;
     Typer typer;
     void Start()
     {
+        ac = FindObjectOfType<Animator>();
         lv = FindObjectOfType<LevelLoader>();
         typer = FindObjectOfType<Typer>();
         input = FindObjectOfType<InputField>();
@@ -24,6 +26,7 @@ public class cutsceen0 : MonoBehaviour
             {
                 input.Select();
                 input.ActivateInputField();
+                return;
             }
             else if(!input.isFocused)
             {
@@ -38,10 +41,20 @@ public class cutsceen0 : MonoBehaviour
             //lv.LoadLevel(2);
             DataManager.instance.NewGame();
         }
+        if (typer.state == TxtState.Idle)
+        {
+            if (ac.GetBool("wait")) return;
+            ac.SetBool("wait", true);
+        }
+        else
+        {
+            if (!ac.GetBool("wait")) return;
+            ac.SetBool("wait", false);
+        }
     }
     //IEnumerator LoadScene()
     //{
-        
+
     //}
     public void OnClick()
     {

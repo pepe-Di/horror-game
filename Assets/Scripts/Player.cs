@@ -14,7 +14,9 @@ public class Player : MonoBehaviour
     {
         if (PlayerPrefs.HasKey("name"))
         {
+            Fungus.Character character = GetComponent<Fungus.Character>();
             name_ = PlayerPrefs.GetString("name");
+            character.nameText = PlayerPrefs.GetString("name");
             PlayerPrefs.DeleteKey("name");
             hp = 100f;
             stamina = 100f;

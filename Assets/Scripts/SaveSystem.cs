@@ -5,7 +5,7 @@ public static class SaveSystem
 {
     public static void OnAwake(SaveSlot[] saveSlots, string[] text)
     {
-        string path = Application.persistentDataPath + "save.ini";
+        string path;
         for (int i = 0; i < saveSlots.Length; i++)
         {
             path = Application.persistentDataPath + i + "save.ini";

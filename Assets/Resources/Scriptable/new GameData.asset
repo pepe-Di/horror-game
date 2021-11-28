@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 331f45afd0a4f914980b63da67c7e5de, type: 3}
   m_Name: new GameData
   m_EditorClassIdentifier: 
-  _name: 
-  hp: 0
-  stamina: 0
-  sceneIndex: 0
-  position: []
-  time: 
+  master_vol: 0
+  music_vol: -24.894268
+  effects_vol: -13.159848
+  vol: 1
+  vol1: 0.05692284
+  vol2: 0.21978983

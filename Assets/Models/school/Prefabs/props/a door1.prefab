@@ -57,6 +57,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -81,6 +82,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &3575895962340015728
 GameObject:
   m_ObjectHideFlags: 0
@@ -92,10 +94,12 @@ GameObject:
   - component: {fileID: 3575895962339517008}
   - component: {fileID: 3575895962342941302}
   - component: {fileID: 3575895962341941430}
+  - component: {fileID: 1938060094333254279}
   - component: {fileID: 7414207656564958353}
+  - component: {fileID: 584680535868640581}
   m_Layer: 0
   m_Name: Cube_10
-  m_TagString: Untagged
+  m_TagString: Door
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
@@ -137,6 +141,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -161,6 +166,20 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &1938060094333254279
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3575895962340015728}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.2696857, y: 2.3269477, z: 2.4794416}
+  m_Center: {x: -0.6115932, y: -0.40481472, z: 0.062232573}
 --- !u!64 &7414207656564958353
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -175,6 +194,18 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300002, guid: e7aacb82296e75c41acea0abba4c8978, type: 3}
+--- !u!114 &584680535868640581
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3575895962340015728}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2a416dc2978b9142ab38f4f5224a647, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3575895962340015730
 GameObject:
   m_ObjectHideFlags: 0
@@ -186,10 +217,12 @@ GameObject:
   - component: {fileID: 3575895962339517010}
   - component: {fileID: 3575895962342941296}
   - component: {fileID: 3575895962341941424}
+  - component: {fileID: 6307956262507975756}
   - component: {fileID: 7554523127687461919}
+  - component: {fileID: 7663472920130744943}
   m_Layer: 0
   m_Name: Cube_14
-  m_TagString: Untagged
+  m_TagString: Door
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
@@ -231,6 +264,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -255,6 +289,20 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &6307956262507975756
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3575895962340015730}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.3053017, y: 2.366319, z: 2.913495}
+  m_Center: {x: 0.6274206, y: 0, z: -0.0055840625}
 --- !u!64 &7554523127687461919
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -269,3 +317,15 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: e7aacb82296e75c41acea0abba4c8978, type: 3}
+--- !u!114 &7663472920130744943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3575895962340015730}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2a416dc2978b9142ab38f4f5224a647, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
