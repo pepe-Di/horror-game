@@ -62,12 +62,10 @@ namespace Footsteps {
 		float lastPlayTime;
 		bool previouslyGrounded;
 		bool isGrounded;
-		StarterAssetsInputs _input;
 		FPersonController fps;
 		private void Awake()
 		{
 			fps = GetComponent<FPersonController>();
-			_input = GetComponent<StarterAssetsInputs>();
 		}
 
 		void Start() {
@@ -126,7 +124,12 @@ namespace Footsteps {
 			AudioClip randomFootstep = SurfaceManager.singleton.GetFootstep(currentGroundInfo.collider, currentGroundInfo.point);
 			float randomVolume = Random.Range(minVolume, maxVolume);
 			if (randomFootstep) {
-				audioSource.PlayOneShot(randomFootstep, randomVolume);
+                switch (fps.stateController.state)
+                {
+					case(State.Crouch): audioSource.PlayOneShot(randomFootstep, randomVolume - 0.2f); break;
+					case (State.Sprint): audioSource.PlayOneShot(randomFootstep, randomVolume+0.5f); break;
+					default: audioSource.PlayOneShot(randomFootstep, randomVolume); break;
+                }
 			}
 		}
 

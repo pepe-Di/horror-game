@@ -6,6 +6,7 @@ public class Player : MonoBehaviour
 {
     public string name_;
     public float hp, stamina;
+    public State state;
    // public int sceneIndex;
    // public State state;
    // public List<Item> items = new List<Item>();

@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class StateController : MonoBehaviour
+[CreateAssetMenu(menuName ="Scriptable/StateController", fileName ="New StateController")]
+public class StateController : ScriptableObject
 {
     public State state;
     public void ChangeState(State state)
@@ -18,5 +18,9 @@ public enum State
     Idle,
     Pause,
     Talk,
-    Walk
+    Walk,
+    Sprint,
+    Crouch,
+    Jump,
+    Sit
 }

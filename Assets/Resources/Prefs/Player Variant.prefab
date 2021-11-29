@@ -15,6 +15,7 @@ MonoBehaviour:
   name_: 
   hp: 0
   stamina: 0
+  state: 0
 --- !u!1001 &7806960094303137936
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22,6 +23,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1393239883463972093, guid: be2531046408a7847a26c75f4708bb4f, type: 3}
+      propertyPath: field of view
+      value: 61
+      objectReference: {fileID: 0}
     - target: {fileID: 2689223167356979497, guid: be2531046408a7847a26c75f4708bb4f, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -68,7 +73,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3321926531074233235, guid: be2531046408a7847a26c75f4708bb4f, type: 3}
       propertyPath: m_Name
-      value: Player
+      value: Player Variant
       objectReference: {fileID: 0}
     - target: {fileID: 3321926531074233235, guid: be2531046408a7847a26c75f4708bb4f, type: 3}
       propertyPath: m_IsActive

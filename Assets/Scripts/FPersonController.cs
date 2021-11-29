@@ -12,7 +12,7 @@ public class FPersonController : MonoBehaviour
     [Tooltip("Sprint speed of the character in m/s")]
     public float SprintSpeed = 2.4f;
     [Tooltip("Crouch speed of the character in m/s")]
-    public float CrouchSpeed = 1.0f;
+    public float CrouchSpeed = 0.4f;
     [Tooltip("Acceleration and deceleration")]
     public float SpeedChangeRate = 10.0f;
     [SerializeField] CharacterController controller;
@@ -38,7 +38,7 @@ public class FPersonController : MonoBehaviour
 
     private float _jumpTimeoutDelta;
     private float _fallTimeoutDelta;
-
+    public StateController stateController;
     public Image cross;
     public GameObject _mainCamera;
     private StarterAssetsInputs _input;
@@ -102,13 +102,40 @@ public class FPersonController : MonoBehaviour
         {
             verticalVelocity.y = 0;
         }
+        else
+        {
+            stateController.ChangeState(State.Jump);
+        }
         float targetSpeed = MoveSpeed;
-        if (_input.crouch) targetSpeed = CrouchSpeed;
+        if (_input.move == Vector2.zero || _animator.GetBool("Sit")) 
+        {
+            targetSpeed = 0.0f;
+            if (_animator.GetBool("Sit"))
+            {
+                stateController.ChangeState(State.Sit);
+            }
+            else
+            {
+                if(isGrounded)
+                    stateController.ChangeState(State.Idle);
+            }
+        }
+        else
+        {
+            if (isGrounded)
+                stateController.ChangeState(State.Walk);
+        }
+        if (_input.crouch)
+        {
+            targetSpeed = CrouchSpeed;
+            stateController.ChangeState(State.Crouch);
+        }
         else if (_input.sprint)
         {
             targetSpeed = SprintSpeed;
+            if (isGrounded)
+                stateController.ChangeState(State.Sprint);
         }
-        if (_input.move == Vector2.zero||_animator.GetBool("Sit")) targetSpeed = 0.0f;
         speed = targetSpeed;
         float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
         _animationBlend = Mathf.Lerp(_animationBlend, targetSpeed, Time.deltaTime * SpeedChangeRate);
@@ -150,8 +177,10 @@ public class FPersonController : MonoBehaviour
             _animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
         }
     }
-    IEnumerator Jump() 
+    IEnumerator Jump()
     {
+        stateController.ChangeState(State.Jump);
+        Debug.Log("jump");
         verticalVelocity.y = Mathf.Sqrt(-2f * jumpHeight * gravity);
         yield return new WaitForSeconds(0.2f);
     }
