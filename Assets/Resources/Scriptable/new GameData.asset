@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: new GameData
   m_EditorClassIdentifier: 
   master_vol: 0
-  music_vol: -24.894268
+  music_vol: -20.820253
   effects_vol: -13.159848
   vol: 1
-  vol1: 0.05692284
+  vol1: 0.09098869
   vol2: 0.21978983

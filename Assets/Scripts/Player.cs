@@ -26,11 +26,14 @@ public class Player : MonoBehaviour
     public void LoadData(PlayerData data)
     {
         name_ = data.name;
+        Fungus.Character character = GetComponent<Fungus.Character>();
+        character.nameText = data.name;
         hp = data.hp;
         stamina = data.stamina;
         Vector3 position = new Vector3(data.position[0], data.position[1], data.position[2]);
         transform.position = position;
         Debug.Log("player loaded");
+
     }
     // Update is called once per frame
     void Update()

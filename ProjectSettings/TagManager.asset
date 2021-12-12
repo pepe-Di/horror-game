@@ -11,6 +11,8 @@ TagManager:
   - Lamp
   - Type
   - mirror
+  - Occluder Static
+  - Occludee Static
   layers:
   - Default
   - TransparentFX
