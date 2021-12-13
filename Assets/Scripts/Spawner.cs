@@ -68,22 +68,22 @@ public class Spawner : MonoBehaviour
         
     }
 }
-enum RoomType
-{
-    Class,
-    Corridor,
-    EntranceHall,
-    CorridorwthStairs,
-    Ñoncert_Hall,
-    Toilet,
-    Buffet,
-    Gym,
-    Storeroom,
-    Cabinet,
-    Teachers,
-    Library,
-    DressingRoom
-}
+//enum RoomType
+//{
+//    Class,
+//    Corridor,
+//    EntranceHall,
+//    CorridorwthStairs,
+//    Ñoncert_Hall,
+//    Toilet,
+//    Buffet,
+//    Gym,
+//    Storeroom,
+//    Cabinet,
+//    Teachers,
+//    Library,
+//    DressingRoom
+//}
 [System.Serializable]
 class Building
 {
