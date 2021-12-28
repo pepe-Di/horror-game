@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Door : MonoBehaviour
 {
+    public bool right_side;
     public bool opened { set; get; }
     void Awake()
     {

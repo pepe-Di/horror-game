@@ -93,8 +93,10 @@ public class PlayerInteract : MonoBehaviour
     {
         C_running = true;
         Quaternion newRotation = new Quaternion(door.rotation.x, door.rotation.y, door.rotation.z, door.rotation.w);
-        if (door.GetComponent<Door>().opened) { audioSource.PlayOneShot(Resources.Load("Sounds/door2") as AudioClip, volume); newRotation *= Quaternion.Euler(0, -90, 0); }
-        else { audioSource.PlayOneShot(Resources.Load("Sounds/door1") as AudioClip, volume); newRotation *= Quaternion.Euler(0, 90, 0); }
+        int val = 1;
+        if (door.GetComponent<Door>().right_side) val = -1;
+        if (door.GetComponent<Door>().opened) { audioSource.PlayOneShot(Resources.Load("Sounds/door2") as AudioClip, volume); newRotation *= Quaternion.Euler(0, -90*val, 0); }
+        else { audioSource.PlayOneShot(Resources.Load("Sounds/door1") as AudioClip, volume); newRotation *= Quaternion.Euler(0, 90*val, 0); }
         door.GetComponent<Door>().opened = !door.GetComponent<Door>().opened;
         Debug.Log(door.GetComponent<Door>().opened);
         while (door.rotation!=newRotation) 
