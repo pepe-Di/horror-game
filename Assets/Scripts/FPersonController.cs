@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class FPersonController : MonoBehaviour
 {
+    const float height = 1.58f, crouch_height=0.5f;
     [Header("Player")]
     [Tooltip("Move speed of the character in m/s")]
     public float MoveSpeed = 2.0f;
@@ -190,6 +191,7 @@ public class FPersonController : MonoBehaviour
         float step = 0f;
         if (b)
         {
+            controller.height = crouch_height;
             while (_mainCamera.transform.position != Crouching_Look.position)
             {
                 step = 1.5f * Time.deltaTime;
@@ -199,12 +201,29 @@ public class FPersonController : MonoBehaviour
         }
         if (!b)
         {
-            while (_mainCamera.transform.position != Standing_look.position)
+            RaycastHit hit;
+            Ray ray = _mainCamera.GetComponent<Camera>().ScreenPointToRay(Vector3.up);
+            if (Physics.Raycast(_mainCamera.transform.position, Vector3.up, out hit,2))
             {
-                step = 1.5f * Time.deltaTime;
-                _mainCamera.transform.position = Vector3.MoveTowards(_mainCamera.transform.position, Standing_look.position, step);
-                yield return new WaitForEndOfFrame();
+                //if(this.gameObject.transform.position.y - hit.collider.transform.position.y < 0.1f)
+                //{
+                    Debug.Log(hit.collider.name);
+               // _animator.SetBool(_animIDCrouch, true);
+
+                Debug.DrawLine(_mainCamera.transform.position, hit.point, Color.cyan);
+               // }
             }
+            else
+            {
+                controller.height = height;
+                while (_mainCamera.transform.position != Standing_look.position)
+                {
+                    step = 1.5f * Time.deltaTime;
+                    _mainCamera.transform.position = Vector3.MoveTowards(_mainCamera.transform.position, Standing_look.position, step);
+                    yield return new WaitForEndOfFrame();
+                }
+            }
+            
         }
         C_running = false;
     }

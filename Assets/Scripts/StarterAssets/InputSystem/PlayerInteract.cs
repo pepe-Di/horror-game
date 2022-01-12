@@ -112,7 +112,7 @@ public class PlayerInteract : MonoBehaviour
         Vector3 direction = transform.TransformDirection(Vector3.forward) * 5;
         Gizmos.DrawRay(transform.position, direction);
     }
-        IEnumerator Sit(Transform place) 
+    IEnumerator Sit(Transform place) 
     {
         C_running = true;
         CharacterController c = player.GetComponent<CharacterController>();
