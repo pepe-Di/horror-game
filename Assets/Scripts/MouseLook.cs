@@ -14,7 +14,7 @@ public class MouseLook : MonoBehaviour
     [SerializeField] float xClamp = 85f;
     float xRotation = 0f;
     int zoom = 20;
-    int normal = 50;
+    int normal = 60;
     float smooth = 5f;
     private bool isZoomed = false;
 
