@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class FPersonController : MonoBehaviour
 {
-    const float height = 1.58f, crouch_height=0.5f;
+    const float height = 1.58f, crouch_height=1f;
     [Header("Player")]
     [Tooltip("Move speed of the character in m/s")]
     public float MoveSpeed = 2.0f;
@@ -57,6 +57,9 @@ public class FPersonController : MonoBehaviour
     Sprite Crosshair;
     private Canvas canvas;
     public float speed;
+    Player player;
+    float value = 1f;
+    PlayerStats stats;
     private void Awake()
     {
         if (_mainCamera == null)
@@ -66,6 +69,8 @@ public class FPersonController : MonoBehaviour
     }
     private void Start()
     {
+        stats = GetComponent<PlayerStats>();
+        player = GetComponent<Player>();
         canvas = GameObject.FindObjectOfType<Canvas>();
         canvas.pixelPerfect = true;
         canvas.transform.position = Vector3.zero;
@@ -128,14 +133,24 @@ public class FPersonController : MonoBehaviour
         }
         if (_input.crouch)
         {
-            targetSpeed = CrouchSpeed;
+            if (_input.move != Vector2.zero) targetSpeed = CrouchSpeed;
             stateController.ChangeState(State.Crouch);
         }
-        else if (_input.sprint)
+        if (_input.sprint&& targetSpeed!=0)
         {
-            targetSpeed = SprintSpeed;
-            if (isGrounded)
+            if (isGrounded&&player.stamina>0&&!_input.crouch)
+            {
+                targetSpeed = SprintSpeed;
                 stateController.ChangeState(State.Sprint);
+                player.stamina -= 10f;
+                stats.ChangeStaminaBar(player.stamina);
+            }
+        }
+        if(player.stamina<player.max_stamina)
+        {
+            if (targetSpeed == 0) player.stamina += 4f;
+            else player.stamina += 2f;
+            stats.ChangeStaminaBar(player.stamina);
         }
         speed = targetSpeed;
         float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
@@ -191,7 +206,7 @@ public class FPersonController : MonoBehaviour
         float step = 0f;
         if (b)
         {
-            controller.height = crouch_height;
+            //controller.height = crouch_height;
             while (_mainCamera.transform.position != Crouching_Look.position)
             {
                 step = 1.5f * Time.deltaTime;
@@ -203,7 +218,7 @@ public class FPersonController : MonoBehaviour
         {
             RaycastHit hit;
             Ray ray = _mainCamera.GetComponent<Camera>().ScreenPointToRay(Vector3.up);
-            if (Physics.Raycast(_mainCamera.transform.position, Vector3.up, out hit,2))
+            if (Physics.Raycast(_mainCamera.transform.position, Vector3.up, out hit,1))
             {
                 //if(this.gameObject.transform.position.y - hit.collider.transform.position.y < 0.1f)
                 //{

@@ -47,6 +47,7 @@ public class MouseLook : MonoBehaviour
         Vector3 targetRotation = transform.eulerAngles;
         targetRotation.x = xRotation;
         playerCamera.eulerAngles = targetRotation;
+
     }
 
     public void ReceiveInput(Vector2 mouseInput)

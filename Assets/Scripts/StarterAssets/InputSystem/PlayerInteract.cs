@@ -1,3 +1,4 @@
+using cakeslice;
 using StarterAssets;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ public class PlayerInteract : MonoBehaviour
     private StarterAssetsInputs _input;
     private Animator _animator;
     private Transform player;
+    GameObject selected_item;
     private void Awake()
     {
         audioSource = gameObject.AddComponent<AudioSource>();
@@ -24,6 +26,11 @@ public class PlayerInteract : MonoBehaviour
         if (other.tag == "Chair")
         {
             Debug.Log("Press E to sit");
+            if (_input.interact) { }
+        }
+        if (other.tag == "Note")
+        {
+            Debug.Log("note trigger enter");
             if (_input.interact) { }
         }
     }
@@ -78,6 +85,34 @@ public class PlayerInteract : MonoBehaviour
                     other.GetComponent<Switch>().Switching();
                 }
             }
+        }
+        if (other.tag == "Note")
+        {
+            Ray ray = controller._mainCamera.GetComponent<Camera>().ViewportPointToRay(new Vector3(0.5f, 0.5F, 0));
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, 1) && hit.transform.tag == "Note" && !C_running)
+            {
+                hit.collider.GetComponent<Outline>().enabled = true;
+                if (_input.click)
+                {
+                    Debug.Log("click on note");
+                }
+                else selected_item = hit.collider.gameObject;
+            }
+            else
+            {
+                if (selected_item != null)
+                {
+                    //selected_item.GetComponent<Outline>().enabled = false;
+                }
+            }
+            //if (_input.click)
+            //{
+            //    if (Physics.Raycast(ray, out hit,1) && hit.transform.tag == "Note" && !C_running)
+            //    {
+            //        Debug.Log("click on note");
+            //    }
+            //}
         }
     }
 

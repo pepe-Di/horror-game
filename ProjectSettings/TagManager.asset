@@ -13,6 +13,7 @@ TagManager:
   - mirror
   - Occluder Static
   - Occludee Static
+  - Note
   layers:
   - Default
   - TransparentFX
@@ -20,7 +21,7 @@ TagManager:
   - Ground
   - Water
   - UI
-  - 
+  - Player
   - 
   - YuME_TileMap
   - 

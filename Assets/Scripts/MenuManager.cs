@@ -14,11 +14,12 @@ public class MenuManager : MonoBehaviour
     Resolution[] resolutions;
     public Dropdown resDrop;
     public Dropdown qaDrop;
+    public Dropdown lgDrop;
     public Toggle fullToggle;
-    public Slider master,music,effects;
+    public Slider master,music,effects,txt_speed;
     private GameObject menu;
     private GameObject _mainCamera;
-    public GameObject icon;
+    //public GameObject icon;
     public List<GameObject> buttons;
     public List<GameObject> slots;
     // Start is called before the first frame update
@@ -67,12 +68,14 @@ public class MenuManager : MonoBehaviour
         }
         menu = GameObject.Find("GameMenu");
         int j = 0;
-       foreach(GameObject slot in slots)
-        {
-            if (j == 4) j = 0;
-            slot.name = j.ToString();
-            slot.GetComponentInChildren<Text>().text = DataManager.saveSlots[j].text;
-            j++;
+        if (slots != null){
+            foreach (GameObject slot in slots)
+            {
+                if (j == 4) j = 0;
+                slot.name = j.ToString();
+                slot.GetComponentInChildren<Text>().text = DataManager.saveSlots[j].text;
+                j++;
+            }
         }
     }
     public void SetQuality(int index)
@@ -165,6 +168,10 @@ public class MenuManager : MonoBehaviour
             DataManager.instance.selectedSlot = selectedSlot;
             FindObjectOfType<LevelLoader>().LoadLevel(1);
         }
+    }
+    public void ResetSettings()
+    {
+        
     }
     public void SelectedUI(Transform button)
     {

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,8 +11,8 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     public StarterAssetsInputs _input;
     public GameObject Player;
-    public GameObject menu; 
-    private GameObject _mainCamera;
+    public GameObject menu;
+    public GameObject _mainCamera;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,10 +22,10 @@ public class GameManager : MonoBehaviour
         {
             _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
         }
-        _input = FindObjectOfType<StarterAssetsInputs>();
-        lv = FindObjectOfType<LevelLoader>();
+      //  _input = FindObjectOfType<StarterAssetsInputs>();
+       // lv = FindObjectOfType<LevelLoader>();
         // menu = GameObject.Find("ui");
-        Player = GameObject.Find("Player");
+       // Player = GameObject.Find("Player");
       //  Player.SetActive(true); 
         menu.SetActive(false);
         try { if (DataManager.instance.loaded) { LoadData(); DataManager.instance.loaded = false; } }
@@ -46,12 +47,11 @@ public class GameManager : MonoBehaviour
     }
     public void ContinueButton()
     {
-        Debug.Log("a");
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         _input.cursorInputForLook = true; 
         Player.GetComponent<CharacterController>().enabled = true;
-        // Player.SetActive(true);
+        Player.GetComponent<MouseLook>().enabled = true;
         menu.SetActive(false);
     }
     public void BackToMenu() //and save
@@ -62,18 +62,20 @@ public class GameManager : MonoBehaviour
     }
     void Update()
     {
-        if (_input != null)
-        {
-             if (_input.esc&&!C_running)
-             {
-                StartCoroutine(OpenMenu());
+         if (_input.esc&&!C_running)
+         {
+             StartCoroutine(OpenMenu());
                 //Transition.LoadScene("0");
-             }
+                //if (menu.activeSelf)
+                //{
+                //    Time.timeScale = 0;
+                //}
+                //else Time.timeScale = 1;
+         }
             // else if (Input.GetKeyDown(KeyCode.I))
             //{
                
             //}
-        }
     }
     bool C_running = false;
     IEnumerator OpenMenu()
@@ -85,7 +87,7 @@ public class GameManager : MonoBehaviour
             Cursor.visible = true;
             _input.cursorInputForLook = false;
             Player.GetComponent<CharacterController>().enabled = false;
-            //Player.SetActive(false);
+            Player.GetComponent<MouseLook>().enabled = false;
             menu.SetActive(true);
         }
         else

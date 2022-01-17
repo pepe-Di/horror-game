@@ -22,9 +22,9 @@ namespace Footsteps {
 	}
 
 	public class CharacterFootsteps : MonoBehaviour {
-
 		[Tooltip("The method of triggering footsteps.")]
 		[SerializeField] TriggeredBy triggeredBy;
+		AudioClip crouch_ac;
 
 		[Tooltip("This is used to determine what distance has to be traveled in order to play the footstep sound.")]
 		[SerializeField] float distanceBetweenSteps = 1.8f;
@@ -68,8 +68,10 @@ namespace Footsteps {
 			fps = GetComponent<FPersonController>();
 		}
 
-		void Start() {
-			if(groundLayers.value == 0) {
+		void Start()
+		{
+			//crouch_ac = Resources.Load<AudioClip>("Sounds/e");
+			if (groundLayers.value == 0) {
 				groundLayers = 1;
 			}
 
@@ -126,7 +128,7 @@ namespace Footsteps {
 			if (randomFootstep) {
                 switch (fps.stateController.state)
                 {
-					case(State.Crouch): audioSource.PlayOneShot(randomFootstep, randomVolume - 0.2f); break;
+					case (State.Crouch): audioSource.PlayOneShot(randomFootstep, randomVolume - 0.2f); break; 
 					case (State.Sprint): audioSource.PlayOneShot(randomFootstep, randomVolume+0.5f); break;
 					default: audioSource.PlayOneShot(randomFootstep, randomVolume); break;
                 }

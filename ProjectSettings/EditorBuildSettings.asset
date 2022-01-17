@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/cutsceen0.unity
     guid: b8869340f3f1d11458860824d663f569
   - enabled: 1
+    path: Assets/Scenes/game.unity
+    guid: 9385b6e65e8602546bb3edf3f6c541e6
+  - enabled: 1
     path: Assets/Scenes/1.unity
     guid: a1c55fe1c2265704c9a878662cbff7f5
   - enabled: 0

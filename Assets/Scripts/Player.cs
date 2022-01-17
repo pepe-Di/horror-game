@@ -5,7 +5,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public string name_;
-    public float hp, stamina;
+    public float hp, stamina, max_stamina=1000f,max_hp=10000f;
     public State state;
    // public int sceneIndex;
    // public State state;
@@ -19,8 +19,8 @@ public class Player : MonoBehaviour
             name_ = PlayerPrefs.GetString("name");
             character.nameText = PlayerPrefs.GetString("name");
             PlayerPrefs.DeleteKey("name");
-            hp = 100f;
-            stamina = 100f;
+            hp = max_hp;
+            stamina = max_stamina;
         }
     }
     public void LoadData(PlayerData data)

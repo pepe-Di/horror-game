@@ -46,14 +46,21 @@ public static class SaveSystem
     }
     public static void SavePlayer(Player player)
     {
-        BinaryFormatter formatter = new BinaryFormatter();
-        PlayerData data = new PlayerData(player);
-        DataManager.saveSlots[DataManager.instance.selectedSlot].Rewrite(data);
-        string path = Application.persistentDataPath +"/SaveSlot_"+ DataManager.instance.selectedSlot +".ini";
-        FileStream stream = new FileStream(path, FileMode.Create); Debug.Log(data.name);
-        formatter.Serialize(stream, DataManager.saveSlots[DataManager.instance.selectedSlot]);
-        stream.Close();
-        Debug.Log("saved"); Debug.Log(path);
+        try
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            PlayerData data = new PlayerData(player);
+            DataManager.saveSlots[DataManager.instance.selectedSlot].Rewrite(data);
+            string path = Application.persistentDataPath + "/SaveSlot_" + DataManager.instance.selectedSlot + ".ini";
+            FileStream stream = new FileStream(path, FileMode.Create); Debug.Log(data.name);
+            formatter.Serialize(stream, DataManager.saveSlots[DataManager.instance.selectedSlot]);
+            stream.Close();
+            Debug.Log("saved"); Debug.Log(path);
+        }
+        catch
+        {
+
+        }
     }
     public static SaveSlot LoadPlayer()
     {
