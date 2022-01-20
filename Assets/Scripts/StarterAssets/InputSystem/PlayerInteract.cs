@@ -1,4 +1,3 @@
-using cakeslice;
 using StarterAssets;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,14 +11,20 @@ public class PlayerInteract : MonoBehaviour
     private StarterAssetsInputs _input;
     private Animator _animator;
     private Transform player;
+    Player player_;
     GameObject selected_item;
+    Vector3 Ray_start_pos = new Vector3(0.5f, 0.5F, 0);
+    Vector3 ray_ = new Vector3(Screen.width / 2, Screen.height / 2, 0);
+    public Camera mainCam;
     private void Awake()
     {
+        player_ = GetComponent<Player>();
         audioSource = gameObject.AddComponent<AudioSource>();
         controller = GetComponent<FPersonController>();
         _input = GetComponent<StarterAssetsInputs>();
         _animator = GetComponent<Animator>();
-        player = GetComponent<Transform>();
+        //player = GetComponent<Transform>();
+        //mainCam = controller._mainCamera.GetComponent<Camera>();
     }
     void OnTriggerEnter(Collider other)
     {
@@ -34,7 +39,8 @@ public class PlayerInteract : MonoBehaviour
             if (_input.interact) { }
         }
     }
-    public bool C_running = false;
+    public bool C_running = false, selected=false;
+    int click = 0;
     private void OnTriggerStay(Collider other)
     {
         if (other.tag == "Chair")
@@ -86,25 +92,37 @@ public class PlayerInteract : MonoBehaviour
                 }
             }
         }
-        if (other.tag == "Note")
+        if (other.tag == "Item")
         {
-            Ray ray = controller._mainCamera.GetComponent<Camera>().ViewportPointToRay(new Vector3(0.5f, 0.5F, 0));
+            Ray ray = mainCam.ViewportPointToRay(new Vector3(0.5f, 0.5F, 0));
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, 1) && hit.transform.tag == "Note" && !C_running)
+            if (Physics.Raycast(ray, out hit, 2) && hit.transform.tag == "Item" && !C_running)
             {
-                hit.collider.GetComponent<Outline>().enabled = true;
-                if (_input.click)
+                if (!selected)
                 {
-                    Debug.Log("click on note");
+                    hit.collider.gameObject.GetComponent<Outline>().enabled = true;
+                    selected = true;
                 }
-                else selected_item = hit.collider.gameObject;
+                else { }
+                if (_input.click&& hit.collider.gameObject.GetComponent<Outline>().enabled)
+                {
+                    click++;
+                    if (click == 1)
+                    {
+                        player_.GetItem(hit.collider.gameObject.name);
+                        Debug.Log(hit.collider.gameObject.name);
+                        Destroy(hit.collider.gameObject);
+                    }
+                    else
+                    {
+                        click = 0;
+                    }
+                }
             }
             else
             {
-                if (selected_item != null)
-                {
-                    //selected_item.GetComponent<Outline>().enabled = false;
-                }
+                other.GetComponent<Outline>().enabled = false; 
+                selected = false;
             }
             //if (_input.click)
             //{
@@ -143,9 +161,9 @@ public class PlayerInteract : MonoBehaviour
     }
     void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.red;
-        Vector3 direction = transform.TransformDirection(Vector3.forward) * 5;
-        Gizmos.DrawRay(transform.position, direction);
+        Gizmos.color = Color.blue;
+        
+        Gizmos.DrawRay(mainCam.transform.position, new Vector3(0.5f, 0.5F, 0));
     }
     IEnumerator Sit(Transform place) 
     {
@@ -204,6 +222,14 @@ public class PlayerInteract : MonoBehaviour
         if (other.tag == "Chair")
         {
             Debug.Log("exit area");
+        }
+        if (other.tag == "Item")
+        {
+            if (selected)
+            {
+                selected = false;
+                other.gameObject.GetComponent<Outline>().enabled = false;
+            }
         }
     }
 }

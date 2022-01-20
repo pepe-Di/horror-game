@@ -33,10 +33,6 @@ public static class SaveSystem
         if (File.Exists(path))
         {
             File.Delete(path);
-            //BinaryFormatter formatter = new BinaryFormatter();
-            //FileStream stream = new FileStream(path, FileMode.);
-            //SaveSlot data = formatter.Deserialize(stream) as SaveSlot; Debug.Log(data.name);
-            //stream.Close();
             Debug.Log("deleted");
         }
         else
@@ -90,6 +86,7 @@ public class PlayerData
     public int sceneIndex;
     public float[] position;
     public string time;
+    public string[] items;
     //public List<Item> items = new List<Item>();
     public PlayerData(Player player)
     {
@@ -103,6 +100,11 @@ public class PlayerData
         position[0] = player.transform.position.x;
         position[1] = player.transform.position.y;
         position[2] = player.transform.position.z;
+        items = new string[player.items.Count];
+        for(int i = 0; i < items.Length; i++)
+        {
+            items[i] = player.items[0].Name;
+        }
     }
 }
 [System.Serializable]

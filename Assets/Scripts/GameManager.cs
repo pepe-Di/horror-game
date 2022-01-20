@@ -11,8 +11,10 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     public StarterAssetsInputs _input;
     public GameObject Player;
+    Player player_;
     public GameObject menu;
     public GameObject _mainCamera;
+    public InventoryUI inv;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,13 +24,20 @@ public class GameManager : MonoBehaviour
         {
             _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
         }
+        player_ = Player.GetComponent<Player>();
       //  _input = FindObjectOfType<StarterAssetsInputs>();
        // lv = FindObjectOfType<LevelLoader>();
         // menu = GameObject.Find("ui");
        // Player = GameObject.Find("Player");
       //  Player.SetActive(true); 
         menu.SetActive(false);
-        try { if (DataManager.instance.loaded) { LoadData(); DataManager.instance.loaded = false; } }
+        try { 
+            if (DataManager.instance.loaded) 
+            { 
+                LoadData(); 
+                DataManager.instance.loaded = false; 
+            } 
+        }
         catch { }
     }
     // Update is called once per frame
@@ -43,7 +52,12 @@ public class GameManager : MonoBehaviour
     public void LoadData()
     {
         SaveSlot data = SaveSystem.LoadPlayer();
-        Player.GetComponent<Player>().LoadData(data.playerData);
+        player_.LoadData(data.playerData);
+       // inv.UpdateData(this);
+    }
+    public void Test()
+    {
+        Debug.Log("a");
     }
     public void ContinueButton()
     {

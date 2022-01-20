@@ -7,9 +7,7 @@ public class Player : MonoBehaviour
     public string name_;
     public float hp, stamina, max_stamina=1000f,max_hp=10000f;
     public State state;
-   // public int sceneIndex;
-   // public State state;
-   // public List<Item> items = new List<Item>();
+    public List<Item> items=new List<Item>();
     // Start is called before the first frame update
     void Start()
     {
@@ -32,13 +30,15 @@ public class Player : MonoBehaviour
         stamina = data.stamina;
         Vector3 position = new Vector3(data.position[0], data.position[1], data.position[2]);
         transform.position = position;
+        for (int i=0; i<data.items.Length;i++)
+        {
+            items.Add(new Item(data.items[i]));
+        }
         Debug.Log("player loaded");
-
     }
-    // Update is called once per frame
-    void Update()
+    public void GetItem(string name)
     {
-        
+        items.Add(new Item(name));
+        GameManager.instance.inv.UpdateData();    
     }
-    
 }
