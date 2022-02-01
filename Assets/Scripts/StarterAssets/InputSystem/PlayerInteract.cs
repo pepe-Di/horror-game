@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class PlayerInteract : MonoBehaviour
 {
+    [SerializeField] private Material highlightMaterial;
     AudioSource audioSource; 
     private float volume = 0.3f;
     private FPersonController controller;
@@ -41,6 +42,73 @@ public class PlayerInteract : MonoBehaviour
     }
     public bool C_running = false, selected=false;
     int click = 0;
+    Outline gm;
+    private Transform _selection;
+    private void Update()
+    {
+        if (_selection != null)
+        {
+            var selectionOutline = _selection.GetComponent<Outline>(); 
+            selectionOutline.enabled = false;
+        }
+        var ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5F, 0));
+        RaycastHit hit;
+        if(Physics.Raycast(ray,out hit,1) && hit.transform.CompareTag("Item"))
+        {
+            var selection = hit.transform;
+            var selectionOutline = selection.GetComponent<Outline>();
+            if (selectionOutline != null)
+            {
+                selectionOutline.enabled=true;
+            }
+            _selection = selection;
+            if (_input.click)
+            {
+                click++;
+                if (click == 1)
+                {
+                    player_.GetItem(hit.collider.gameObject.name);
+                    Debug.Log(hit.collider.gameObject.name);
+                    Destroy(hit.collider.gameObject);
+                }
+                else
+                {
+                    click = 0;
+                }
+            }
+        }
+        //Ray ray = mainCam.ViewportPointToRay(new Vector3(0.5f, 0.5F, 0));
+        //RaycastHit hit;
+        //if (Physics.Raycast(ray, out hit, 2) && hit.transform.tag == "Item" && !C_running)
+        //{
+        //    if (!selected)
+        //    {
+        //        gm = hit.collider.gameObject.GetComponent<Outline>();
+        //        gm.enabled = true;
+        //        selected = true;
+        //    }
+        //    else { }
+        //    if (_input.click && hit.collider.gameObject.GetComponent<Outline>().enabled)
+        //    {
+        //        click++;
+        //        if (click == 1)
+        //        {
+        //            player_.GetItem(hit.collider.gameObject.name);
+        //            Debug.Log(hit.collider.gameObject.name);
+        //            Destroy(hit.collider.gameObject);
+        //        }
+        //        else
+        //        {
+        //            click = 0;
+        //        }
+        //    }
+        //}
+        //else
+        //{
+        //    if(gm!=null) gm.enabled = false;
+        //    selected = false;
+        //}
+    }
     private void OnTriggerStay(Collider other)
     {
         if (other.tag == "Chair")

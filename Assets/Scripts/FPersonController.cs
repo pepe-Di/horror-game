@@ -43,7 +43,8 @@ public class FPersonController : MonoBehaviour
     public Image cross;
     public GameObject _mainCamera;
     private StarterAssetsInputs _input;
-    public Animator _animator;
+    public Animator _animator; 
+    public Animator cam_animator;
     private int _animIDSpeed;
     private int _animIDGrounded;
     private int _animIDJump;
@@ -69,6 +70,7 @@ public class FPersonController : MonoBehaviour
     }
     private void Start()
     {
+        cam_animator = _mainCamera.GetComponent<Animator>();
         stats = GetComponent<PlayerStats>();
         player = GetComponent<Player>();
         canvas = GameObject.FindObjectOfType<Canvas>();
@@ -77,10 +79,10 @@ public class FPersonController : MonoBehaviour
 
         Image crossHair = new GameObject("Crosshair").AddComponent<Image>();
        // crossHair.sprite = Crosshair;
-        crossHair.sprite = Resources.Load("ui/Reticle")as Sprite;
-        crossHair.rectTransform.sizeDelta = new Vector2(10, 10);
-        crossHair.transform.SetParent(canvas.transform);
-        crossHair.transform.position = Vector3.zero;
+        //crossHair.sprite = Resources.Load("ui/Reticle")as Sprite;
+        //crossHair.rectTransform.sizeDelta = new Vector2(10, 10);
+        //crossHair.transform.SetParent(canvas.transform);
+        //crossHair.transform.position = Vector3.zero;
 
         _animator = GetComponent<Animator>();
         _hasAnimator = TryGetComponent(out _animator);
@@ -101,6 +103,7 @@ public class FPersonController : MonoBehaviour
         _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
         _animIDCrouch = Animator.StringToHash("Crouch");
     }
+    bool stop = false; float limit=10f;
     private void Update()
     {
         isGrounded = Physics.CheckSphere(transform.position, 0.1f, groundMask);
@@ -138,24 +141,36 @@ public class FPersonController : MonoBehaviour
         }
         if (_input.sprint&& targetSpeed!=0)
         {
-            if (isGrounded&&player.stamina>0&&!_input.crouch)
+            if (stop) { limit = 500f; stats.stam_anim.SetBool("warn",true); }
+            if (isGrounded && player.stamina > limit && !_input.crouch)
             {
                 targetSpeed = SprintSpeed;
                 stateController.ChangeState(State.Sprint);
                 player.stamina -= 10f;
                 stats.ChangeStaminaBar(player.stamina);
+                if (stop)
+                {
+                    stop = !stop;
+                    limit = 10f;
+                    stats.stam_anim.SetBool("warn", false);
+                }
             }
         }
-        if(player.stamina<player.max_stamina)
+        if (player.stamina<player.max_stamina)
         {
+            if (player.stamina <= 10) stop = true;
             if (targetSpeed == 0) player.stamina += 4f;
             else player.stamina += 2f;
             stats.ChangeStaminaBar(player.stamina);
         }
         speed = targetSpeed;
+        cam_animator.SetFloat("speed", targetSpeed);
+        if (stateController.state == State.Crouch)
+            cam_animator.SetBool("crouch", true);
+        else if(cam_animator.GetBool("crouch")) cam_animator.SetBool("crouch", false);
         float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
-        _animationBlend = Mathf.Lerp(_animationBlend, targetSpeed, Time.deltaTime * SpeedChangeRate);
-        Vector3 horizontalVelocity = (transform.right * _input.move.x + transform.forward * _input.move.y) * targetSpeed;
+        _animationBlend = Mathf.Lerp(_animationBlend, speed, Time.deltaTime * SpeedChangeRate);
+        Vector3 horizontalVelocity = (transform.right * _input.move.x + transform.forward * _input.move.y) * (speed + player.speed_modifier);
         controller.Move(horizontalVelocity * Time.deltaTime);
 
         if (!_input.crouch && _input.jump&&!_animator.GetBool("Sit"))

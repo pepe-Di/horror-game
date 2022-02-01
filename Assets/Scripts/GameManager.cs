@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     public StarterAssetsInputs _input;
     public GameObject Player;
-    Player player_;
+    public Player player_;
     public GameObject menu;
     public GameObject _mainCamera;
     public InventoryUI inv;
@@ -97,6 +97,10 @@ public class GameManager : MonoBehaviour
         C_running = true;
         if (!menu.activeSelf)
         {
+            if (player_.selectedItem != null)
+            {
+                player_.DeselectItem();
+            }
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             _input.cursorInputForLook = false;

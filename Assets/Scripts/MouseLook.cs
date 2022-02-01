@@ -11,6 +11,7 @@ public class MouseLook : MonoBehaviour
     private StarterAssetsInputs _input;
 
     [SerializeField] Transform playerCamera;
+    Animator animator;
     [SerializeField] float xClamp = 85f;
     float xRotation = 0f;
     int zoom = 20;
@@ -20,6 +21,7 @@ public class MouseLook : MonoBehaviour
 
     private void Start()
     {
+        animator = playerCamera.gameObject.GetComponent<Animator>();
         _input = GetComponent<StarterAssetsInputs>();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -47,9 +49,31 @@ public class MouseLook : MonoBehaviour
         Vector3 targetRotation = transform.eulerAngles;
         targetRotation.x = xRotation;
         playerCamera.eulerAngles = targetRotation;
-
     }
-
+    IEnumerator CameraMove()
+    {
+        C_running = true;
+        Transform transform_ = playerCamera.transform;
+        while (_input.move != Vector2.zero)
+        {
+            while (playerCamera.position != new Vector3(playerCamera.position.x, playerCamera.position.y + 1f, playerCamera.position.z))
+            {
+                playerCamera.position = Vector3.MoveTowards(playerCamera.position, new Vector3(playerCamera.position.x, playerCamera.position.y+1f, playerCamera.position.z), 1.5f * Time.deltaTime);
+                yield return new WaitForEndOfFrame();
+            }
+            while (playerCamera.position != new Vector3(playerCamera.position.x, playerCamera.position.y - 1f, playerCamera.position.z))
+            {
+                playerCamera.position = Vector3.MoveTowards(playerCamera.position, new Vector3(playerCamera.position.x, playerCamera.position.y - 1f, playerCamera.position.z), 1.5f * Time.deltaTime);
+                yield return new WaitForEndOfFrame();
+            }
+        } 
+        while (playerCamera.position != transform_.position)
+        {
+            playerCamera.position = Vector3.MoveTowards(playerCamera.position, transform_.position, 1.5f * Time.deltaTime);
+            yield return new WaitForEndOfFrame();
+        }
+        C_running = false;
+    }
     public void ReceiveInput(Vector2 mouseInput)
     {
         mouseX = mouseInput.x * sensitivityX;

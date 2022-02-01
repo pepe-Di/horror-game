@@ -8,6 +8,9 @@ public class Player : MonoBehaviour
     public float hp, stamina, max_stamina=1000f,max_hp=10000f;
     public State state;
     public List<Item> items=new List<Item>();
+    public GameObject selectedItem;
+    private int selectedID;
+    public float speed_modifier=0;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,6 +23,32 @@ public class Player : MonoBehaviour
             hp = max_hp;
             stamina = max_stamina;
         }
+    }
+    public void SetItem(GameObject g, int i)
+    {
+        selectedItem = g;
+        selectedID = i;
+    }
+    public void DeselectItem()
+    {
+        if(selectedItem!=null) Destroy(selectedItem);
+        selectedID = -1;
+    }
+    public void UseItem()
+    {
+        switch (items[selectedID].type)
+        {
+            case itemType.Food: RegenerateHP(items[selectedID].value, items[selectedID].speed); break;
+            case itemType.Drink: ChangeSpeed(items[selectedID].value, items[selectedID].speed); break;
+            case itemType.Battery: break;
+            case itemType.Drug: break;
+            case itemType.Torch: return; 
+            default: break;
+        }
+        Destroy(selectedItem);
+        items.RemoveAt(selectedID);
+        GameManager.instance.inv.UpdateData(); 
+        selectedID = -1;
     }
     public void LoadData(PlayerData data)
     {
@@ -40,5 +69,39 @@ public class Player : MonoBehaviour
     {
         items.Add(new Item(name));
         GameManager.instance.inv.UpdateData();    
+    }
+    public void RegenerateHP(float value, float speed)
+    {
+        if(hp<max_hp) StartCoroutine(Regeneration(value, speed));
+    }
+    public void ChangeStamina(float value)
+    {
+        hp -= value;
+    }
+    public void ChangeSpeed(float value, float time) 
+    {
+        StartCoroutine(SpeedModifier(value, time));
+    }
+    IEnumerator SpeedModifier(float value, float time)
+    {
+        speed_modifier = value;
+        while (time!=0)
+        {
+            time--;
+            Debug.Log("time");
+            yield return new WaitForSeconds(1);
+        }
+        speed_modifier = 0;
+    }
+    IEnumerator Regeneration(float value, float speed)
+    {
+        float hp_ = hp;
+        while(hp < hp_+value)
+        {
+            if (hp >= max_hp) break;
+            hp+=speed;
+            Debug.Log(hp);
+            yield return new WaitForEndOfFrame();
+        }
     }
 }

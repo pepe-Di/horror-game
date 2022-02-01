@@ -10,6 +10,7 @@ namespace StarterAssets
 		[Header("Character Input Values")]
 		public Vector2 move;
 		public Vector2 look;
+		public Vector2 scroll;
 		public bool jump;
 		public bool sprint;
 		public bool crouch;
@@ -47,7 +48,10 @@ namespace StarterAssets
 				LookInput(value.Get<Vector2>());
 			}
 		}
-
+		public void OnScroll(InputValue value)
+		{
+			ScrollInput(value.Get<Vector2>());
+		}
 		public void OnMouseX(InputValue value)
 		{
 			if (cursorInputForLook)
@@ -114,8 +118,11 @@ namespace StarterAssets
 		public void MoveInput(Vector2 newMoveDirection)
 		{
 			move = newMoveDirection;
-		} 
-
+		}
+		public void ScrollInput(Vector2 newScrollDirection)
+		{
+			scroll = newScrollDirection;
+		}
 		public void LookInput(Vector2 newLookDirection)
 		{
 			look = newLookDirection;
