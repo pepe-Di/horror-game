@@ -53,7 +53,7 @@ public class PlayerInteract : MonoBehaviour
         }
         var ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5F, 0));
         RaycastHit hit;
-        if(Physics.Raycast(ray,out hit,1) && hit.transform.CompareTag("Item"))
+        if(Physics.Raycast(ray,out hit,2) && hit.transform.CompareTag("Item"))
         {
             var selection = hit.transform;
             var selectionOutline = selection.GetComponent<Outline>();
@@ -67,9 +67,12 @@ public class PlayerInteract : MonoBehaviour
                 click++;
                 if (click == 1)
                 {
-                    player_.GetItem(hit.collider.gameObject.name);
+                    if (player_.GetItem(hit.collider.gameObject.name)) Destroy(hit.collider.gameObject);
+                    else
+                    {
+                        GameManager.instance.inv.GetMessage("Инвентарь переполнен");
+                    }
                     Debug.Log(hit.collider.gameObject.name);
-                    Destroy(hit.collider.gameObject);
                 }
                 else
                 {
@@ -77,37 +80,6 @@ public class PlayerInteract : MonoBehaviour
                 }
             }
         }
-        //Ray ray = mainCam.ViewportPointToRay(new Vector3(0.5f, 0.5F, 0));
-        //RaycastHit hit;
-        //if (Physics.Raycast(ray, out hit, 2) && hit.transform.tag == "Item" && !C_running)
-        //{
-        //    if (!selected)
-        //    {
-        //        gm = hit.collider.gameObject.GetComponent<Outline>();
-        //        gm.enabled = true;
-        //        selected = true;
-        //    }
-        //    else { }
-        //    if (_input.click && hit.collider.gameObject.GetComponent<Outline>().enabled)
-        //    {
-        //        click++;
-        //        if (click == 1)
-        //        {
-        //            player_.GetItem(hit.collider.gameObject.name);
-        //            Debug.Log(hit.collider.gameObject.name);
-        //            Destroy(hit.collider.gameObject);
-        //        }
-        //        else
-        //        {
-        //            click = 0;
-        //        }
-        //    }
-        //}
-        //else
-        //{
-        //    if(gm!=null) gm.enabled = false;
-        //    selected = false;
-        //}
     }
     private void OnTriggerStay(Collider other)
     {

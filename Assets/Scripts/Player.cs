@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    [SerializeField] public List<Item> ii;
     public string name_;
     public float hp, stamina, max_stamina=1000f,max_hp=10000f;
     public State state;
@@ -41,7 +42,7 @@ public class Player : MonoBehaviour
             case itemType.Food: RegenerateHP(items[selectedID].value, items[selectedID].speed); break;
             case itemType.Drink: ChangeSpeed(items[selectedID].value, items[selectedID].speed); break;
             case itemType.Battery: break;
-            case itemType.Drug: break;
+            case itemType.Drug: RegenerateHP(items[selectedID].value, 1); break;
             case itemType.Torch: return; 
             default: break;
         }
@@ -65,10 +66,15 @@ public class Player : MonoBehaviour
         }
         Debug.Log("player loaded");
     }
-    public void GetItem(string name)
+    public bool GetItem(string name)
     {
-        items.Add(new Item(name));
-        GameManager.instance.inv.UpdateData();    
+        if (items.Count<15)
+        {
+            items.Add(new Item(name));
+            GameManager.instance.inv.UpdateData();
+            return true;
+        }
+        return false;
     }
     public void RegenerateHP(float value, float speed)
     {
@@ -93,15 +99,15 @@ public class Player : MonoBehaviour
         }
         speed_modifier = 0;
     }
-    IEnumerator Regeneration(float value, float speed)
+    IEnumerator Regeneration(float value, float time)
     {
-        float hp_ = hp;
-        while(hp < hp_+value)
+        float hp_ = value/time;
+        while (time != 0)
         {
-            if (hp >= max_hp) break;
-            hp+=speed;
-            Debug.Log(hp);
-            yield return new WaitForEndOfFrame();
+            hp += hp_;
+            if (hp>max_hp) { hp = max_hp; break; }
+            yield return new WaitForSeconds(1);
+            time--;
         }
     }
 }

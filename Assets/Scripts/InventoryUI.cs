@@ -5,11 +5,14 @@ using UnityEngine.UI;
 
 public class InventoryUI : MonoBehaviour
 {
+    public Text Message;
+    public GameObject descWindow;
     public GameObject inventory;
     public List<GameObject> items = new List<GameObject>();
     public Player player;
     public Transform itemPos;
     public ItemSelect isel;
+    bool C = false;
     // Update is called once per frame
     public void UpdateData()
     {
@@ -29,10 +32,26 @@ public class InventoryUI : MonoBehaviour
             b.gameObject.name = item.Name;
             b.onClick.AddListener(()=> 
             {
-                GameManager.instance.ContinueButton();
                 try
                 {
-                    SetItem(item);
+                    if (!C)
+                    {
+                        if (descWindow.name == item.Name)
+                        {
+                            descWindow.SetActive(false);
+                            GameManager.instance.ContinueButton();
+                            SetItem(item);
+                        }
+                        else
+                        {
+                            descWindow.SetActive(true);
+                            descWindow.name = item.Name;
+                            Image img = descWindow.GetComponentInChildren<Image>();
+                            img.sprite = i.sprite;
+                            img.SetNativeSize(); StartCoroutine(Desc(item));
+                            return;
+                        }
+                    }
                 }
                 catch
                 {
@@ -45,21 +64,44 @@ public class InventoryUI : MonoBehaviour
         }
         isel.GetItems();
     }
+    IEnumerator Desc(Item item)
+    {
+        C = true;
+        var text = descWindow.GetComponentsInChildren<Text>();
+        text[0].text = item._name;
+        text[1].text = item.GetDesc();
+        yield return new WaitForSeconds(0.1f);
+        C = false;
+    }
     public void SetItem(Item item) 
     {
         try
         {
             if (item!=null)
             {
-                GameObject o = Instantiate(Resources.Load<GameObject>("Prefs/Items/" + item.Name + " Item"));
+                GameObject o = Instantiate(Resources.Load<GameObject>("Prefs/Items/" + item.Name));
                 o.transform.SetParent(itemPos);
                 o.transform.localPosition = Vector3.zero;
+                o.AddComponent<InteractItem>();
+                Destroy(o.GetComponent<Outline>());
                 player.SetItem(o, player.items.IndexOf(item));
+                GetMessage("Нажмите на E чтобы использовать");
             }
         }
         catch
         {
 
         }
+    }
+    public void GetMessage(string message)
+    {
+        Message.text = message;
+        Message.gameObject.SetActive(true);
+        StartCoroutine(End());
+    }
+    IEnumerator End()
+    {
+        yield return new WaitForSeconds(2);
+        Message.gameObject.SetActive(false);
     }
 }
