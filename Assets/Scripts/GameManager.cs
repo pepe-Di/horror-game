@@ -63,8 +63,9 @@ public class GameManager : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        _input.cursorInputForLook = true; 
-        Player.GetComponent<CharacterController>().enabled = true;
+        _input.locked_input = false;
+        _input.cursorInputForLook = true;
+        //Player.GetComponent<CharacterController>().enabled = true;
         Player.GetComponent<MouseLook>().enabled = true;
         menu.SetActive(false);
     }
@@ -104,7 +105,8 @@ public class GameManager : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             _input.cursorInputForLook = false;
-            Player.GetComponent<CharacterController>().enabled = false;
+            _input.locked_input = true;
+            //Player.GetComponent<CharacterController>().enabled = false;
             Player.GetComponent<MouseLook>().enabled = false;
             menu.SetActive(true);
         }

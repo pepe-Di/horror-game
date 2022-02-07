@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class InventoryUI : MonoBehaviour
 {
     public Text Message;
+    public int inv_size = 15;
     public GameObject descWindow;
     public GameObject inventory;
     public List<GameObject> items = new List<GameObject>();
@@ -14,6 +15,11 @@ public class InventoryUI : MonoBehaviour
     public ItemSelect isel;
     bool C = false;
     // Update is called once per frame
+    private void Start()=>Player.instance.onHpChange += onPlayerHpChange;
+    public void onPlayerHpChange(float value)
+    {
+        Debug.Log("onPlayerHpChange "+value);
+    }
     public void UpdateData()
     {
         foreach(GameObject obj in items)
@@ -79,6 +85,17 @@ public class InventoryUI : MonoBehaviour
         {
             if (item!=null)
             {
+                switch (item.type)
+                {
+                    case itemType.Flashlight:
+                        {
+                            player.SetItem(player.items.IndexOf(item));
+                            return; 
+                        }
+                    default: { 
+                            break; 
+                        }
+                }
                 GameObject o = Instantiate(Resources.Load<GameObject>("Prefs/Items/" + item.Name));
                 o.transform.SetParent(itemPos);
                 o.transform.localPosition = Vector3.zero;

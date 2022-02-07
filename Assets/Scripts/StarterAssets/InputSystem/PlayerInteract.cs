@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class PlayerInteract : MonoBehaviour
 {
+    public GameObject flashlight;
+    private bool flash = false, locked=false;
     [SerializeField] private Material highlightMaterial;
     AudioSource audioSource; 
     private float volume = 0.3f;
@@ -44,6 +46,22 @@ public class PlayerInteract : MonoBehaviour
     int click = 0;
     Outline gm;
     private Transform _selection;
+    private void FixedUpdate()
+    {
+        if (_input.f&&!locked)
+        {
+            StartCoroutine(Flash());
+            Player.instance.StopAllCoroutines();
+            flashlight.SetActive(!flash);
+            flash = !flash;
+        }
+    }
+    IEnumerator Flash()
+    {
+        locked = true;
+        yield return new WaitForSeconds(0.2f);
+        locked = false;
+    }
     private void Update()
     {
         if (_selection != null)
@@ -53,7 +71,7 @@ public class PlayerInteract : MonoBehaviour
         }
         var ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5F, 0));
         RaycastHit hit;
-        if(Physics.Raycast(ray,out hit,2) && hit.transform.CompareTag("Item"))
+        if(Physics.Raycast(ray,out hit,1.5f) && hit.transform.CompareTag("Item"))
         {
             var selection = hit.transform;
             var selectionOutline = selection.GetComponent<Outline>();
@@ -173,12 +191,10 @@ public class PlayerInteract : MonoBehaviour
             //}
         }
     }
-
     IEnumerator Switch() 
     {
         C_running = true; 
         yield return new WaitForEndOfFrame();
-        
         C_running = false;
     }
 

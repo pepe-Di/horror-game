@@ -15,6 +15,7 @@ TagManager:
   - Occludee Static
   - Note
   - Item
+  - Energy
   layers:
   - Default
   - TransparentFX

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6959069871800246041}
   - component: {fileID: 2255898743515097413}
   m_Layer: 0
-  m_Name: Joghurt
+  m_Name: Yogurt
   m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

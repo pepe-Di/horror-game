@@ -4,15 +4,23 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] public List<Item> ii;
+    public static Player instance;
     public string name_;
-    public float hp, stamina, max_stamina=1000f,max_hp=10000f;
+    public float hp, stamina, max_stamina=1000f,max_hp=10000f, energy, full_energy=5000f;
     public State state;
     public List<Item> items=new List<Item>();
     public GameObject selectedItem;
     private int selectedID;
     public float speed_modifier=0;
+    public event OnHpChange onHpChange;
+    public delegate void OnHpChange(float value);
     // Start is called before the first frame update
+    void Awake()
+    {
+        instance = this;
+        EventController.instance.FlashEvent += EnergyChange;
+
+    }
     void Start()
     {
         if (PlayerPrefs.HasKey("name"))
@@ -23,17 +31,29 @@ public class Player : MonoBehaviour
             PlayerPrefs.DeleteKey("name");
             hp = max_hp;
             stamina = max_stamina;
+            energy = full_energy;
         }
+    }
+    public void EnergyChange(float value)
+    {
+        StartCoroutine(ChangeEnergy(value));
     }
     public void SetItem(GameObject g, int i)
     {
         selectedItem = g;
         selectedID = i;
+        StopAllCoroutines();//?
+    }
+    public void SetItem(int i)
+    {
+        selectedID = i;
+        StopAllCoroutines();//?
     }
     public void DeselectItem()
     {
         if(selectedItem!=null) Destroy(selectedItem);
         selectedID = -1;
+        StopAllCoroutines();//?
     }
     public void UseItem()
     {
@@ -41,9 +61,9 @@ public class Player : MonoBehaviour
         {
             case itemType.Food: RegenerateHP(items[selectedID].value, items[selectedID].speed); break;
             case itemType.Drink: ChangeSpeed(items[selectedID].value, items[selectedID].speed); break;
-            case itemType.Battery: break;
+            case itemType.Battery: { energy += items[selectedID].value; if (energy > full_energy) energy = full_energy; break; }
             case itemType.Drug: RegenerateHP(items[selectedID].value, 1); break;
-            case itemType.Torch: return; 
+            case itemType.Flashlight: items[selectedID].Use(); return; 
             default: break;
         }
         Destroy(selectedItem);
@@ -68,7 +88,7 @@ public class Player : MonoBehaviour
     }
     public bool GetItem(string name)
     {
-        if (items.Count<15)
+        if (items.Count< GameManager.instance.inv.inv_size)
         {
             items.Add(new Item(name));
             GameManager.instance.inv.UpdateData();
@@ -78,7 +98,11 @@ public class Player : MonoBehaviour
     }
     public void RegenerateHP(float value, float speed)
     {
-        if(hp<max_hp) StartCoroutine(Regeneration(value, speed));
+        if (hp < max_hp) 
+        {
+            StartCoroutine(Regeneration(value, speed));
+            onHpChange.Invoke(value);
+        }
     }
     public void ChangeStamina(float value)
     {
@@ -108,6 +132,16 @@ public class Player : MonoBehaviour
             if (hp>max_hp) { hp = max_hp; break; }
             yield return new WaitForSeconds(1);
             time--;
+        }
+    }
+    IEnumerator ChangeEnergy(float value)
+    {
+        while (true)
+        {
+            if (energy <= 0) break;
+            energy -= value;
+            yield return new WaitForSeconds(1);
+            Debug.Log("energy "+energy);
         }
     }
 }

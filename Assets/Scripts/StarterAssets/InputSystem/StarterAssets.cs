@@ -113,6 +113,14 @@ public class @Controls_ : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": ""Press(behavior=2)""
+                },
+                {
+                    ""name"": ""F"",
+                    ""type"": ""Button"",
+                    ""id"": ""24cc06de-cec1-4a7d-bba3-b94ce26045ad"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=2)""
                 }
             ],
             ""bindings"": [
@@ -456,6 +464,17 @@ public class @Controls_ : IInputActionCollection, IDisposable
                     ""action"": ""Scroll"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""74ac26bc-3da0-4272-a8ec-c77024acfe96"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""F"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -524,6 +543,7 @@ public class @Controls_ : IInputActionCollection, IDisposable
         m_Player_Esc = m_Player.FindAction("Esc", throwIfNotFound: true);
         m_Player_Zoom = m_Player.FindAction("Zoom", throwIfNotFound: true);
         m_Player_Scroll = m_Player.FindAction("Scroll", throwIfNotFound: true);
+        m_Player_F = m_Player.FindAction("F", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -585,6 +605,7 @@ public class @Controls_ : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Esc;
     private readonly InputAction m_Player_Zoom;
     private readonly InputAction m_Player_Scroll;
+    private readonly InputAction m_Player_F;
     public struct PlayerActions
     {
         private @Controls_ m_Wrapper;
@@ -601,6 +622,7 @@ public class @Controls_ : IInputActionCollection, IDisposable
         public InputAction @Esc => m_Wrapper.m_Player_Esc;
         public InputAction @Zoom => m_Wrapper.m_Player_Zoom;
         public InputAction @Scroll => m_Wrapper.m_Player_Scroll;
+        public InputAction @F => m_Wrapper.m_Player_F;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -646,6 +668,9 @@ public class @Controls_ : IInputActionCollection, IDisposable
                 @Scroll.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnScroll;
                 @Scroll.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnScroll;
                 @Scroll.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnScroll;
+                @F.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnF;
+                @F.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnF;
+                @F.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnF;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -686,6 +711,9 @@ public class @Controls_ : IInputActionCollection, IDisposable
                 @Scroll.started += instance.OnScroll;
                 @Scroll.performed += instance.OnScroll;
                 @Scroll.canceled += instance.OnScroll;
+                @F.started += instance.OnF;
+                @F.performed += instance.OnF;
+                @F.canceled += instance.OnF;
             }
         }
     }
@@ -740,5 +768,6 @@ public class @Controls_ : IInputActionCollection, IDisposable
         void OnEsc(InputAction.CallbackContext context);
         void OnZoom(InputAction.CallbackContext context);
         void OnScroll(InputAction.CallbackContext context);
+        void OnF(InputAction.CallbackContext context);
     }
 }

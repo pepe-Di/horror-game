@@ -76,21 +76,21 @@ public class ItemSelect : MonoBehaviour
             if (selectedID < max_items-1) { selectedID++; }
             if (!C_run) StartCoroutine(GetItem()); 
         }
-        else
+        else 
         {
         }
     }
     IEnumerator Wait()
     {
-        inventory.player.DeselectItem();
+        Player.instance.DeselectItem();
         if (items.Count!=0)
         {
-            inventory.SetItem(inventory.player.items[selectedID]);
+            inventory.SetItem(Player.instance.items[selectedID]);
         }
         int sec = 3;
         while (sec != 0)
         {
-            Debug.Log(sec);
+            //Debug.Log(sec);
             yield return new WaitForSeconds(1);
             sec--;
         }

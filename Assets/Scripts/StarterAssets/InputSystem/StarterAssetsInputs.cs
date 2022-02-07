@@ -20,6 +20,7 @@ namespace StarterAssets
 		public float mouseY;
 		public bool esc;
 		public bool zoom;
+		public bool f;
 
 		[Header("Movement Settings")]
 		public bool analogMovement;
@@ -28,6 +29,7 @@ namespace StarterAssets
 		[Header("Mouse Cursor Settings")]
 		public bool cursorLocked = true;
 		public bool cursorInputForLook = true;
+		public bool locked_input = false;
 #endif
         private void Awake()
         {
@@ -38,7 +40,7 @@ namespace StarterAssets
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
         public void OnMove(InputValue value)
 		{
-			MoveInput(value.Get<Vector2>());
+			if (!locked_input) MoveInput(value.Get<Vector2>());
 		}
 
 		public void OnLook(InputValue value)
@@ -50,7 +52,7 @@ namespace StarterAssets
 		}
 		public void OnScroll(InputValue value)
 		{
-			ScrollInput(value.Get<Vector2>());
+			if (!locked_input) ScrollInput(value.Get<Vector2>());
 		}
 		public void OnMouseX(InputValue value)
 		{
@@ -70,12 +72,17 @@ namespace StarterAssets
 
 		public void OnJump(InputValue value)
 		{
-			JumpInput(value.isPressed);
+			if (!locked_input) JumpInput(value.isPressed);
 		}
 
 		public void OnZoom(InputValue value)
 		{
-			ZoomInput(value.isPressed);
+			if (!locked_input) ZoomInput(value.isPressed);
+		}
+
+		public void OnF(InputValue value)
+		{
+			if (!locked_input) FInput(value.isPressed);
 		}
 
 		public void OnEsc(InputValue value)
@@ -85,22 +92,22 @@ namespace StarterAssets
 
 		public void OnSprint(InputValue value)
 		{
-			SprintInput(value.isPressed);
+			if (!locked_input) SprintInput(value.isPressed);
 		}
 
 		public void OnCrouch(InputValue value)
 		{
-			CrouchInput(value.isPressed);
+			if (!locked_input) CrouchInput(value.isPressed);
 		}
 
 		public void OnInteract(InputValue value)
 		{
-			InteractInput(value.isPressed);
+			if(!locked_input)InteractInput(value.isPressed);
 		}
 
 		public void OnClick(InputValue value)
 		{
-			ClickInput(value.isPressed);
+			if (!locked_input) ClickInput(value.isPressed);
 		}
 #else
 	// old input sys if we do decide to have it (most likely wont)...
@@ -141,6 +148,11 @@ namespace StarterAssets
 		public void EscInput(bool newEscState)
 		{
 			esc = newEscState;
+		}
+
+		public void FInput(bool newFState)
+		{
+			f = newFState;
 		}
 
 		public void SprintInput(bool newSprintState)
