@@ -16,9 +16,12 @@ public class GameManager : MonoBehaviour
     public GameObject _mainCamera;
     public InventoryUI inv;
     // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
         instance = this;
+    }
+    void Start()
+    {
       //  DontDestroyOnLoad(instance.gameObject);
         if (_mainCamera == null)
         {

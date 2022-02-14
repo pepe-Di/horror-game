@@ -9,6 +9,9 @@ public class EventController : MonoBehaviour
     public event Action<float> FlashEvent;
     public event Action<int> ItemEvent;
     public event Action<int> DoorEvent;
+    public event Action<int> QEvent;
+    public event Action<int> endQEvent;
+    public event Action updateQEvent;
     private void Awake()
     {
         if (instance == null)
@@ -28,5 +31,18 @@ public class EventController : MonoBehaviour
     public void StartDoorEvent(int id)
     {
         DoorEvent?.Invoke(id);
+    }
+    public void StartQEvent(int id)
+    {
+        QEvent?.Invoke(id);
+    }
+    public void EndQEvent(int id)
+    {
+        endQEvent?.Invoke(id);
+        //updateQEvent?.Invoke();
+    }
+    public void UpdateQEvent()
+    {
+        updateQEvent?.Invoke();
     }
 }

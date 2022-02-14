@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Item 
 {
+    public int questId;
     public string _name;
     private string name;
     public string Name 
@@ -36,6 +37,7 @@ public class Item
     public Item(string name)
     {
         this.name = name;
+        questId = -1;
         switch (name)
         {
             case "Cola Can": _name = "Кола"; value = 1f; speed = 30f; type = itemType.Drink; break;
@@ -63,10 +65,17 @@ public class Item
     }
     public void Use()
     {
+        if(questId>=0)
+        {
+            EventController.instance.EndQEvent(questId);
+            Debug.Log(questId);
+            EventController.instance.UpdateQEvent();
+            questId = -1;
+        }
         switch (type)
         {
             case itemType.Flashlight: break;
-            default: return;
+            default: break;
         }
     }
     ~Item () { }
@@ -78,4 +87,50 @@ public enum itemType
     Battery,
     Flashlight,
     Drug
+}
+public class Quest
+{
+    public int id;
+    private questType type;
+    public questType Type { get { return type; } set { type = value; } }
+    public string name;
+    public bool isConsistent;
+    public GameObject finish;
+    public Quest(questType type, string name,bool b)
+    {
+        Type = type;
+        this.name = name;
+        isConsistent = b;
+        switch (type) 
+        {
+            case questType.ToPoint: break;
+            case questType.Grab: break;
+            case questType.Use: break;
+            case questType.Puzzle: break;
+            default: break;
+        }
+
+    }
+    public Quest(questType type, string name, bool b, string s)
+    {
+        Type = type;
+        this.name = name;
+        isConsistent = b;
+        switch (type)
+        {
+            case questType.ToPoint: break;
+            case questType.Grab: break;
+            case questType.Use: break;
+            case questType.Puzzle: break;
+            default: break;
+        }
+        finish = new GameObject(s);
+    }
+}
+public enum questType
+{
+    ToPoint,
+    Use,
+    Grab,
+    Puzzle
 }

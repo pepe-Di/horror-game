@@ -16,6 +16,7 @@ TagManager:
   - Note
   - Item
   - Energy
+  - Point
   layers:
   - Default
   - TransparentFX

@@ -85,7 +85,21 @@ public class PlayerInteract : MonoBehaviour
                 click++;
                 if (click == 1)
                 {
-                    if (player_.GetItem(hit.collider.gameObject.name)) Destroy(hit.collider.gameObject);
+                    if (player_.GetItem(hit.collider.gameObject.name))
+                    {
+                        try
+                        {
+                            QuestItem qi = hit.collider.GetComponent<QuestItem>();
+                            if (qi != null)
+                            {
+                                EventController.instance.EndQEvent(qi.id);
+                                EventController.instance.UpdateQEvent();
+                                Debug.Log("Qi "+qi.id);
+                            }
+                        }
+                        catch { }
+                        Destroy(hit.collider.gameObject); 
+                    }
                     else
                     {
                         GameManager.instance.inv.GetMessage("Инвентарь переполнен");

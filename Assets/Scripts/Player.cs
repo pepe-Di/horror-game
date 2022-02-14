@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public int lastQIndex=-1;
     public static Player instance;
     public string name_;
     public float hp, stamina, max_stamina=1000f,max_hp=10000f, energy, full_energy=5000f;
     public State state;
     public List<Item> items=new List<Item>();
+    public List<Quest> quests = new List<Quest>();
     public GameObject selectedItem;
     private int selectedID;
     public float speed_modifier=0;
@@ -19,7 +21,45 @@ public class Player : MonoBehaviour
     {
         instance = this;
         EventController.instance.FlashEvent += EnergyChange;
-
+        EventController.instance.QEvent += AddQ;
+        EventController.instance.endQEvent += EndQuest;
+    }
+    public void AddQ(int id)
+    {
+        Quest q = QuestManager.instance.quests[id];
+        if (q.Type==questType.Use)
+        {
+            Item i = FindItem(q.finish.name);
+            i.questId = id;
+            Debug.Log(i.questId);
+        }
+        quests.Add(q);
+    }
+    public Item FindItem(string name)
+    {
+        foreach (Item i in items)
+        {
+            if (i.Name == name) return i;
+        }
+        return null;
+    }
+    public void EndQuest(int id)
+    {
+        try
+        {
+            lastQIndex = id;
+            quests.Remove(QuestManager.instance.quests[id]);
+            if (QuestManager.instance.quests[id].isConsistent)
+            {
+                StartCoroutine(StartQ(id));
+            }
+        }
+        catch { }
+    }
+    IEnumerator StartQ(int id)
+    {
+        yield return new WaitForEndOfFrame();
+        EventController.instance.StartQEvent(id + 1);
     }
     void Start()
     {
@@ -57,13 +97,14 @@ public class Player : MonoBehaviour
     }
     public void UseItem()
     {
+        items[selectedID].Use();
         switch (items[selectedID].type)
         {
             case itemType.Food: RegenerateHP(items[selectedID].value, items[selectedID].speed); break;
             case itemType.Drink: ChangeSpeed(items[selectedID].value, items[selectedID].speed); break;
             case itemType.Battery: { energy += items[selectedID].value; if (energy > full_energy) energy = full_energy; break; }
             case itemType.Drug: RegenerateHP(items[selectedID].value, 1); break;
-            case itemType.Flashlight: items[selectedID].Use(); return; 
+            case itemType.Flashlight: return; 
             default: break;
         }
         Destroy(selectedItem);

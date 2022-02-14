@@ -15,7 +15,7 @@ public class InteractItem : MonoBehaviour
     {
         if (GameManager.instance._input.interact)
         {
-            GameManager.instance.player_.UseItem();
+            Player.instance.UseItem();
         }
     }
 }
