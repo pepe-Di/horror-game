@@ -17,6 +17,7 @@ TagManager:
   - Item
   - Energy
   - Point
+  - header
   layers:
   - Default
   - TransparentFX
@@ -25,7 +26,7 @@ TagManager:
   - Water
   - UI
   - Player
-  - 
+  - Enemy
   - YuME_TileMap
   - 
   - 

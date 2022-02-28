@@ -5,10 +5,14 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "GameData", fileName = "new GameData")]
 public class GameData : ScriptableObject
 {
-    [SerializeField] public float master_vol, music_vol, effects_vol, vol,vol1,vol2;
-    
+    [SerializeField] public float master_vol, music_vol, effects_vol, vol,vol1,vol2, sens;
+    [SerializeField] public int lg, q, res, style, last_slot;
+    [SerializeField] public bool fc;
+
     public GameData()
     {
+        master_vol = 0; music_vol = 0; effects_vol = 0;
+        vol = 1; vol1 = 1; vol2 = 1; lg = 0; sens = 1; style = 0; last_slot = -1;
     }
     public void ForceSerialization()
 

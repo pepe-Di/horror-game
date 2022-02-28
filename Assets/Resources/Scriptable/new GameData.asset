@@ -12,9 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 331f45afd0a4f914980b63da67c7e5de, type: 3}
   m_Name: new GameData
   m_EditorClassIdentifier: 
-  master_vol: -7.222472
-  music_vol: -20.820253
-  effects_vol: -13.159848
-  vol: 0.4353879
-  vol1: 0.09098869
-  vol2: 0.21978983
+  master_vol: -11.78742
+  music_vol: -80
+  effects_vol: -7.585243
+  vol: 0.2574121
+  vol1: 0.0001
+  vol2: 0.41757822
+  sens: 0
+  lg: 1
+  q: 1
+  res: 17
+  style: 0
+  last_slot: -1
+  fc: 1

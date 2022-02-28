@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using UnityEngine.Audio;
 public class MenuManager : MonoBehaviour
 {
+    public List<GameObject> panels;
     public AudioSource sfx;
     private AudioSource audio_;
     public GameData gameData;
@@ -15,30 +16,36 @@ public class MenuManager : MonoBehaviour
     public Dropdown resDrop;
     public Dropdown qaDrop;
     public Dropdown lgDrop;
+    public Dropdown stDrop;
     public Toggle fullToggle;
-    public Slider master,music,effects,txt_speed;
+    public Slider master, music, effects, txt_speed;
     private GameObject menu;
     private GameObject _mainCamera;
     //public GameObject icon;
     public List<GameObject> buttons;
     public List<GameObject> slots;
+    public List<string> lg = new List<string> { "en", "ru"  };
+    private int curlg=0;
+    public Material mat;
+    public Button lgButton;
     // Start is called before the first frame update
     private void Awake()
     {
     }
     void Start()
     {
+        if (gameData == null)
+        {
+            gameData = new GameData();
+            gameData.q = QualitySettings.GetQualityLevel();
+            gameData.fc = Screen.fullScreen;
+        }
+        else
+        {
+        }
         audio_ = GetComponent<AudioSource>();
-        qaDrop.value = QualitySettings.GetQualityLevel();
-        fullToggle.isOn = Screen.fullScreen;
         resolutions = Screen.resolutions;
         resDrop.ClearOptions();
-        audioMixer.SetFloat("master", gameData.master_vol);
-        audioMixer.SetFloat("music", gameData.music_vol);
-        audioMixer.SetFloat("effects", gameData.effects_vol);
-        master.value = gameData.vol; 
-        music.value = gameData.vol1; 
-        effects.value = gameData.vol2;
         List<string> options = new List<string>();
         int curRes = 0;
         for(int i=0; i < resolutions.Length; i++)
@@ -48,11 +55,13 @@ public class MenuManager : MonoBehaviour
             if (resolutions[i].width == Screen.currentResolution.width&& resolutions[i].height == Screen.currentResolution.height)
             {
                 curRes = i;
+                gameData.res = i;
             }
         }
         resDrop.AddOptions(options);
         resDrop.value = curRes;
         resDrop.RefreshShownValue();
+        UpdateData();
         var obj = FindObjectsOfType<DataManager>();
         if (obj.Length > 1)
         {
@@ -76,6 +85,135 @@ public class MenuManager : MonoBehaviour
                 slot.GetComponentInChildren<Text>().text = DataManager.saveSlots[j].text;
                 j++;
             }
+        }
+    }
+    public void UpdateData()
+    {
+        audioMixer.SetFloat("master", gameData.master_vol);
+        audioMixer.SetFloat("music", gameData.music_vol);
+        audioMixer.SetFloat("effects", gameData.effects_vol);
+        master.value = gameData.vol;
+        music.value = gameData.vol1;
+        effects.value = gameData.vol2;
+        curlg = gameData.lg;
+        if (lgButton != null)
+        {
+            lgButton.GetComponent<Image>().sprite = Resources.Load<Sprite>("ui/" + lg[curlg]);
+        }
+        if (stDrop != null)
+        {
+            stDrop.value = gameData.style;
+        }
+        if (lgDrop != null)
+        {
+            lgDrop.value = gameData.lg;
+        }
+        if (txt_speed != null)
+        {
+            txt_speed.value = gameData.sens;
+        }
+        LangChanger();
+        qaDrop.value = gameData.q;
+        fullToggle.isOn = gameData.fc;
+        resDrop.value = gameData.res;
+    }
+    public void ContinueButton()
+    {
+        if (gameData.last_slot != -1)
+        {
+
+        }
+    }
+    public void lgChange(Button b)
+    {
+        curlg++;
+        if (curlg >= lg.Count) curlg = 0; 
+        b.GetComponent<Image>().sprite = Resources.Load<Sprite>("ui/" + lg[curlg]); 
+        LangChanger();
+    }
+    public void LangChanger()
+    {
+        gameData.lg = curlg;
+        Dictionary<string, string> d = DataManager.dictionary[lg[curlg]]; 
+        Font f = Resources.Load<Font>("Font/" + d["menu_font"]);
+        int size = System.Int32.Parse(d["menu_size"]);
+        //if (buttons != null)
+        //{
+        //    switch (curlg)
+        //    {
+        //        case 0:
+        //            {
+        //                break;
+        //            }
+        //        case 1:
+        //            {
+                        
+        //                break;
+        //            }
+        //    }
+        //    //int i = 0;
+            
+        //    foreach (GameObject b in buttons)
+        //    {
+        //        Text t = b.GetComponentInChildren<Text>();
+        //        t.font = f;
+        //        t.fontSize = size;
+        //        //t.text = d["menu" + i];
+        //       // i++;
+        //    }
+        //}
+        if (panels != null)
+        {
+            foreach(GameObject o in panels)
+            {
+                o.SetActive(true);
+            }
+        }
+        var txt = GameObject.FindObjectsOfType<Text>();
+        foreach(Text tt in txt)
+        {
+            if (d.ContainsKey(tt.name))
+            {
+                tt.text = d[tt.name];
+                if (tt.gameObject.tag == "header")
+                {
+                    tt.font = f;
+                    tt.fontSize = size;
+                }
+            }
+        }
+        if (panels != null)
+        {
+            foreach (GameObject o in panels)
+            {
+                o.SetActive(false);
+            }
+        }
+    }
+    public void SetStyle(int i)
+    {
+        //Color[] c = new Color[2];
+        //c[0] = Color.black;
+        //c[1] = Color.red;
+        //mat.SetColorArray("",c);
+        switch (i) 
+        {
+            case 0:
+                {
+                    mat.SetColor("_BG", Color.black);
+                    mat.SetColor("_FG", Color.white);break;
+                }
+            case 1:
+                {
+                    mat.SetColor("_BG", Color.blue);
+                    mat.SetColor("_FG", Color.white);
+                    break; }
+            case 2:
+                {
+                    mat.SetColor("_BG", Color.red);
+                    mat.SetColor("_FG", Color.yellow);
+                    break;
+                }
         }
     }
     public void SetQuality(int index)
@@ -125,6 +263,10 @@ public class MenuManager : MonoBehaviour
         gameData.music_vol = vol2;
         audioMixer.GetFloat("effects", out float vol3);
         gameData.effects_vol = vol3;
+        gameData.lg = curlg;
+        gameData.q = qaDrop.value;
+        gameData.fc = fullToggle.isOn;
+        gameData.res = resDrop.value;
         gameData.ForceSerialization();
     }
     public void ClearSlot()
@@ -171,7 +313,8 @@ public class MenuManager : MonoBehaviour
     }
     public void ResetSettings()
     {
-        
+        gameData = new GameData();
+        UpdateData();
     }
     public void SelectedUI(Transform button)
     {
