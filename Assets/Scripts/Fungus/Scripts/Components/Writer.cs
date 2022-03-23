@@ -83,7 +83,7 @@ namespace Fungus
 
         //holds number of Word tokens in the currently running Write
         public int WordTokensFound { get; protected set; }
-
+        public float WritingSpeed { get { return writingSpeed; }  set { writingSpeed = value; } }
         /// <summary>
         /// Updated during writing of Word tokens, when processed tips over found, fires NotifyAllWordsWritten
         /// </summary>

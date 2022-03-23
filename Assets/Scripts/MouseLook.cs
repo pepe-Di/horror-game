@@ -7,6 +7,7 @@ public class MouseLook : MonoBehaviour
 {
     [SerializeField] float sensitivityX = 8f;
     [SerializeField] float sensitivityY = 0.5f;
+    float multiplier =1f;
     float mouseX, mouseY;
     private StarterAssetsInputs _input;
 
@@ -18,7 +19,11 @@ public class MouseLook : MonoBehaviour
     int normal = 60;
     float smooth = 5f;
     private bool isZoomed = false;
-
+    public void SensChange(float value)
+    {
+        sensitivityX = 8f * value; 
+        sensitivityY= 0.5f * value*0.2f;
+    }
     private void Start()
     {
         animator = playerCamera.gameObject.GetComponent<Animator>();

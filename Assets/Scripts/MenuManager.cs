@@ -18,7 +18,7 @@ public class MenuManager : MonoBehaviour
     public Dropdown lgDrop;
     public Dropdown stDrop;
     public Toggle fullToggle;
-    public Slider master, music, effects, txt_speed;
+    public Slider master, music, effects, txt_speed, sens;
     private GameObject menu;
     private GameObject _mainCamera;
     //public GameObject icon;
@@ -96,13 +96,14 @@ public class MenuManager : MonoBehaviour
         music.value = gameData.vol1;
         effects.value = gameData.vol2;
         curlg = gameData.lg;
+        try
+        {
+            DataManager.instance.curlg = gameData.lg;
+        }
+        catch { }
         if (lgButton != null)
         {
             lgButton.GetComponent<Image>().sprite = Resources.Load<Sprite>("ui/" + lg[curlg]);
-        }
-        if (stDrop != null)
-        {
-            stDrop.value = gameData.style;
         }
         if (lgDrop != null)
         {
@@ -110,7 +111,17 @@ public class MenuManager : MonoBehaviour
         }
         if (txt_speed != null)
         {
-            txt_speed.value = gameData.sens;
+            txt_speed.value = gameData.txt_speed;
+            SetTxtSpeed(gameData.txt_speed);
+        }
+        if (sens != null)
+        {
+            sens.value = gameData.sens;
+            ChangeSens(gameData.sens);
+        }
+        if (stDrop != null)
+        {
+            stDrop.value = gameData.style;
         }
         LangChanger();
         qaDrop.value = gameData.q;
@@ -131,37 +142,21 @@ public class MenuManager : MonoBehaviour
         b.GetComponent<Image>().sprite = Resources.Load<Sprite>("ui/" + lg[curlg]); 
         LangChanger();
     }
+    public void SetLang(int i)
+    {
+        curlg = i;
+    }
+    public void ChangeSens(float value)
+    {
+        Player.instance.GetComponent<MouseLook>().SensChange(value);
+    }
     public void LangChanger()
     {
+        gameData.style = stDrop.value;
         gameData.lg = curlg;
         Dictionary<string, string> d = DataManager.dictionary[lg[curlg]]; 
         Font f = Resources.Load<Font>("Font/" + d["menu_font"]);
         int size = System.Int32.Parse(d["menu_size"]);
-        //if (buttons != null)
-        //{
-        //    switch (curlg)
-        //    {
-        //        case 0:
-        //            {
-        //                break;
-        //            }
-        //        case 1:
-        //            {
-                        
-        //                break;
-        //            }
-        //    }
-        //    //int i = 0;
-            
-        //    foreach (GameObject b in buttons)
-        //    {
-        //        Text t = b.GetComponentInChildren<Text>();
-        //        t.font = f;
-        //        t.fontSize = size;
-        //        //t.text = d["menu" + i];
-        //       // i++;
-        //    }
-        //}
         if (panels != null)
         {
             foreach(GameObject o in panels)
@@ -178,30 +173,53 @@ public class MenuManager : MonoBehaviour
                 if (tt.gameObject.tag == "header")
                 {
                     tt.font = f;
-                    tt.fontSize = size;
+                  //  tt.fontSize = size;
                 }
             }
+        }
+        qaDrop.ClearOptions();
+        List<string> options = new List<string>();
+        for (int i=0;i<4;i++)
+        {
+            options.Add(d["q" + i]);
+        }
+        qaDrop.AddOptions(options);
+        qaDrop.value = gameData.q;
+        qaDrop.RefreshShownValue();
+        if (stDrop != null)
+        {
+            stDrop.ClearOptions();
+            List<string> o = new List<string>();
+            for (int i = 0; i < 3; i++)
+            {
+                o.Add(d["st" + i]);
+            }
+            stDrop.AddOptions(o);
+            stDrop.value = gameData.style;
+            stDrop.RefreshShownValue();
         }
         if (panels != null)
         {
             foreach (GameObject o in panels)
             {
                 o.SetActive(false);
+                
+            }
+            if (GameManager.instance != null)
+            {
+                GameManager.instance.menu.SetActive(true);
             }
         }
     }
     public void SetStyle(int i)
     {
-        //Color[] c = new Color[2];
-        //c[0] = Color.black;
-        //c[1] = Color.red;
-        //mat.SetColorArray("",c);
         switch (i) 
         {
             case 0:
                 {
                     mat.SetColor("_BG", Color.black);
-                    mat.SetColor("_FG", Color.white);break;
+                    mat.SetColor("_FG", Color.white);
+                    break;
                 }
             case 1:
                 {
@@ -252,6 +270,10 @@ public class MenuManager : MonoBehaviour
     {
         Screen.fullScreen = isFullscreen;
     }
+    public void SetTxtSpeed(float value)
+    {
+        Player.instance.GetComponent<Fungus.Character>().SetSayDialog.GetComponent<Fungus.Writer>().WritingSpeed = value*10f;
+    }
     public void ApplySettings()
     {
         gameData.vol = master.value;
@@ -267,7 +289,10 @@ public class MenuManager : MonoBehaviour
         gameData.q = qaDrop.value;
         gameData.fc = fullToggle.isOn;
         gameData.res = resDrop.value;
+        gameData.txt_speed = txt_speed.value;
+        gameData.sens = sens.value;
         gameData.ForceSerialization();
+        LangChanger();
     }
     public void ClearSlot()
     {
@@ -321,14 +346,18 @@ public class MenuManager : MonoBehaviour
         //icon.transform.position =new Vector3(icon.transform.position.x, button.position.y,0);
         button.GetComponent<Image>().color = Color.white;
         button.GetComponentInChildren<Text>().color = Color.black;
-        foreach (GameObject gm in buttons)
+        if (buttons != null)
         {
-            if (gm.name != button.name)
+            foreach (GameObject gm in buttons)
             {
-                gm.GetComponent<Image>().color = Color.black;
-                gm.GetComponentInChildren<Text>().color = Color.white;
+                if (gm.name != button.name)
+                {
+                    gm.GetComponent<Image>().color = Color.black;
+                    gm.GetComponentInChildren<Text>().color = Color.white;
+                }
             }
         }
+        
     }
     public void ExitUI(GameObject button)
     {

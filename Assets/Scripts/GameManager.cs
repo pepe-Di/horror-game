@@ -96,7 +96,7 @@ public class GameManager : MonoBehaviour
             //}
     }
     bool C_running = false;
-    IEnumerator OpenMenu()
+    public IEnumerator OpenMenu()
     {
         C_running = true;
         if (!menu.activeSelf)
