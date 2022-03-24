@@ -152,8 +152,16 @@ public class MenuManager : MonoBehaviour
     }
     public void LangChanger()
     {
-        gameData.style = stDrop.value;
-        gameData.lg = curlg;
+        if (stDrop!=null)
+        {
+            gameData.style = stDrop.value;
+
+        }
+        if (lgDrop != null)
+        {
+            gameData.lg = curlg;
+
+        }
         Dictionary<string, string> d = DataManager.dictionary[lg[curlg]]; 
         Font f = Resources.Load<Font>("Font/" + d["menu_font"]);
         int size = System.Int32.Parse(d["menu_size"]);

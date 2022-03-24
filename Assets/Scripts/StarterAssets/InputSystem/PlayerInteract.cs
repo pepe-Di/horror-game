@@ -2,6 +2,7 @@ using StarterAssets;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerInteract : MonoBehaviour
 {
@@ -19,6 +20,7 @@ public class PlayerInteract : MonoBehaviour
     Vector3 Ray_start_pos = new Vector3(0.5f, 0.5F, 0);
     Vector3 ray_ = new Vector3(Screen.width / 2, Screen.height / 2, 0);
     public Camera mainCam;
+    public Image crosshair;
     private void Awake()
     {
         player_ = GetComponent<Player>();
@@ -34,12 +36,16 @@ public class PlayerInteract : MonoBehaviour
         if (other.tag == "Chair")
         {
             Debug.Log("Press E to sit");
-            if (_input.interact) { }
+            //if (_input.interact) { }
         }
         if (other.tag == "Note")
         {
             Debug.Log("note trigger enter");
-            if (_input.interact) { }
+            //if (_input.interact) { }
+        }
+        if (other.tag == "Door")
+        {
+            Debug.Log("door trigger enter");
         }
     }
     public bool C_running = false, selected=false;
@@ -66,53 +72,85 @@ public class PlayerInteract : MonoBehaviour
     {
         if (_selection != null)
         {
-            var selectionOutline = _selection.GetComponent<Outline>(); 
-            selectionOutline.enabled = false;
+            //var selectionOutline = _selection.GetComponent<Outline>(); 
+            //selectionOutline.enabled = false;
+            crosshair.sprite = Resources.Load<Sprite>("ui/Reticle");
         }
         var ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5F, 0));
         RaycastHit hit;
-        if(Physics.Raycast(ray,out hit,1.5f) && hit.transform.CompareTag("Item"))
+        if(Physics.Raycast(ray,out hit,1.5f))
         {
-            var selection = hit.transform;
-            var selectionOutline = selection.GetComponent<Outline>();
-            if (selectionOutline != null)
+            if (hit.transform.CompareTag("Item"))
             {
-                selectionOutline.enabled=true;
-            }
-            _selection = selection;
-            if (_input.click)
-            {
-                click++;
-                if (click == 1)
+                crosshair.sprite = Resources.Load<Sprite>("ui/grab");
+                var selection = hit.transform;
+                //var selectionOutline = selection.GetComponent<Outline>();
+                //if (selectionOutline != null)
+                //{
+                //    selectionOutline.enabled=true;
+                //}
+                _selection = selection;
+                if (_input.click)
                 {
-                    if (player_.GetItem(hit.collider.gameObject.name))
+                    click++;
+                    if (click == 1)
                     {
-                        try
+                        if (player_.GetItem(hit.collider.gameObject.name))
                         {
-                            QuestItem qi = hit.collider.GetComponent<QuestItem>();
-                            if (qi != null)
+                            try
                             {
-                                EventController.instance.EndQEvent(qi.id);
-                                EventController.instance.UpdateQEvent();
-                                Debug.Log("Qi "+qi.id);
+                                QuestItem qi = hit.collider.GetComponent<QuestItem>();
+                                if (qi != null)
+                                {
+                                    EventController.instance.EndQEvent(qi.id);
+                                    EventController.instance.UpdateQEvent();
+                                    Debug.Log("Qi " + qi.id);
+                                }
                             }
+                            catch { }
+                            Destroy(hit.collider.gameObject);
+                            SoundManager.instanse.PlaySe(Se.Item);
+                            crosshair.sprite = Resources.Load<Sprite>("ui/Reticle");
                         }
-                        catch { }
-                        Destroy(hit.collider.gameObject); 
+                        else
+                        {
+                            GameManager.instance.inv.GetMessage("Инвентарь переполнен");
+                        }
+                        Debug.Log(hit.collider.gameObject.name);
                     }
                     else
                     {
-                        GameManager.instance.inv.GetMessage("Инвентарь переполнен");
+                        click = 0;
                     }
-                    Debug.Log(hit.collider.gameObject.name);
-                }
-                else
-                {
-                    click = 0;
                 }
             }
+            if (hit.transform.CompareTag("Door"))
+            {
+                crosshair.sprite = Resources.Load<Sprite>("ui/grab");
+                var selection = hit.transform;
+                //var selectionOutline = selection.GetComponent<Outline>();
+                //if (selectionOutline != null)
+                //{
+                //    selectionOutline.enabled=true;
+                //}
+                _selection = selection;
+                if (_input.click)
+                {
+                    click++;
+                    if (click == 1)
+                    {
+                        if(!C_running) StartCoroutine(Door(hit.transform));
+                    }
+                    else
+                    {
+                        click = 0;
+                    }
+                }
+            }
+
         }
     }
+
     private void OnTriggerStay(Collider other)
     {
         if (other.tag == "Chair")
@@ -137,12 +175,12 @@ public class PlayerInteract : MonoBehaviour
         {
             if (_input.click)
             {
-                Ray ray = controller._mainCamera.GetComponent<Camera>().ViewportPointToRay(new Vector3(0.5f, 0.5F, 0));
-                RaycastHit hit;
-                if (Physics.Raycast(ray, out hit) && hit.transform.tag == "Door" && !C_running)
-                {
-                    StartCoroutine(Door(other.transform));
-                }
+                //Ray ray = controller._mainCamera.GetComponent<Camera>().ViewportPointToRay(new Vector3(0.5f, 0.5F, 0));
+                //RaycastHit hit;
+                //if (Physics.Raycast(ray, out hit) && hit.transform.tag == "Door" && !C_running)
+                //{
+                //    StartCoroutine(Door(other.transform));
+                //}
             }
         }
         if (other.tag == "Switch")
@@ -174,6 +212,7 @@ public class PlayerInteract : MonoBehaviour
                 {
                     hit.collider.gameObject.GetComponent<Outline>().enabled = true;
                     selected = true;
+                    crosshair.sprite = Resources.Load<Sprite>("ui/grab");
                 }
                 else { }
                 if (_input.click&& hit.collider.gameObject.GetComponent<Outline>().enabled)
@@ -195,6 +234,7 @@ public class PlayerInteract : MonoBehaviour
             {
                 other.GetComponent<Outline>().enabled = false; 
                 selected = false;
+                crosshair.sprite = Resources.Load<Sprite>("ui/Reticle");
             }
             //if (_input.click)
             //{
