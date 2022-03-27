@@ -28,21 +28,24 @@ public class GameManager : MonoBehaviour
             _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
         }
         player_ = Player.GetComponent<Player>();
-      //  _input = FindObjectOfType<StarterAssetsInputs>();
-       // lv = FindObjectOfType<LevelLoader>();
+        //  _input = FindObjectOfType<StarterAssetsInputs>();
+        // lv = FindObjectOfType<LevelLoader>();
         // menu = GameObject.Find("ui");
-       // Player = GameObject.Find("Player");
-      //  Player.SetActive(true); 
-        menu.SetActive(false);
-        try { 
-            if (DataManager.instance.loaded) 
-            { 
-                LoadData(); 
-                DataManager.instance.loaded = false; 
-            } 
+        // Player = GameObject.Find("Player");
+        //  Player.SetActive(true); 
+        
+        menu.SetActive(false); LoadData();
+        try {
+            LoadData();
+            //if (DataManager.instance.loaded) 
+            //{ 
+            //    LoadData(); 
+            //    DataManager.instance.loaded = false; 
+            //} 
         }
-        catch { }
+        catch { Debug.Log("catch"); }
     }
+   
     // Update is called once per frame
     public int GetSceneIndex()
     {
@@ -76,6 +79,8 @@ public class GameManager : MonoBehaviour
     }
     public void BackToMenu() //and save
     {
+        Time.timeScale = 1f;
+        Debug.Log("cur_slot " + DataManager.instance.gameData.cur_slot);
         SaveSystem.SavePlayer(instance.Player.GetComponent<Player>());
         lv.LoadLevel(0);
 

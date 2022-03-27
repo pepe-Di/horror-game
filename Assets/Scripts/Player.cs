@@ -73,6 +73,15 @@ public class Player : MonoBehaviour
             stamina = max_stamina;
             energy = full_energy;
         }
+        else
+        {
+            try 
+            {
+                Fungus.Character character = GetComponent<Fungus.Character>();
+               // name_ = DataManager.DataManager.instance.gameData.cur_slot
+            }
+            catch { Debug.Log("ÿ"); }
+        }
     }
     public void EnergyChange(float value)
     {
@@ -117,6 +126,7 @@ public class Player : MonoBehaviour
         name_ = data.name;
         Fungus.Character character = GetComponent<Fungus.Character>();
         character.nameText = data.name;
+        Debug.Log(data.name);
         hp = data.hp;
         stamina = data.stamina;
         Vector3 position = new Vector3(data.position[0], data.position[1], data.position[2]);

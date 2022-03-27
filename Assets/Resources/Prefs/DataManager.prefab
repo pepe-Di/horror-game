@@ -43,3 +43,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22cc1a9a3ec36374ea8b9d007a390553, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameData: {fileID: 11400000, guid: 123e32a4bcf7d1345aa9e57431e430cb, type: 2}
+  lg:
+  - en
+  - ru
+  text: []
+  curlg: 0
+  loaded: 0
+  selectedSlot: -1
+  palettes: []
+  colors: []

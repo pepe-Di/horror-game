@@ -28,9 +28,38 @@ public class MenuManager : MonoBehaviour
     private int curlg=0;
     public Material mat;
     public Button lgButton;
+    Text[] txt;
+    List<Image> imgs;
+    List<Text> texts;
+    Color bg, fg;
     // Start is called before the first frame update
     private void Awake()
     {
+        Time.timeScale = 1f;
+    }
+    void createDrops()
+    {
+        resolutions = Screen.resolutions;
+        resDrop.ClearOptions();
+        List<string> options = new List<string>();
+        int curRes = 0;
+        for (int i = 0; i < resolutions.Length; i++)
+        {
+            string option = resolutions[i].width + "x" + resolutions[i].height;
+            options.Add(option);
+            if (resolutions[i].width == Screen.currentResolution.width && resolutions[i].height == Screen.currentResolution.height)
+            {
+                curRes = i;
+                if(gameData.res==-1) gameData.res = i;
+            }
+        }
+        if (gameData.res != -1)
+        {
+            curRes = gameData.res;
+        }
+        resDrop.AddOptions(options);
+        resDrop.value = curRes;
+        resDrop.RefreshShownValue();
     }
     void Start()
     {
@@ -43,24 +72,38 @@ public class MenuManager : MonoBehaviour
         else
         {
         }
-        audio_ = GetComponent<AudioSource>();
-        resolutions = Screen.resolutions;
-        resDrop.ClearOptions();
-        List<string> options = new List<string>();
-        int curRes = 0;
-        for(int i=0; i < resolutions.Length; i++)
+        if (panels != null)
         {
-            string option = resolutions[i].width + "x" + resolutions[i].height;
-            options.Add(option);
-            if (resolutions[i].width == Screen.currentResolution.width&& resolutions[i].height == Screen.currentResolution.height)
+            foreach (GameObject o in panels)
             {
-                curRes = i;
-                gameData.res = i;
+                o.SetActive(true);
             }
         }
-        resDrop.AddOptions(options);
-        resDrop.value = curRes;
-        resDrop.RefreshShownValue();
+        StyleUIChanger();
+        txt = GameObject.FindObjectsOfType<Text>();
+        if (panels != null)
+        {
+            foreach (GameObject o in panels)
+            {
+                o.SetActive(false);
+            }
+        }
+        audio_ = GetComponent<AudioSource>();
+        createDrops();
+        if (stDrop != null)
+        {
+            //stDrop.ClearOptions();
+            //try
+            //{
+            //    List<string> opts = new List<string>();
+            //    foreach (ColorPalette cp in DataManager.instance.palettes)
+            //    {
+            //        opts.Add(cp.Name);
+            //    }
+            //    stDrop.AddOptions(opts);
+            //}
+            //catch { }
+        }
         UpdateData();
         var obj = FindObjectsOfType<DataManager>();
         if (obj.Length > 1)
@@ -76,16 +119,8 @@ public class MenuManager : MonoBehaviour
             _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
         }
         menu = GameObject.Find("GameMenu");
-        int j = 0;
-        if (slots != null){
-            foreach (GameObject slot in slots)
-            {
-                if (j == 4) j = 0;
-                slot.name = j.ToString();
-                slot.GetComponentInChildren<Text>().text = DataManager.saveSlots[j].text;
-                j++;
-            }
-        }
+        bg = DataManager.instance.palettes[gameData.style].bg.color;
+        fg = DataManager.instance.palettes[gameData.style].fg.color;
     }
     public void UpdateData()
     {
@@ -122,6 +157,7 @@ public class MenuManager : MonoBehaviour
         if (stDrop != null)
         {
             stDrop.value = gameData.style;
+            stDrop.RefreshShownValue();
         }
         LangChanger();
         qaDrop.value = gameData.q;
@@ -141,6 +177,7 @@ public class MenuManager : MonoBehaviour
         if (curlg >= lg.Count) curlg = 0; 
         b.GetComponent<Image>().sprite = Resources.Load<Sprite>("ui/" + lg[curlg]); 
         LangChanger();
+        gameData.lg = curlg;
     }
     public void SetLang(int i)
     {
@@ -150,9 +187,87 @@ public class MenuManager : MonoBehaviour
     {
         Player.instance.GetComponent<MouseLook>().SensChange(value);
     }
+    public void ChangeUIColor(Color bg, Color fg)
+    {
+        foreach (Image i in imgs)
+        {
+            try
+            {
+                UiElement el;
+                if (i.gameObject.TryGetComponent<UiElement>(out el)) 
+                {
+                    if (el.type == UIColor.Bg) 
+                    {
+                       // if (el.alpha) 
+                            i.color = bg;
+                       // else i.color = new Color(bg.r, bg.g, bg.b, 0f);
+                    }
+                    else i.color = fg;
+                }
+                else
+                {
+                    i.gameObject.AddComponent<UiElement>();
+                    UiElement e = i.gameObject.GetComponent<UiElement>();
+                    //Button b;
+                    //if(i.gameObject.TryGetComponent<Button>(out b))
+                    //{
+                    //    i.color = new Color(bg.r, bg.g, bg.b, 0f);
+                    //    e.alpha = false;
+                    //}
+                    //else
+                    //{
+                        i.color = bg; 
+                    //}
+                    e.type = UIColor.Bg;
+                }
+            }
+            catch
+            {
+
+            }
+        }
+        foreach (Text t in texts)
+        {
+            try
+            {
+                UiElement e;
+                if (t.gameObject.TryGetComponent<UiElement>(out e))
+                {
+                    if (e.type == UIColor.Bg) t.color = bg;
+                    else t.color = fg;
+                }
+                else
+                {
+                    t.gameObject.AddComponent<UiElement>();
+                    t.gameObject.GetComponent<UiElement>().type = UIColor.Fg;
+                    t.color = fg;
+                }
+            }
+            catch { }
+        }
+    }
+    public void StyleUIChanger()
+    {
+        imgs = new List<Image>();
+        texts = new List<Text>();
+        var objs = FindObjectsOfType<Canvas>();
+        foreach (Canvas canvas in objs)
+        {
+            var img = canvas.gameObject.GetComponentsInChildren<Image>();
+            var txt = canvas.gameObject.GetComponentsInChildren<Text>();
+            foreach (Image i in img)
+            {
+                imgs.Add(i);
+            }
+            foreach (Text t in txt)
+            {
+                texts.Add(t);
+            }
+        }
+    }
     public void LangChanger()
     {
-        if (stDrop!=null)
+        if (stDrop != null)
         {
             gameData.style = stDrop.value;
 
@@ -162,85 +277,83 @@ public class MenuManager : MonoBehaviour
             gameData.lg = curlg;
 
         }
-        Dictionary<string, string> d = DataManager.dictionary[lg[curlg]]; 
-        Font f = Resources.Load<Font>("Font/" + d["menu_font"]);
-        int size = System.Int32.Parse(d["menu_size"]);
-        if (panels != null)
+        Font hfont;
+        switch (curlg)
         {
-            foreach(GameObject o in panels)
-            {
-                o.SetActive(true);
-            }
+            case 0: 
+                { 
+                    LocalisationSystem.language = LocalisationSystem.Language.English; 
+                    hfont = Resources.Load<Font>("Font/Ho8Bit");
+                    break; 
+                }
+            case 1: 
+                {
+                    LocalisationSystem.language = LocalisationSystem.Language.Russian;
+                    hfont = Resources.Load<Font>("Font/pixcyr");
+                    break;
+                }
+            default:
+                hfont = Resources.Load<Font>("Font/pixcyr");
+                break;
         }
-        var txt = GameObject.FindObjectsOfType<Text>();
         foreach(Text tt in txt)
         {
-            if (d.ContainsKey(tt.name))
+            if (tt.gameObject.tag == "header")
             {
-                tt.text = d[tt.name];
-                if (tt.gameObject.tag == "header")
-                {
-                    tt.font = f;
-                  //  tt.fontSize = size;
-                }
+                tt.font = hfont;
             }
+            tt.text = LocalisationSystem.TryGetLocalisedValue(tt.name);
         }
         qaDrop.ClearOptions();
         List<string> options = new List<string>();
         for (int i=0;i<4;i++)
         {
-            options.Add(d["q" + i]);
+            options.Add(LocalisationSystem.GetLocalisedValue("q" + i));
         }
         qaDrop.AddOptions(options);
         qaDrop.value = gameData.q;
         qaDrop.RefreshShownValue();
+        resDrop.RefreshShownValue();
+        if (lgDrop != null)
+        {
+            lgDrop.RefreshShownValue();
+        }
         if (stDrop != null)
         {
             stDrop.ClearOptions();
             List<string> o = new List<string>();
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < DataManager.instance.palettes.Count; i++)
             {
-                o.Add(d["st" + i]);
+                o.Add(LocalisationSystem.GetLocalisedValue("st" + i));
             }
             stDrop.AddOptions(o);
             stDrop.value = gameData.style;
             stDrop.RefreshShownValue();
         }
-        if (panels != null)
+        if (slots != null)
         {
-            foreach (GameObject o in panels)
+            int j = 0;
+            foreach (GameObject slot in slots)
             {
-                o.SetActive(false);
-                
-            }
-            if (GameManager.instance != null)
-            {
-                GameManager.instance.menu.SetActive(true);
+                if (j == 4) j = 0;
+                if (DataManager.saveSlots[j].isEmpty)
+                {
+                    string s = LocalisationSystem.TryGetLocalisedValue(j + "slot");
+                    Debug.Log(s);
+                    slot.GetComponentInChildren<Text>().text = s;
+                }
+                else slot.GetComponentInChildren<Text>().text = DataManager.saveSlots[j].text;
+                j++;
             }
         }
     }
     public void SetStyle(int i)
     {
-        switch (i) 
-        {
-            case 0:
-                {
-                    mat.SetColor("_BG", Color.black);
-                    mat.SetColor("_FG", Color.white);
-                    break;
-                }
-            case 1:
-                {
-                    mat.SetColor("_BG", Color.blue);
-                    mat.SetColor("_FG", Color.white);
-                    break; }
-            case 2:
-                {
-                    mat.SetColor("_BG", Color.red);
-                    mat.SetColor("_FG", Color.yellow);
-                    break;
-                }
-        }
+        bg = DataManager.instance.palettes[i].bg.color;
+        fg = DataManager.instance.palettes[i].fg.color;
+        mat.SetColor("_BG", bg);
+        mat.SetColor("_FG", fg);
+        ChangeUIColor(bg,fg);
     }
     public void SetQuality(int index)
     {
@@ -297,8 +410,16 @@ public class MenuManager : MonoBehaviour
         gameData.q = qaDrop.value;
         gameData.fc = fullToggle.isOn;
         gameData.res = resDrop.value;
-        gameData.txt_speed = txt_speed.value;
-        gameData.sens = sens.value;
+        try
+        {
+            gameData.txt_speed = txt_speed.value;
+            gameData.sens = sens.value;
+            gameData.lg = lgDrop.value;
+        }
+        catch
+        {
+
+        }
         gameData.ForceSerialization();
         LangChanger();
     }
@@ -308,27 +429,27 @@ public class MenuManager : MonoBehaviour
         {
             SaveSystem.ClearSlot(selectedSlot);
             DataManager.saveSlots[selectedSlot].Clear();
-            DataManager.saveSlots[selectedSlot].text = DataManager.instance.text[selectedSlot];
-            slots[selectedSlot].GetComponentInChildren<Text>().text = DataManager.instance.text[selectedSlot];
-            slots[selectedSlot+4].GetComponentInChildren<Text>().text = DataManager.instance.text[selectedSlot];
+            // DataManager.saveSlots[selectedSlot].text = DataManager.instance.text[selectedSlot]; 
+            slots[selectedSlot].GetComponentInChildren<Text>().text = LocalisationSystem.GetLocalisedValue(selectedSlot + "slot");
+            //DataManager.instance.text[selectedSlot];
+            slots[selectedSlot+4].GetComponentInChildren<Text>().text = LocalisationSystem.GetLocalisedValue(selectedSlot + "slot");
+            //DataManager.instance.text[selectedSlot];
         }
     }
     public void LoadGame()
     {
-        try 
-        {
             if (selectedSlot != -1)
             {
                 DataManager.instance.selectedSlot = selectedSlot;
+                gameData.cur_slot = selectedSlot;
                 DataManager.instance.LoadGame();
             }
-        }
-        catch { Debug.LogError("erorr"); }
     }
     public int selectedSlot = -1;
     public void SelectSlot(GameObject gm)
     {
         selectedSlot = int.Parse(gm.name);
+        gameData.cur_slot = selectedSlot;
         Debug.Log(selectedSlot);
     }
     public void DeselectSlot()
@@ -352,38 +473,19 @@ public class MenuManager : MonoBehaviour
     public void SelectedUI(Transform button)
     {
         //icon.transform.position =new Vector3(icon.transform.position.x, button.position.y,0);
-        button.GetComponent<Image>().color = Color.white;
-        button.GetComponentInChildren<Text>().color = Color.black;
-        if (buttons != null)
-        {
-            foreach (GameObject gm in buttons)
-            {
-                if (gm.name != button.name)
-                {
-                    gm.GetComponent<Image>().color = Color.black;
-                    gm.GetComponentInChildren<Text>().color = Color.white;
-                }
-            }
-        }
+        button.GetComponent<Image>().color = fg;
+        button.GetComponentInChildren<Text>().color =bg;
         
     }
     public void ExitUI(GameObject button)
     {
-        button.GetComponent<Image>().color = Color.black;
-        button.GetComponentInChildren<Text>().color = Color.white;
+        button.GetComponent<Image>().color = bg;
+        button.GetComponentInChildren<Text>().color = fg;
     }
     public void SelectButton(GameObject gm)
     {
         gm.GetComponent<Image>().color = Color.white;
         gm.GetComponentInChildren<Text>().color = Color.black;
-        foreach (GameObject button in buttons) 
-        {
-            if (button.name != gm.name)
-            {
-                button.GetComponent<Image>().color = Color.black;
-                button.GetComponentInChildren<Text>().color = Color.white;
-            }
-        }
     }
     public void PressButton(GameObject gm)
     {

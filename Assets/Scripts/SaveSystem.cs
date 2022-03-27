@@ -44,12 +44,13 @@ public static class SaveSystem
     {
         try
         {
+            int selectedSlot = DataManager.instance.gameData.cur_slot;
             BinaryFormatter formatter = new BinaryFormatter();
             PlayerData data = new PlayerData(player);
-            DataManager.saveSlots[DataManager.instance.selectedSlot].Rewrite(data);
-            string path = Application.persistentDataPath + "/SaveSlot_" + DataManager.instance.selectedSlot + ".ini";
+            DataManager.saveSlots[selectedSlot].Rewrite(data);
+            string path = Application.persistentDataPath + "/SaveSlot_" + selectedSlot + ".ini";
             FileStream stream = new FileStream(path, FileMode.Create); Debug.Log(data.name);
-            formatter.Serialize(stream, DataManager.saveSlots[DataManager.instance.selectedSlot]);
+            formatter.Serialize(stream, DataManager.saveSlots[selectedSlot]);
             stream.Close();
             Debug.Log("saved"); Debug.Log(path);
         }
@@ -60,7 +61,8 @@ public static class SaveSystem
     }
     public static SaveSlot LoadPlayer()
     {
-        string path = Application.persistentDataPath + "/SaveSlot_"+ DataManager.instance.selectedSlot + ".ini";
+        int selectedSlot = DataManager.instance.gameData.cur_slot;
+        string path = Application.persistentDataPath + "/SaveSlot_"+ selectedSlot + ".ini";
         if (File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();
@@ -113,26 +115,31 @@ public class SaveSlot
     public PlayerData playerData;
     public string name;
     public string text;
+    public bool isEmpty = true;
     public SaveSlot(string text) 
     {
         this.text = text;
+        isEmpty = true;
     }
     public void Rewrite(PlayerData playerData)
     {
         name = playerData.name+"'s slot";
         text = playerData.name + " " + playerData.time;
-        this.playerData = playerData;
+        this.playerData = playerData; 
+        isEmpty = false;
     }
     public void Clear()
     {
         name = "Empty slot";
-        playerData = null;
+        playerData = null; 
+        isEmpty = true;
     }
     public SaveSlot(PlayerData playerData)
     {
         name = "";
         text = playerData.name + " "+ playerData.time;
         this.playerData = playerData;
+        isEmpty = false;
     }
 }
 

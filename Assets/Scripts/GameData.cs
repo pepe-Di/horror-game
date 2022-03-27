@@ -6,13 +6,14 @@ using UnityEngine;
 public class GameData : ScriptableObject
 {
     [SerializeField] public float master_vol, music_vol, effects_vol, vol,vol1,vol2, sens,txt_speed;
-    [SerializeField] public int lg, q, res, style, last_slot;
+    [SerializeField] public int lg, q, res, style, last_slot, cur_slot;
     [SerializeField] public bool fc;
 
     public GameData()
     {
         master_vol = 0; music_vol = 0; effects_vol = 0;
-        vol = 1; vol1 = 1; vol2 = 1; lg = 0; sens = 1; style = 0; last_slot = -1; txt_speed = 1;
+        vol = 1; vol1 = 1; vol2 = 1; lg = 0; sens = 1; style = 0; 
+        cur_slot = -1; last_slot = -1; txt_speed = 1; res = -1;
     }
     public void ForceSerialization()
 
