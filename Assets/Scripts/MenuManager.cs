@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.Audio;
+using System.Linq;
+
 public class MenuManager : MonoBehaviour
 {
     public List<GameObject> panels;
@@ -17,7 +19,9 @@ public class MenuManager : MonoBehaviour
     public Dropdown qaDrop;
     public Dropdown lgDrop;
     public Dropdown stDrop;
+    public Dropdown frameDrop;
     public Toggle fullToggle;
+    public Toggle frameToggle;
     public Slider master, music, effects, txt_speed, sens;
     private GameObject menu;
     private GameObject _mainCamera;
@@ -28,6 +32,7 @@ public class MenuManager : MonoBehaviour
     private int curlg=0;
     public Material mat;
     public Button lgButton;
+    public bool frame_mode = true;
     Text[] txt;
     List<Image> imgs;
     List<Text> texts;
@@ -39,7 +44,7 @@ public class MenuManager : MonoBehaviour
     }
     void createDrops()
     {
-        resolutions = Screen.resolutions;
+        resolutions = Screen.resolutions.Where(resolution => resolution.refreshRate == 60).ToArray();
         resDrop.ClearOptions();
         List<string> options = new List<string>();
         int curRes = 0;
@@ -67,7 +72,7 @@ public class MenuManager : MonoBehaviour
         {
             gameData = new GameData();
             gameData.q = QualitySettings.GetQualityLevel();
-            gameData.fc = Screen.fullScreen;
+            Screen.fullScreen =gameData.fc;
         }
         else
         {
@@ -79,6 +84,7 @@ public class MenuManager : MonoBehaviour
                 o.SetActive(true);
             }
         }
+        frame_mode = gameData.frame_mode;
         StyleUIChanger();
         txt = GameObject.FindObjectsOfType<Text>();
         if (panels != null)
@@ -133,9 +139,14 @@ public class MenuManager : MonoBehaviour
         curlg = gameData.lg;
         try
         {
+            frameToggle.isOn = gameData.frame_mode;
             DataManager.instance.curlg = gameData.lg;
         }
         catch { }
+        if (frameDrop != null)
+        {
+            frameDrop.value = gameData.frame_limit;
+        }
         if (lgButton != null)
         {
             lgButton.GetComponent<Image>().sprite = Resources.Load<Sprite>("ui/" + lg[curlg]);
@@ -163,6 +174,18 @@ public class MenuManager : MonoBehaviour
         qaDrop.value = gameData.q;
         fullToggle.isOn = gameData.fc;
         resDrop.value = gameData.res;
+    }
+    public void FrameRateDrop(int i)
+    {
+        int value = 60;
+        switch (i)
+        {
+            case 0: value = 30; break;
+            case 1: value = 60; break;
+            case 2: value = 144; break;
+            case 3: value = 400; break;
+        }
+        Application.targetFrameRate = value;
     }
     public void ContinueButton()
     {
@@ -198,9 +221,9 @@ public class MenuManager : MonoBehaviour
                 {
                     if (el.type == UIColor.Bg) 
                     {
-                       // if (el.alpha) 
+                        if (el.alpha) 
                             i.color = bg;
-                       // else i.color = new Color(bg.r, bg.g, bg.b, 0f);
+                        else i.color = new Color(bg.r, bg.g, bg.b, 0f);
                     }
                     else i.color = fg;
                 }
@@ -208,16 +231,16 @@ public class MenuManager : MonoBehaviour
                 {
                     i.gameObject.AddComponent<UiElement>();
                     UiElement e = i.gameObject.GetComponent<UiElement>();
-                    //Button b;
-                    //if(i.gameObject.TryGetComponent<Button>(out b))
-                    //{
-                    //    i.color = new Color(bg.r, bg.g, bg.b, 0f);
-                    //    e.alpha = false;
-                    //}
-                    //else
-                    //{
-                        i.color = bg; 
-                    //}
+                    Button b;
+                    if (i.gameObject.TryGetComponent<Button>(out b))
+                    {
+                        i.color = new Color(bg.r, bg.g, bg.b, 0f);
+                        e.alpha = false;
+                    }
+                    else
+                    {
+                        i.color = bg;
+                    }
                     e.type = UIColor.Bg;
                 }
             }
@@ -324,11 +347,23 @@ public class MenuManager : MonoBehaviour
             List<string> o = new List<string>();
             for (int i = 0; i < DataManager.instance.palettes.Count; i++)
             {
-                o.Add(LocalisationSystem.GetLocalisedValue("st" + i));
+                o.Add(LocalisationSystem.TryGetLocalisedValue("st" + i));
             }
             stDrop.AddOptions(o);
             stDrop.value = gameData.style;
             stDrop.RefreshShownValue();
+        }
+        if (frameDrop != null)
+        {
+            frameDrop.ClearOptions();
+            List<string> ss = new List<string>();
+            for (int i = 0; i < 4; i++)
+            {
+                ss.Add(LocalisationSystem.TryGetLocalisedValue("fps" + i));
+            }
+            frameDrop.AddOptions(ss);
+            frameDrop.value = gameData.frame_limit;
+            frameDrop.RefreshShownValue();
         }
         if (slots != null)
         {
@@ -354,6 +389,32 @@ public class MenuManager : MonoBehaviour
         mat.SetColor("_BG", bg);
         mat.SetColor("_FG", fg);
         ChangeUIColor(bg,fg);
+    }
+    public void CancelButton()
+    {
+        master.value= gameData.vol;
+        music.value = gameData.vol1;
+        effects.value = gameData.vol2;
+        curlg = gameData.lg;
+        lgDrop.value= gameData.lg;
+        qaDrop.value = gameData.q;
+        fullToggle.isOn = gameData.fc;
+        resDrop.value = gameData.res;
+        stDrop.value = gameData.style;
+        try
+        {
+            txt_speed.value= gameData.txt_speed;
+            sens.value= gameData.sens;
+            frameToggle.isOn = gameData.frame_mode;
+        }
+        catch
+        {
+
+        }
+    }
+    public void FrameModeToggle()
+    {
+        frame_mode = frameToggle.isOn;
     }
     public void SetQuality(int index)
     {
@@ -410,11 +471,14 @@ public class MenuManager : MonoBehaviour
         gameData.q = qaDrop.value;
         gameData.fc = fullToggle.isOn;
         gameData.res = resDrop.value;
+        gameData.lg = lgDrop.value;
+        gameData.style = stDrop.value;
+        if (frameDrop != null) gameData.frame_limit = frameDrop.value;
         try
         {
             gameData.txt_speed = txt_speed.value;
             gameData.sens = sens.value;
-            gameData.lg = lgDrop.value;
+            gameData.frame_mode = frameToggle.isOn;
         }
         catch
         {
@@ -446,10 +510,52 @@ public class MenuManager : MonoBehaviour
             }
     }
     public int selectedSlot = -1;
+   public GameObject cartridge;
+    float Xdistance = -130f, Ydistance=0f;
+    public void OnPointerEnterSlot(GameObject gm)
+    {
+        cartridge = Instantiate(Resources.Load<GameObject>("ui/gif/cartridge"),gm.transform);
+        cartridge.transform.localPosition = new Vector2(Xdistance, Ydistance);
+        Debug.Log(cartridge.name);
+    }
     public void SelectSlot(GameObject gm)
     {
         selectedSlot = int.Parse(gm.name);
         gameData.cur_slot = selectedSlot;
+        for (int i = 0; i < DataManager.saveSlots.Length; i++)
+        {
+            if (i == selectedSlot) DataManager.saveSlots[i].selected = true;
+            else DataManager.saveSlots[i].selected = false;
+        }
+        int j = 0,k=0;
+        Slot s;
+        if (cartridge != null) Destroy(cartridge);
+        Debug.Log(cartridge);
+        foreach (GameObject slot in slots)
+        {
+           if (j == 4) j = 0;
+           if (slot.TryGetComponent<Slot>(out s))
+           {
+                if (j == selectedSlot) 
+                {
+                    if (s.isEnabled)
+                    {
+                        s.selected = true; OnPointerEnterSlot(slot); }
+                    else
+                    {
+                        s.selected = false; ExitUI(slot);
+                    }
+                }
+                else
+                {
+                    s.selected = false;
+                    //if (cartridge != null) Destroy(cartridge);
+                    ExitUI(slot);
+                }
+           }
+            j++;k++;
+        }
+        gm.GetComponent<Slot>().selected = true;
         Debug.Log(selectedSlot);
     }
     public void DeselectSlot()
@@ -477,15 +583,28 @@ public class MenuManager : MonoBehaviour
         button.GetComponentInChildren<Text>().color =bg;
         
     }
+    public void ExitUiSlot(GameObject button)
+    {
+        Slot slot;
+        if (button.TryGetComponent<Slot>(out slot))
+        {
+            if (slot.selected)
+            {
+                return;
+            }
+        }
+        button.GetComponent<Image>().color = new Color(bg.r, bg.g, bg.b, 0f);
+        button.GetComponentInChildren<Text>().color = fg;
+    }
     public void ExitUI(GameObject button)
     {
-        button.GetComponent<Image>().color = bg;
-        button.GetComponentInChildren<Text>().color = fg;
+         button.GetComponent<Image>().color = new Color(bg.r, bg.g, bg.b, 0f);
+         button.GetComponentInChildren<Text>().color = fg;
     }
     public void SelectButton(GameObject gm)
     {
-        gm.GetComponent<Image>().color = Color.white;
-        gm.GetComponentInChildren<Text>().color = Color.black;
+        gm.GetComponent<Image>().color = new Color(bg.r, bg.g, bg.b, 0f);
+        gm.GetComponentInChildren<Text>().color = fg;
     }
     public void PressButton(GameObject gm)
     {

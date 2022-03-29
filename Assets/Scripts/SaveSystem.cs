@@ -116,6 +116,7 @@ public class SaveSlot
     public string name;
     public string text;
     public bool isEmpty = true;
+    public bool selected = false;
     public SaveSlot(string text) 
     {
         this.text = text;

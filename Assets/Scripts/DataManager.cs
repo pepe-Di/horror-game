@@ -17,6 +17,10 @@ public class DataManager : MonoBehaviour
     public int selectedSlot = -1;
     public List<ColorPalette> palettes;
     public List<Color_> colors;
+    public ColorPalette GetPalette()
+    {
+        return palettes[gameData.style];
+    }
     void Awake()
     {
         if (colors.Count == 0)
@@ -26,18 +30,21 @@ public class DataManager : MonoBehaviour
             colors.Add(new Color_("White Blue", 124f / 255f, 212f / 255f, 217f / 255f));
             colors.Add(new Color_("Dark Red", 94f / 255f, 34f / 255f, 25f / 255f));
             colors.Add(new Color_("Lemon", 233f / 255f, 233f / 255f, 131f / 255f));
+            colors.Add(new Color_("Light Yellow", 200f / 255f, 200f / 255f, 168f / 255f));
+            colors.Add(new Color_("Grass", 70f / 255f, 100f / 255f, 100f / 255f));
         }
         if (palettes.Count == 0)
         {
             palettes = new List<ColorPalette>();
             palettes.Add(new ColorPalette("Marine", colors.Where(c=>c.Name == "Dark Blue").FirstOrDefault(), colors.Where(c => c.Name == "White Blue").FirstOrDefault()));
             palettes.Add(new ColorPalette("Daylight", colors.Where(c => c.Name == "Dark Red").FirstOrDefault(), colors.Where(c => c.Name == "Lemon").FirstOrDefault()));
+            palettes.Add(new ColorPalette("Dandelion", colors.Where(c => c.Name == "Grass").FirstOrDefault(), colors.Where(c => c.Name == "Light Yellow").FirstOrDefault()));
         }
         text = new string[] { LocalisationSystem.TryGetLocalisedValue("A slot"), LocalisationSystem.TryGetLocalisedValue("B slot"), LocalisationSystem.TryGetLocalisedValue("C slot"), LocalisationSystem.TryGetLocalisedValue("D slot") };
         SaveSystem.OnAwake(saveSlots, text);
         instance = this;
         DontDestroyOnLoad(instance.gameObject);
-
+        loaded = true;
     }
     void Start()
     {
