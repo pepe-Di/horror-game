@@ -6,6 +6,7 @@ using System;
 public class EventController : MonoBehaviour
 {
     public static EventController instance;
+    public event Action<bool> FrameEvent;
     public event Action<float> FlashEvent;
     public event Action<int> ItemEvent;
     public event Action<int> DoorEvent;
@@ -19,6 +20,10 @@ public class EventController : MonoBehaviour
         else Destroy(gameObject);
 
         DontDestroyOnLoad(gameObject);
+    }
+    public void StartFrameEvent(bool frame_mode)
+    {
+        FrameEvent?.Invoke(frame_mode);
     }
     public void StartFlashEvent(float value)
     {

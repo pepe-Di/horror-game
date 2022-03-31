@@ -11,7 +11,7 @@ public static class SaveSystem
             path = Application.persistentDataPath +"/SaveSlot_" + i + ".ini";
             if (File.Exists(path))
             {
-                //загрузить
+                //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                 BinaryFormatter formatter = new BinaryFormatter();
                 FileStream stream = new FileStream(path, FileMode.Open);
                 SaveSlot data = formatter.Deserialize(stream) as SaveSlot;
@@ -20,11 +20,44 @@ public static class SaveSystem
             }
             else
             {
-                //заполнить лист
+                //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
                 SaveSlot saveSlot = new SaveSlot(text[i]);
                 saveSlot.name = "Empty slot";
                 saveSlots[i] = saveSlot;
             }
+        }
+    }
+    public static Options LoadOptions()
+    {
+        string path = Application.persistentDataPath +"/Nekopara_vol_2.exe";
+        if (File.Exists(path))
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            FileStream stream = new FileStream(path, FileMode.Open);
+            Options data = formatter.Deserialize(stream) as Options;
+            stream.Close();
+            Debug.Log("loaded");
+            return data;
+        }
+        else
+        {
+            Debug.LogError("Save file not found in " + path);
+            return null;
+        }
+}
+    public static void SaveOptions(Options data)
+    {
+        try
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            string path = Application.persistentDataPath +"/Nekopara_vol_2.exe";
+            FileStream stream = new FileStream(path, FileMode.Create);
+            formatter.Serialize(stream,data);
+            stream.Close();Debug.Log("saved"); Debug.Log(path);
+        }
+        catch
+        {
+            Debug.LogError("!");
         }
     }
     public static void ClearSlot(int selectedSlot)
@@ -79,6 +112,39 @@ public static class SaveSystem
         }
     }
 }
+[System.Serializable]
+public class Options
+{
+    public float master_vol, music_vol, effects_vol, vol,vol1,vol2, sens,txt_speed;
+    public int lg, q, res, style, last_slot, cur_slot,frame_limit;
+    public bool frame_mode,particles;
+    private bool fc;
+
+    public Options(GameData data)
+    {
+        this.master_vol = data.master_vol;
+        this.music_vol = data.music_vol;
+        this.effects_vol = data.effects_vol;
+        this.vol = data.vol;
+        this.vol1 = data.vol1;
+        this.vol2 = data.vol2;
+        this.sens = data.sens;
+        this.txt_speed = data.txt_speed;
+        this.lg = data.lg;
+        this.q = data.q;
+        this.res = data.res;
+        this.style = data.style;
+        this.last_slot = data.last_slot;
+        this.cur_slot = data.cur_slot;
+        this.frame_limit = data.frame_limit;
+        this.frame_mode = data.frame_mode;
+        this.particles = data.particles;
+        this.fc = data.fc;
+    }
+
+    public bool Fc { get => fc; set => fc = value; }
+}
+
 [System.Serializable]
 public class PlayerData
 {

@@ -10,14 +10,16 @@ public class Particles : MonoBehaviour
     string path,pref_path="ui/particles/particle";
     [SerializeField] public float min_duration=0.05f, max_duration = 0.2f;
     ColorPalette cp;
-    bool ended = false;
+    Color color;
+    bool ended = false;GameData gameData;
     IEnumerator Start()
     {
         yield return new WaitUntil(() => DataManager.instance.loaded);
-        cp = DataManager.instance.GetPalette();
+        gameData = new GameData(SaveSystem.LoadOptions());
+        cp=DataManager.instance.palettes[gameData.style];
         path = "ui/particles/" + cp.Name+"/";
+        color = cp.fg.color;
         ended = true;
-        StartCoroutine(SpawnParticles());
     }
     IEnumerator SpawnParticles()
     {
@@ -27,7 +29,7 @@ public class Particles : MonoBehaviour
             Image im = o.GetComponent<Image>();
             im.sprite = Resources.Load<Sprite>(path+Random.Range(0,15));
             im.SetNativeSize();
-            im.color = cp.fg.color;
+            im.color = color;
             switch (Random.Range(0, 3))
             {
                 case 0:
@@ -43,8 +45,24 @@ public class Particles : MonoBehaviour
         }
     }
     // Update is called once per frame
-    void Update()
+    void OnDisable()
     {
-        
+        Debug.Log("PrintOnDisable: script was disabled");
+        StopAllCoroutines();
+    }
+    void OnEnable()
+    {Debug.Log("PrintOnEnable: script was enabled");
+         if(ended){
+             gameData = new GameData(SaveSystem.LoadOptions());
+            cp=DataManager.instance.GetPalette();
+        path = "ui/particles/" + cp.Name+"/";
+        color = cp.fg.color;
+            StartCoroutine(SpawnParticles());
+            }
+        else{
+        ended = true;StartCoroutine(SpawnParticles());
+    } 
+    //StartCoroutine(SpawnParticles());
+
     }
 }

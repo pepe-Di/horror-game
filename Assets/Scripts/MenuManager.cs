@@ -8,18 +8,21 @@ using System.Linq;
 
 public class MenuManager : MonoBehaviour
 {
+    public List<DropDown> drops;
     public List<GameObject> panels;
-    public AudioSource sfx;
+    public AudioSource sfx; 
     private AudioSource audio_;
     public GameData gameData;
     public AudioMixer audioMixer;
     float currentVolume;
+    public DropDown lg_drop;
     Resolution[] resolutions;
     public Dropdown resDrop;
     public Dropdown qaDrop;
     public Dropdown lgDrop;
     public Dropdown stDrop;
     public Dropdown frameDrop;
+    public Toggle partToggle;
     public Toggle fullToggle;
     public Toggle frameToggle;
     public Slider master, music, effects, txt_speed, sens;
@@ -32,11 +35,13 @@ public class MenuManager : MonoBehaviour
     private int curlg=0;
     public Material mat;
     public Button lgButton;
-    public bool frame_mode = true;
+    public bool frame_mode = true, particles_on;
     Text[] txt;
     List<Image> imgs;
     List<Text> texts;
     Color bg, fg;
+    public int vsync_count;
+    public Particles prts;
     // Start is called before the first frame update
     private void Awake()
     {
@@ -45,7 +50,7 @@ public class MenuManager : MonoBehaviour
     void createDrops()
     {
         resolutions = Screen.resolutions.Where(resolution => resolution.refreshRate == 60).ToArray();
-        resDrop.ClearOptions();
+        drops[1].ClearOptions();
         List<string> options = new List<string>();
         int curRes = 0;
         for (int i = 0; i < resolutions.Length; i++)
@@ -62,12 +67,19 @@ public class MenuManager : MonoBehaviour
         {
             curRes = gameData.res;
         }
-        resDrop.AddOptions(options);
-        resDrop.value = curRes;
-        resDrop.RefreshShownValue();
+        drops[1].AddOptions(options);
+        drops[1].Value = curRes;
+        drops[1].RefreshShownValue();
     }
     void Start()
     {
+        try
+        {
+            gameData.SetOptions(new GameData(SaveSystem.LoadOptions()));
+        }
+        catch{}
+
+        vsync_count = QualitySettings.vSyncCount;
         if (gameData == null)
         {
             gameData = new GameData();
@@ -84,7 +96,10 @@ public class MenuManager : MonoBehaviour
                 o.SetActive(true);
             }
         }
+        prts = GameObject.FindObjectOfType<Particles>();
+        particles_on = gameData.particles;
         frame_mode = gameData.frame_mode;
+        FrameRateDrop(gameData.frame_limit);
         StyleUIChanger();
         txt = GameObject.FindObjectsOfType<Text>();
         if (panels != null)
@@ -94,21 +109,12 @@ public class MenuManager : MonoBehaviour
                 o.SetActive(false);
             }
         }
+        if(!frame_mode) EventController.instance.StartFrameEvent(frame_mode);
         audio_ = GetComponent<AudioSource>();
         createDrops();
         if (stDrop != null)
         {
-            //stDrop.ClearOptions();
-            //try
-            //{
-            //    List<string> opts = new List<string>();
-            //    foreach (ColorPalette cp in DataManager.instance.palettes)
-            //    {
-            //        opts.Add(cp.Name);
-            //    }
-            //    stDrop.AddOptions(opts);
-            //}
-            //catch { }
+            SetStyle(gameData.style);
         }
         UpdateData();
         var obj = FindObjectsOfType<DataManager>();
@@ -139,13 +145,13 @@ public class MenuManager : MonoBehaviour
         curlg = gameData.lg;
         try
         {
-            frameToggle.isOn = gameData.frame_mode;
+           if(frameToggle!=null) frameToggle.isOn = gameData.frame_mode;
             DataManager.instance.curlg = gameData.lg;
         }
         catch { }
-        if (frameDrop != null)
+        if (drops[2] != null)
         {
-            frameDrop.value = gameData.frame_limit;
+            drops[2].Value = gameData.frame_limit;
         }
         if (lgButton != null)
         {
@@ -153,7 +159,12 @@ public class MenuManager : MonoBehaviour
         }
         if (lgDrop != null)
         {
-            lgDrop.value = gameData.lg;
+           // lgDrop.value = gameData.lg;
+        }
+        drops[4].Value= gameData.lg;
+        if (lg_drop != null)
+        {
+            //lg_drop.Value = gameData.lg;
         }
         if (txt_speed != null)
         {
@@ -165,18 +176,21 @@ public class MenuManager : MonoBehaviour
             sens.value = gameData.sens;
             ChangeSens(gameData.sens);
         }
-        if (stDrop != null)
-        {
-            stDrop.value = gameData.style;
-            stDrop.RefreshShownValue();
+        
+            drops[3].Value = gameData.style;
+            drops[3].RefreshShownValue();
+        
+        if(partToggle!= null){
+            partToggle.isOn = gameData.particles;
         }
         LangChanger();
-        qaDrop.value = gameData.q;
+        drops[0].Value = gameData.q;
         fullToggle.isOn = gameData.fc;
-        resDrop.value = gameData.res;
+        drops[1].value = gameData.res;
     }
     public void FrameRateDrop(int i)
     {
+        QualitySettings.vSyncCount = 0;
         int value = 60;
         switch (i)
         {
@@ -184,6 +198,7 @@ public class MenuManager : MonoBehaviour
             case 1: value = 60; break;
             case 2: value = 144; break;
             case 3: value = 400; break;
+            case 4: QualitySettings.vSyncCount = vsync_count; break;
         }
         Application.targetFrameRate = value;
     }
@@ -204,6 +219,7 @@ public class MenuManager : MonoBehaviour
     }
     public void SetLang(int i)
     {
+        Debug.Log("setlg " + i);
         curlg = i;
     }
     public void ChangeSens(float value)
@@ -290,18 +306,23 @@ public class MenuManager : MonoBehaviour
     }
     public void LangChanger()
     {
-        if (stDrop != null)
-        {
-            gameData.style = stDrop.value;
+        //if (stDrop != null)
+      //  {
+            gameData.style = drops[3].Value;
 
-        }
-        if (lgDrop != null)
-        {
-            gameData.lg = curlg;
+      //  }
+      //  if (lgDrop != null)
+      //  {
+       //     gameData.lg = curlg;
 
-        }
+      //  }
+       // if (lg_drop != null)
+      //  {
+           // gameData.lg = drops[4].Value;
+
+      //  }
         Font hfont;
-        switch (curlg)
+        switch (gameData.lg)
         {
             case 0: 
                 { 
@@ -327,43 +348,53 @@ public class MenuManager : MonoBehaviour
             }
             tt.text = LocalisationSystem.TryGetLocalisedValue(tt.name);
         }
-        qaDrop.ClearOptions();
+        if (drops[4] != null)
+        {
+            drops[4].ClearOptions();
+            List<string> opt = new List<string>();
+        for (int i=0;i<2;i++)
+        {
+            opt.Add(LocalisationSystem.GetLocalisedValue("lg" + i));
+        }
+        drops[4].AddOptions(opt);
+        drops[4].Value = gameData.lg;
+        drops[4].RefreshShownValue();
+
+        }
+        drops[0].ClearOptions();
         List<string> options = new List<string>();
         for (int i=0;i<4;i++)
         {
             options.Add(LocalisationSystem.GetLocalisedValue("q" + i));
         }
-        qaDrop.AddOptions(options);
-        qaDrop.value = gameData.q;
-        qaDrop.RefreshShownValue();
-        resDrop.RefreshShownValue();
-        if (lgDrop != null)
-        {
-            lgDrop.RefreshShownValue();
-        }
-        if (stDrop != null)
-        {
-            stDrop.ClearOptions();
+        drops[0].AddOptions(options);
+        drops[0].Value = gameData.q;
+        drops[0].RefreshShownValue();
+        drops[1].RefreshShownValue();
+        drops[4].RefreshShownValue();
+       // if (stDrop != null)
+       // {
+            drops[3].ClearOptions();
             List<string> o = new List<string>();
             for (int i = 0; i < DataManager.instance.palettes.Count; i++)
             {
                 o.Add(LocalisationSystem.TryGetLocalisedValue("st" + i));
             }
-            stDrop.AddOptions(o);
-            stDrop.value = gameData.style;
-            stDrop.RefreshShownValue();
-        }
-        if (frameDrop != null)
+            drops[3].AddOptions(o);
+            drops[3].Value = gameData.style;
+            drops[3].RefreshShownValue();
+       // }
+        if (drops[2] != null)
         {
-            frameDrop.ClearOptions();
+            drops[2].ClearOptions();
             List<string> ss = new List<string>();
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 5; i++)
             {
                 ss.Add(LocalisationSystem.TryGetLocalisedValue("fps" + i));
             }
-            frameDrop.AddOptions(ss);
-            frameDrop.value = gameData.frame_limit;
-            frameDrop.RefreshShownValue();
+            drops[2].AddOptions(ss);
+            drops[2].Value = gameData.frame_limit;
+            drops[2].RefreshShownValue();
         }
         if (slots != null)
         {
@@ -374,7 +405,7 @@ public class MenuManager : MonoBehaviour
                 if (DataManager.saveSlots[j].isEmpty)
                 {
                     string s = LocalisationSystem.TryGetLocalisedValue(j + "slot");
-                    Debug.Log(s);
+                   // Debug.Log(s);
                     slot.GetComponentInChildren<Text>().text = s;
                 }
                 else slot.GetComponentInChildren<Text>().text = DataManager.saveSlots[j].text;
@@ -384,37 +415,28 @@ public class MenuManager : MonoBehaviour
     }
     public void SetStyle(int i)
     {
+        DataManager.instance.selectedPalette = i;
+        Debug.Log(DataManager.instance.palettes[i].bg.Name);
         bg = DataManager.instance.palettes[i].bg.color;
         fg = DataManager.instance.palettes[i].fg.color;
         mat.SetColor("_BG", bg);
         mat.SetColor("_FG", fg);
         ChangeUIColor(bg,fg);
-    }
-    public void CancelButton()
-    {
-        master.value= gameData.vol;
-        music.value = gameData.vol1;
-        effects.value = gameData.vol2;
-        curlg = gameData.lg;
-        lgDrop.value= gameData.lg;
-        qaDrop.value = gameData.q;
-        fullToggle.isOn = gameData.fc;
-        resDrop.value = gameData.res;
-        stDrop.value = gameData.style;
-        try
+        if(prts!=null) {prts.enabled = false;
+        var objs = GameObject.FindObjectsOfType<Particle>();
+        foreach(Particle o in objs) 
         {
-            txt_speed.value= gameData.txt_speed;
-            sens.value= gameData.sens;
-            frameToggle.isOn = gameData.frame_mode;
+            Destroy(o.gameObject);
         }
-        catch
-        {
+        if(particles_on) prts.enabled = true;}
+    }
+    
 
-        }
-    }
     public void FrameModeToggle()
     {
         frame_mode = frameToggle.isOn;
+        EventController.instance.StartFrameEvent(frame_mode);
+        Debug.Log("frame_toggle "+frame_mode);
     }
     public void SetQuality(int index)
     {
@@ -452,6 +474,18 @@ public class MenuManager : MonoBehaviour
     {
         Screen.fullScreen = isFullscreen;
     }
+    public void SetParticles(bool isOn)
+    {
+        particles_on = isOn;
+        prts.enabled = isOn;
+        if(isOn==false){
+           var objs = GameObject.FindObjectsOfType<Particle>();
+        foreach(Particle o in objs) 
+        {
+            Destroy(o.gameObject);
+        }
+        }
+    }
     public void SetTxtSpeed(float value)
     {
         Player.instance.GetComponent<Fungus.Character>().SetSayDialog.GetComponent<Fungus.Writer>().WritingSpeed = value*10f;
@@ -468,24 +502,27 @@ public class MenuManager : MonoBehaviour
         audioMixer.GetFloat("effects", out float vol3);
         gameData.effects_vol = vol3;
         gameData.lg = curlg;
-        gameData.q = qaDrop.value;
+        gameData.q = drops[0].Value;
         gameData.fc = fullToggle.isOn;
-        gameData.res = resDrop.value;
-        gameData.lg = lgDrop.value;
-        gameData.style = stDrop.value;
-        if (frameDrop != null) gameData.frame_limit = frameDrop.value;
+        gameData.res = drops[1].Value;
+        gameData.lg = drops[4].Value;
+        gameData.style = drops[3].Value;
+        if(partToggle!=null) gameData.particles = particles_on;
+        if (drops[2] != null) gameData.frame_limit = drops[2].Value;
         try
         {
-            gameData.txt_speed = txt_speed.value;
-            gameData.sens = sens.value;
-            gameData.frame_mode = frameToggle.isOn;
+           if (txt_speed != null) gameData.txt_speed = txt_speed.value;
+           if (sens != null)  gameData.sens = sens.value;
+           if (frameToggle != null)  gameData.frame_mode = frameToggle.isOn;
         }
         catch
         {
-
+            Debug.LogError("hui");
         }
         gameData.ForceSerialization();
+        SaveSystem.SaveOptions(new Options(gameData));
         LangChanger();
+            Debug.Log(" gameData.lg  "+gameData.lg);
     }
     public void ClearSlot()
     {
@@ -573,7 +610,7 @@ public class MenuManager : MonoBehaviour
     }
     public void ResetSettings()
     {
-        gameData = new GameData();
+        gameData.Clear();
         UpdateData();
     }
     public void SelectedUI(Transform button)

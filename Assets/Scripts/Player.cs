@@ -80,7 +80,7 @@ public class Player : MonoBehaviour
                 Fungus.Character character = GetComponent<Fungus.Character>();
                // name_ = DataManager.DataManager.instance.gameData.cur_slot
             }
-            catch { Debug.Log("ÿ"); }
+            catch { Debug.Log("ï¿½"); }
         }
     }
     public void EnergyChange(float value)

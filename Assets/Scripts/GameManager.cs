@@ -79,7 +79,7 @@ public class GameManager : MonoBehaviour
     }
     public void BackToMenu() //and save
     {
-        Time.timeScale = 1f;
+        //Time.timeScale = 1f;
         Debug.Log("cur_slot " + DataManager.instance.gameData.cur_slot);
         SaveSystem.SavePlayer(instance.Player.GetComponent<Player>());
         lv.LoadLevel(0);
@@ -128,7 +128,7 @@ public class GameManager : MonoBehaviour
             _input.cursorInputForLook = false;
             _input.locked_input = true;
             //Player.GetComponent<CharacterController>().enabled = false;
-            Player.GetComponent<MouseLook>().enabled = false;
+            //Player.GetComponent<MouseLook>().enabled = false;
             menu.SetActive(true); gamePaused = true;
         }
         else

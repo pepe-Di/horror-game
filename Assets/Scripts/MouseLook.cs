@@ -24,12 +24,21 @@ public class MouseLook : MonoBehaviour
         sensitivityX = 8f * value; 
         sensitivityY= 0.5f * value*0.2f;
     }
+    private void Awake()
+    {
+        
+    }
+    public void ChangeCameraLook(bool frame_mode)
+    {
+        if (frame_mode) normal = 90;
+        else normal = 60;
+    }
     private void Start()
     {
         animator = playerCamera.gameObject.GetComponent<Animator>();
         _input = GetComponent<StarterAssetsInputs>();
         Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        Cursor.visible = false; EventController.instance.FrameEvent += ChangeCameraLook;
     }
     IEnumerator Zoom(int i) 
     {

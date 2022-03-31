@@ -14,12 +14,12 @@ public class DataManager : MonoBehaviour
     public int curlg = 0;
     public static DataManager instance;
     public bool loaded = false;
-    public int selectedSlot = -1;
+    public int selectedSlot = -1, selectedPalette=-1;
     public List<ColorPalette> palettes;
     public List<Color_> colors;
     public ColorPalette GetPalette()
     {
-        return palettes[gameData.style];
+        return palettes[selectedPalette];
     }
     void Awake()
     {
@@ -45,6 +45,11 @@ public class DataManager : MonoBehaviour
         instance = this;
         DontDestroyOnLoad(instance.gameObject);
         loaded = true;
+        try{
+            GameData data = new GameData(SaveSystem.LoadOptions());
+            selectedPalette = data.style;
+        }
+        catch{}
     }
     void Start()
     {
