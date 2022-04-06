@@ -4,10 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
     public LevelLoader lv;
+    public GameObject options;
     public static GameManager instance;
     public StarterAssetsInputs _input;
     public GameObject Player;
@@ -15,6 +17,8 @@ public class GameManager : MonoBehaviour
     public GameObject menu;
     public GameObject _mainCamera;
     public InventoryUI inv;
+    public Fungus.Flowchart flowchart;
+    public List<Transform> itemsPos;
     // Start is called before the first frame update
     private void Awake()
     {
@@ -22,6 +26,8 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
+        EventController.instance.SayEvent+=StartDialogue;
+        //flowchart.ExecuteBlock("0");
       //  DontDestroyOnLoad(instance.gameObject);
         if (_mainCamera == null)
         {
@@ -36,7 +42,7 @@ public class GameManager : MonoBehaviour
         
         menu.SetActive(false); LoadData();
         try {
-            LoadData();
+           // LoadData();
             //if (DataManager.instance.loaded) 
             //{ 
             //    LoadData(); 
@@ -45,7 +51,9 @@ public class GameManager : MonoBehaviour
         }
         catch { Debug.Log("catch"); }
     }
-   
+   public void StartDialogue(string blockName){
+       flowchart.ExecuteBlock(blockName);
+   }
     // Update is called once per frame
     public int GetSceneIndex()
     {
@@ -59,7 +67,24 @@ public class GameManager : MonoBehaviour
     {
         SaveSlot data = SaveSystem.LoadPlayer();
         player_.LoadData(data.playerData);
+        SpawnItems();
        // inv.UpdateData(this);
+    }
+    public void SpawnItems(){
+        foreach(Transform pos in itemsPos)
+        {
+            ItemPos ip = pos.GetComponent<ItemPos>();
+            var item = player_.items.Where(c=>c.GetGmName()==ip.Name&&c.Id==ip.index).FirstOrDefault();
+            var it = player_.used_items.Where(c=>c.GetGmName()==ip.Name&&c.Id==ip.index).FirstOrDefault();
+            if(it!=null||item!=null) 
+            {
+                Debug.Log("item found");
+            }
+            else{
+                GameObject gm = Instantiate(Resources.Load<GameObject>("Prefs/Items/"+ip.Name),pos);
+                gm.transform.localScale = new Vector3(1,1,1);
+            }
+        }
     }
     public void Test()
     {
@@ -72,10 +97,12 @@ public class GameManager : MonoBehaviour
         _input.locked_input = false;
         _input.cursorInputForLook = true;
         //Player.GetComponent<CharacterController>().enabled = true;
-        Player.GetComponent<MouseLook>().enabled = true;
+       // Player.GetComponent<MouseLook>().enabled = true;
+       MenuManager.instance.UpdateData();
         menu.SetActive(false); 
         gamePaused = false;
         Time.timeScale = 1f;
+        EventController.instance.ChangeStateEvent(State.Idle);
     }
     public void BackToMenu() //and save
     {
@@ -94,8 +121,8 @@ public class GameManager : MonoBehaviour
     {
         if (_input.esc)
         {
-            Debug.Log(Time.timeScale);
-            Debug.Log(C_running);
+    //        Debug.Log(Time.timeScale);
+    //        Debug.Log(C_running);
             if (!C_running)
             StartCoroutine(OpenMenu());
             //Transition.LoadScene("0");
@@ -109,7 +136,7 @@ public class GameManager : MonoBehaviour
     public IEnumerator Esc()
     {
         C_running = true;
-        yield return new WaitForSeconds(0.2f); C_running = false;
+        yield return new WaitForSecondsRealtime(0.2f); C_running = false;
     }
     bool C_running = false;
     public IEnumerator OpenMenu()
@@ -122,6 +149,7 @@ public class GameManager : MonoBehaviour
             {
                 player_.DeselectItem();
             }
+        EventController.instance.ChangeStateEvent(State.Pause);
             
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
@@ -135,7 +163,7 @@ public class GameManager : MonoBehaviour
         {
             ContinueButton(); gamePaused = false;
         }
-        yield return new WaitForSeconds(0.2f); 
+        yield return new WaitForSecondsRealtime(0.2f); 
         if (!gamePaused)
         {
             Time.timeScale = 1f;

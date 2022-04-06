@@ -8,8 +8,12 @@ public class Frame : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        GameData data = new GameData(SaveSystem.LoadOptions());
+        if(!data.frame_mode) this.gameObject.GetComponent<Image>().color = new Color(1,1,1,0);
+       // EventController.instance.FrameEvent += ChangeAlpha;
+    }
+    void Init(){
         
-        EventController.instance.FrameEvent += ChangeAlpha;
     }
     public void ChangeAlpha(bool frame_mode)
     {

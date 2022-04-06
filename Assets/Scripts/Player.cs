@@ -8,8 +8,9 @@ public class Player : MonoBehaviour
     public static Player instance;
     public string name_;
     public float hp, stamina, max_stamina=1000f,max_hp=10000f, energy, full_energy=5000f;
-    public State state;
+    public State state; 
     public List<Item> items=new List<Item>();
+    public List<Item> used_items=new List<Item>();
     public List<Quest> quests = new List<Quest>();
     public GameObject selectedItem;
     private int selectedID;
@@ -31,7 +32,7 @@ public class Player : MonoBehaviour
         {
             Item i = FindItem(q.finish.name);
             i.questId = id;
-            Debug.Log(i.questId);
+            Debug.Log("i.questId "+i.questId);
         }
         quests.Add(q);
     }
@@ -39,7 +40,7 @@ public class Player : MonoBehaviour
     {
         foreach (Item i in items)
         {
-            if (i.Name == name) return i;
+            if (i.GetGmName() == name) return i;
         }
         return null;
     }
@@ -83,6 +84,10 @@ public class Player : MonoBehaviour
             catch { Debug.Log("�"); }
         }
     }
+    public Item GetSelectedItem()
+    {
+        return items[selectedID];
+    }
     public void EnergyChange(float value)
     {
         StartCoroutine(ChangeEnergy(value));
@@ -97,6 +102,12 @@ public class Player : MonoBehaviour
     {
         selectedID = i;
         StopAllCoroutines();//?
+        switch(items[i].type){
+            case itemType.Flashlight: break;
+            case itemType.Key: break; 
+            case itemType.Card: break; 
+            default: InventoryUI.instance.GetMessage(LocalisationSystem.TryGetLocalisedValue("message0")); break;
+        }
     }
     public void DeselectItem()
     {
@@ -114,9 +125,12 @@ public class Player : MonoBehaviour
             case itemType.Battery: { energy += items[selectedID].value; if (energy > full_energy) energy = full_energy; break; }
             case itemType.Drug: RegenerateHP(items[selectedID].value, 1); break;
             case itemType.Flashlight: return; 
-            default: break;
+            case itemType.Key: return; 
+            case itemType.Card: return; 
+            default: return;
         }
         Destroy(selectedItem);
+        used_items.Add(items[selectedID]);
         items.RemoveAt(selectedID);
         GameManager.instance.inv.UpdateData(); 
         selectedID = -1;
@@ -128,20 +142,29 @@ public class Player : MonoBehaviour
         character.nameText = data.name;
         Debug.Log(data.name);
         hp = data.hp;
+        items.Clear();
         stamina = data.stamina;
         Vector3 position = new Vector3(data.position[0], data.position[1], data.position[2]);
         transform.position = position;
         for (int i=0; i<data.items.Length;i++)
         {
-            items.Add(new Item(data.items[i]));
+           items.Add(new Item(data.items[i]));
+        }
+        //items.Clear();
+        InventoryUI.instance.UpdateData();
+        for (int i=0; i<data.used_items.Length;i++)
+        {
+           used_items.Add(new Item(data.used_items[i]));
         }
         Debug.Log("player loaded");
     }
-    public bool GetItem(string name)
+    public bool GetItem(GameObject gm)
     {
         if (items.Count< GameManager.instance.inv.inv_size)
         {
-            items.Add(new Item(name));
+            Item i = new Item(gm.name);
+            i.Id = gm.GetComponentInParent<ItemPos>().index;
+            items.Add(i);
             GameManager.instance.inv.UpdateData();
             return true;
         }

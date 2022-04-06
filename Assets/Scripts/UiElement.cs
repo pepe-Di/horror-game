@@ -6,6 +6,7 @@ public class UiElement : MonoBehaviour
 {
     [SerializeField] public UIColor type;
     [SerializeField] public bool alpha = true;
+    [SerializeField] public bool ignore = false;
     void Start()
     {
         

@@ -14,9 +14,9 @@ public class QuestManager : MonoBehaviour
     void Awake()
     {
         instance = this;
-        quests.Add(new Quest(questType.ToPoint, "Подойти к столу WASD", false));
-        quests.Add(new Quest(questType.Grab, "Взять фонарь с помощью ЛКМ", true));
-        quests.Add(new Quest(questType.Use, "Использовать фонарь на клавишу F", true, "flashlight"));
+        quests.Add(new Quest(questType.ToPoint, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ WASD", false));
+        quests.Add(new Quest(questType.Grab, "пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ", true));
+        quests.Add(new Quest(questType.Use, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ F", true, "flashlight"));
     }
     private void Start()
     {
@@ -24,13 +24,19 @@ public class QuestManager : MonoBehaviour
         EventController.instance.endQEvent += DeleteQName;
         EventController.instance.updateQEvent += UpdateContent;
     }
+    public void ChangeColor()
+    {
+        
+    }
     public void ChangeQName(int id)
     {
-        qName.text = quests[id].name;
+        qName.text = LocalisationSystem.TryGetLocalisedValue("quest"+id);
+        //qName.text = quests[id].name;
     }
     public void DeleteQName(int id)
     {
         qName.text = "";
+        Debug.Log("DeleteQ!!!!!!!!!!!!!");
     }
     public bool TryToInvoke(int id)
     {
@@ -51,12 +57,18 @@ public class QuestManager : MonoBehaviour
             Destroy(o);
         }
         qs.Clear();
+        int id=0;
         foreach(Quest q in Player.instance.quests)
         {
             GameObject gm = Instantiate(Resources.Load<GameObject>("Prefs/UI/quest"));
-            gm.GetComponentInChildren<Text>().text = q.name; 
+            gm.GetComponentInChildren<Text>().text = LocalisationSystem.TryGetLocalisedValue("quest"+id); 
             gm.transform.SetParent(content.transform);
             qs.Add(gm);
+            id++;
         }
+    }
+    void OnEnable(){
+        Debug.Log("OnEnable!!!!!!!!!!!!!");
+
     }
 }

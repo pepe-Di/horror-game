@@ -5,9 +5,10 @@ using UnityEngine;
 public class Door : MonoBehaviour
 {
     public bool right_side;
-    public bool opened { set; get; }
-    void Awake()
-    {
-        opened = false;
-    }
+    [SerializeField] public bool opened;
+    [SerializeField] public bool locked=false;
+    [SerializeField] public int index;
+   void Awake(){
+       opened = false;
+   }
 }

@@ -6,6 +6,7 @@ using System;
 public class EventController : MonoBehaviour
 {
     public static EventController instance;
+    public event Action<State> StateEvent;
     public event Action<bool> FrameEvent;
     public event Action<float> FlashEvent;
     public event Action<int> ItemEvent;
@@ -13,6 +14,7 @@ public class EventController : MonoBehaviour
     public event Action<int> QEvent;
     public event Action<int> endQEvent;
     public event Action updateQEvent;
+    public event Action<string> SayEvent;
     private void Awake()
     {
         if (instance == null)
@@ -20,6 +22,16 @@ public class EventController : MonoBehaviour
         else Destroy(gameObject);
 
         DontDestroyOnLoad(gameObject);
+    }
+    public void StartDialogueEvent(string blockName)
+    {
+        Debug.Log("StartDialogueEvent");
+        SayEvent?.Invoke(blockName);
+    }
+    public void ChangeStateEvent(State state)
+    {
+        Debug.Log("ChangeStateEvent");
+        StateEvent?.Invoke(state);
     }
     public void StartFrameEvent(bool frame_mode)
     {
@@ -39,15 +51,18 @@ public class EventController : MonoBehaviour
     }
     public void StartQEvent(int id)
     {
+        Debug.Log("StartQEvent");
         QEvent?.Invoke(id);
     }
     public void EndQEvent(int id)
     {
+        Debug.Log("EndQEvent");
         endQEvent?.Invoke(id);
         //updateQEvent?.Invoke();
     }
     public void UpdateQEvent()
     {
+        Debug.Log("UpdateQEvent");
         updateQEvent?.Invoke();
     }
 }

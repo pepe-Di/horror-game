@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class InventoryUI : MonoBehaviour
 {
+    public static InventoryUI instance;
     public Text Message;
     public int inv_size = 15;
     public GameObject descWindow;
@@ -15,6 +16,9 @@ public class InventoryUI : MonoBehaviour
     public ItemSelect isel;
     bool C = false;
     // Update is called once per frame
+    void Awake(){
+        instance = this;
+    }
     private void Start()=>Player.instance.onHpChange += onPlayerHpChange;
     public void onPlayerHpChange(float value)
     {
@@ -29,20 +33,20 @@ public class InventoryUI : MonoBehaviour
         items.Clear();
         foreach (Item item in player.items)
         {
-            Debug.Log("Prefs/Items/" + item.Name);
+            Debug.Log("Prefs/Items/" + item.GetGmName());
             GameObject gm = Instantiate(Resources.Load<GameObject>("Prefs/Items/Item"));
             Image i = gm.GetComponentInChildren<Image>();
-            i.sprite = Resources.Load<Sprite>("Prefs/Items/" + item.Name);
+            i.sprite = Resources.Load<Sprite>("Prefs/Items/" + item.GetGmName());
             i.SetNativeSize();
             Button b = gm.GetComponentInChildren<Button>();
-            b.gameObject.name = item.Name;
+            b.gameObject.name = item.GetGmName();
             b.onClick.AddListener(()=> 
             {
                 try
                 {
                     if (!C)
                     {
-                        if (descWindow.name == item.Name)
+                        if (descWindow.name == item.GetGmName())
                         {
                             descWindow.SetActive(false);
                             GameManager.instance.ContinueButton();
@@ -51,7 +55,7 @@ public class InventoryUI : MonoBehaviour
                         else
                         {
                             descWindow.SetActive(true);
-                            descWindow.name = item.Name;
+                            descWindow.name = item.GetGmName();
                             Image img = descWindow.GetComponentInChildren<Image>();
                             img.sprite = i.sprite;
                             img.SetNativeSize(); StartCoroutine(Desc(item));
@@ -63,7 +67,6 @@ public class InventoryUI : MonoBehaviour
                 {
 
                 }
-                Debug.Log(b.gameObject.name); 
             });
             gm.transform.SetParent(inventory.transform);
             items.Add(gm);
@@ -74,10 +77,11 @@ public class InventoryUI : MonoBehaviour
     {
         C = true;
         var text = descWindow.GetComponentsInChildren<Text>();
-        text[0].text = item._name;
+        text[0].text = item.Name;
         text[1].text = item.GetDesc();
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSecondsRealtime(0.1f);
         C = false;
+        Debug.Log("Desc end");
     }
     public void SetItem(Item item) 
     {
@@ -96,13 +100,12 @@ public class InventoryUI : MonoBehaviour
                             break; 
                         }
                 }
-                GameObject o = Instantiate(Resources.Load<GameObject>("Prefs/Items/" + item.Name));
+                GameObject o = Instantiate(Resources.Load<GameObject>("Prefs/Items/" + item.GetGmName()));
                 o.transform.SetParent(itemPos);
                 o.transform.localPosition = Vector3.zero;
                 o.AddComponent<InteractItem>();
-                Destroy(o.GetComponent<Outline>());
+                //Destroy(o.GetComponent<Outline>());
                 player.SetItem(o, player.items.IndexOf(item));
-                GetMessage("Нажмите на E чтобы использовать");
             }
         }
         catch

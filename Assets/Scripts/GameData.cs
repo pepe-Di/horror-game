@@ -57,7 +57,7 @@ public class GameData : ScriptableObject
         this.frame_mode = data.frame_mode;
         this.particles = data.particles;
         this.fc = data.Fc;
-        Debug.Log("GameData() "+lg);
+      //  Debug.Log("GameData() "+lg);
     }
     
     public void Clear(){

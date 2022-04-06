@@ -4,64 +4,119 @@ using UnityEngine;
 
 public class Item 
 {
+    int index;
+    int id;
     public int questId;
     public string _name;
     private string name;
+    private bool look=false;
+    private bool grab=false;
     public string Name 
     { 
         get 
         {
-            return name;
+            return LocalisationSystem.TryGetLocalisedValue("n"+index);
         }  
         set 
         {
             name = value;
         } 
     }
+    public string GetGmName(){
+        return name;
+    }
+    public int Index { get => index; set => index = value; }
+    public bool Look { get => look; set => look = value; }
+    public bool Grab { get => grab; set => grab = value; }
+    public int Id { get => id; set => id = value; }
+
     public itemType type;
     public float value, speed;
     public int click = 0;
+    public string GetDesc_()
+    {
+        switch (type)
+        {
+            case itemType.Food: return _name+ " РІРѕСЃСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ <color=red>" + value+ "</color> Р·РґРѕСЂРѕРІСЊСЏ Р·Р° <color=cyan>"+speed+ "</color> СЃРµРєСѓРЅРґ.";
+            case itemType.Drink: return _name + " РїРѕРІС‹С€Р°РµС‚ СЃРєРѕСЂРѕСЃС‚СЊ РїРµСЂСЃРѕРЅР°Р¶Р° РЅР° <color=green>+" + value + "</color>. Р­С„С„РµРєС‚ РґР»РёС‚СЃСЏ <color=cyan>"+speed+ "</color> СЃРµРєСѓРЅРґ.";
+            case itemType.Battery: return _name + " Р·Р°СЂСЏР¶Р°РµС‚ <color=yellow>" + value+"</color> РµРґРёРЅРёС† СЌРЅРµСЂРіРёРё.";
+            case itemType.Drug: return _name + " РјРіРЅРѕРІРµРЅРЅРѕ РІРѕСЃСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ <color=red>" + value+ "</color> РµРґРёРЅРёС† Р·РґРѕСЂРѕРІСЊСЏ.";
+            case itemType.Flashlight: return _name + " С‚СЂР°С‚РёС‚ Р±Р°С‚Р°СЂРµР№РєРё. Р’ С‚РµРјРЅРѕС‚Рµ С‚РµСЂСЏРµС‚СЃСЏ СЂР°СЃСЃСѓРґРѕРє. Р§С‚РѕР±С‹ РІС‹Р±СЂР°С‚СЊ РЅР°Р¶РјРёС‚Рµ F.";
+            default: break;
+        }
+        return "??? РЅРµРёР·РІРµСЃС‚РЅРѕ ???";
+    }
+    public string GetLookAt(){
+        switch(name){
+            case "Cola Can": return "look0";
+            case "card0": return "look1";
+            case "laptop": return "look1";
+            case "image0": return "look1";
+            default: return "look0";
+        }
+    }
     public string GetDesc()
     {
         switch (type)
         {
-            case itemType.Food: return _name+ " восстанавливает <color=red>" + value+ "</color> здоровья за <color=cyan>"+speed+ "</color> секунд.";
-            case itemType.Drink: return _name + " повышает скорость персонажа на <color=green>+" + value + "</color>. Эффект длится <color=cyan>"+speed+ "</color> секунд.";
-            case itemType.Battery: return _name + " заряжает <color=yellow>" + value+"</color> единиц энергии.";
-            case itemType.Drug: return _name + " мгновенно восстанавливает <color=red>" + value+ "</color> единиц здоровья.";
-            case itemType.Flashlight: return _name + " тратит батарейки. В темноте теряется рассудок. Чтобы выбрать нажмите F.";
+            case itemType.Food: return LocalisationSystem.TryGetLocalisedValue("desc0") + value+ LocalisationSystem.TryGetLocalisedValue("desc2")+speed+LocalisationSystem.TryGetLocalisedValue("desc3");
+            case itemType.Drink: return LocalisationSystem.TryGetLocalisedValue("desc1") + value + LocalisationSystem.TryGetLocalisedValue("desc5")+speed+ LocalisationSystem.TryGetLocalisedValue("desc3");
+            case itemType.Battery: return LocalisationSystem.TryGetLocalisedValue("desc4") + value;
+            case itemType.Drug: return LocalisationSystem.TryGetLocalisedValue("desc0") + value;
+            case itemType.Flashlight: return LocalisationSystem.TryGetLocalisedValue("desc6");
+            case itemType.Key: return LocalisationSystem.TryGetLocalisedValue("desc7");
+            case itemType.Card: return LocalisationSystem.TryGetLocalisedValue("desc8");
             default: break;
         }
-        return "??? неизвестно ???";
+        return "???";
     }
+
     public Item(string name)
     {
         this.name = name;
         questId = -1;
+        Debug.Log(name);
         switch (name)
         {
-            case "Cola Can": _name = "Кола"; value = 1f; speed = 30f; type = itemType.Drink; break;
-            case "Carrot": _name = "морковь"; value = 50f; speed = 20f; type = itemType.Food; break;
-            case "Coffee": _name = "кофейный напиток"; value = 3f; speed = 50f; type = itemType.Drink; break;
-            case "Coffee2": _name = "кофейный напиток"; value = 2f; speed = 30f; type = itemType.Drink; break;
-            case "flashlight": _name = "фонарь"; type = itemType.Flashlight; break;
-            case "battery": _name = "батарея 1х"; value = 1000f; type = itemType.Battery; break;
-            case "big battery": _name = "батарея 2х"; value = 2000f; type = itemType.Battery; break;
-            case "Chips": _name = "чипсы"; value = -10f; speed = 10f; type = itemType.Food; break;
-            case "kit": _name = "аптечка"; value = 1000f; type = itemType.Drug; break;
-            case "beans": _name = "консерва"; value = 20f; speed = 120f; type = itemType.Food; break;
-            case "Bottle": _name = "вода"; value = 0.01f; speed = 70f; type = itemType.Drink; break;
-            case "Cheese": _name = "сыр"; value = 80f; speed = 60f; type = itemType.Food; break;
-            case "Mozzarella": _name = "моцарелла"; value = 80f; speed = 60f; type = itemType.Food; break;
-            case "Meat": _name = "мясо"; value = -40f; speed = 10f; type = itemType.Food; break;
-            case "Milk": _name = "молоко"; value = -4f; speed = 70f; type = itemType.Drink; break;
-            case "pills": _name = "лекарство"; value = 500f; type = itemType.Drug; break;
-            case "Yogurt": _name = "Йогурт"; value = 1500f; speed = 120f; type = itemType.Food; break;
-            case "Sandwich": _name = "Бутерброд"; value = 150f; speed = 90f; type = itemType.Food; break;
-            case "Tomato": _name = "Томат"; value = 20f; speed = 20f; type = itemType.Food; break;
+            case "Cola Can": index=0;_name = Name; value = 1f; speed = 30f; type = itemType.Drink; look=true; break;
+            case "Carrot": _name = "РјРѕСЂРєРѕРІСЊ"; value = 50f; speed = 20f; type = itemType.Food; break;
+            case "Coffee": _name = "РєРѕС„РµР№РЅС‹Р№ РЅР°РїРёС‚РѕРє"; value = 3f; speed = 50f; type = itemType.Drink; break;
+            case "Coffee2": _name = "РєРѕС„РµР№РЅС‹Р№ РЅР°РїРёС‚РѕРє"; value = 2f; speed = 30f; type = itemType.Drink; break;
+            case "flashlight": index=1;_name = Name; type = itemType.Flashlight; break;
+            case "battery": index=2;_name = Name; value = 1000f; type = itemType.Battery; break;
+            case "big battery": index=3;_name = Name; value = 2000f; type = itemType.Battery; break;
+            case "Chips": _name = "С‡РёРїСЃС‹"; value = -10f; speed = 10f; type = itemType.Food; break;
+            case "kit": index=4;_name = Name; value = 1000f; type = itemType.Drug; break;
+            case "beans": _name = "РєРѕРЅСЃРµСЂРІР°"; value = 20f; speed = 120f; type = itemType.Food; break;
+            case "Bottle": _name = "РІРѕРґР°"; value = 0.01f; speed = 70f; type = itemType.Drink; break;
+            case "Cheese": _name = "СЃС‹СЂ"; value = 80f; speed = 60f; type = itemType.Food; break;
+            case "Mozzarella": _name = "РјРѕС†Р°СЂРµР»Р»Р°"; value = 80f; speed = 60f; type = itemType.Food; break;
+            case "Meat": _name = "РјСЏСЃРѕ"; value = -40f; speed = 10f; type = itemType.Food; break;
+            case "Milk": _name = "РјРѕР»РѕРєРѕ"; value = -4f; speed = 70f; type = itemType.Drink; break;
+            case "pills": index=5;_name = Name; value = 500f; type = itemType.Drug; break;
+            case "Yogurt": _name = "Р™РѕРіСѓСЂС‚"; value = 1500f; speed = 120f; type = itemType.Food; break;
+            case "Sandwich": _name = "Р‘СѓС‚РµСЂР±СЂРѕРґ"; value = 150f; speed = 90f; type = itemType.Food; break;
+            case "Tomato": _name = "РўРѕРјР°С‚"; value = 20f; speed = 20f; type = itemType.Food; break;
+            case "key0": index=6;_name = Name;  type = itemType.Key; break;
+            case "card0": index=7;_name = Name;  type = itemType.Card; look=true; break;
+            case "laptop": index=-1;grab = false; look=true; break;
 
-            default: break;
+            default: index=-1; break;
         }
+        switch (type)
+        {
+            case itemType.Food: grab = true; break;
+            case itemType.Drink: grab = true; break;
+            case itemType.Battery: grab = true; break;
+            case itemType.Drug: grab = true; break;
+            case itemType.Flashlight: grab = true; break;
+            case itemType.Key: grab = true; break;
+            case itemType.Card: grab = true; break;
+            default: grab = false; break;
+        }
+        if(index==-1) grab = false;
+        Debug.Log(grab);
+       
     }
     public void Use()
     {
@@ -86,7 +141,9 @@ public enum itemType
     Drink,
     Battery,
     Flashlight,
-    Drug
+    Drug,
+    Key,
+    Card
 }
 public class Quest
 {

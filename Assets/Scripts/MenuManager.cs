@@ -42,10 +42,14 @@ public class MenuManager : MonoBehaviour
     Color bg, fg;
     public int vsync_count;
     public Particles prts;
+    public static MenuManager instance;
+    public Fungus.Localization localization;
+    Frame frame;GameObject player; Fungus.Character character;
     // Start is called before the first frame update
     private void Awake()
     {
         Time.timeScale = 1f;
+        instance = this;
     }
     void createDrops()
     {
@@ -73,6 +77,12 @@ public class MenuManager : MonoBehaviour
     }
     void Start()
     {
+        if(GameManager.instance!=null)
+        {
+            player = GameManager.instance.Player;
+            character = player.GetComponent<Fungus.Character>();
+        }
+        frame = FindObjectOfType<Frame>();
         try
         {
             gameData.SetOptions(new GameData(SaveSystem.LoadOptions()));
@@ -109,7 +119,7 @@ public class MenuManager : MonoBehaviour
                 o.SetActive(false);
             }
         }
-        if(!frame_mode) EventController.instance.StartFrameEvent(frame_mode);
+       // if(!frame_mode) EventController.instance.StartFrameEvent(frame_mode);
         audio_ = GetComponent<AudioSource>();
         createDrops();
         if (stDrop != null)
@@ -133,6 +143,7 @@ public class MenuManager : MonoBehaviour
         menu = GameObject.Find("GameMenu");
         bg = DataManager.instance.palettes[gameData.style].bg.color;
         fg = DataManager.instance.palettes[gameData.style].fg.color;
+        
     }
     public void UpdateData()
     {
@@ -227,7 +238,7 @@ public class MenuManager : MonoBehaviour
         Player.instance.GetComponent<MouseLook>().SensChange(value);
     }
     public void ChangeUIColor(Color bg, Color fg)
-    {
+    {Debug.Log("changeuicol");
         foreach (Image i in imgs)
         {
             try
@@ -265,6 +276,10 @@ public class MenuManager : MonoBehaviour
 
             }
         }
+                if(character!=null){
+                    character.NameColor = fg;
+                    Debug.Log("dsklgjkgldsfglkjdlfskgjkdfg");
+                }
         foreach (Text t in texts)
         {
             try
@@ -328,12 +343,14 @@ public class MenuManager : MonoBehaviour
                 { 
                     LocalisationSystem.language = LocalisationSystem.Language.English; 
                     hfont = Resources.Load<Font>("Font/Ho8Bit");
+                    if(localization!=null) localization.SetActiveLanguage("en");
                     break; 
                 }
             case 1: 
                 {
                     LocalisationSystem.language = LocalisationSystem.Language.Russian;
                     hfont = Resources.Load<Font>("Font/pixcyr");
+                    if(localization!=null) localization.SetActiveLanguage("Standart");
                     break;
                 }
             default:
@@ -346,7 +363,7 @@ public class MenuManager : MonoBehaviour
             {
                 tt.font = hfont;
             }
-            tt.text = LocalisationSystem.TryGetLocalisedValue(tt.name);
+           if(tt.name!="ignore") tt.text = LocalisationSystem.TryGetLocalisedValue(tt.name);
         }
         if (drops[4] != null)
         {
@@ -436,6 +453,8 @@ public class MenuManager : MonoBehaviour
     {
         frame_mode = frameToggle.isOn;
         EventController.instance.StartFrameEvent(frame_mode);
+        
+        if(frame!=null)frame.gameObject.SetActive(frame_mode);
         Debug.Log("frame_toggle "+frame_mode);
     }
     public void SetQuality(int index)
@@ -509,20 +528,13 @@ public class MenuManager : MonoBehaviour
         gameData.style = drops[3].Value;
         if(partToggle!=null) gameData.particles = particles_on;
         if (drops[2] != null) gameData.frame_limit = drops[2].Value;
-        try
-        {
            if (txt_speed != null) gameData.txt_speed = txt_speed.value;
            if (sens != null)  gameData.sens = sens.value;
-           if (frameToggle != null)  gameData.frame_mode = frameToggle.isOn;
-        }
-        catch
-        {
-            Debug.LogError("hui");
-        }
+           if (frameToggle != null)  {gameData.frame_mode = frame_mode;}
         gameData.ForceSerialization();
         SaveSystem.SaveOptions(new Options(gameData));
         LangChanger();
-            Debug.Log(" gameData.lg  "+gameData.lg);
+            Debug.Log(" frame_mode  "+frame_mode);
     }
     public void ClearSlot()
     {

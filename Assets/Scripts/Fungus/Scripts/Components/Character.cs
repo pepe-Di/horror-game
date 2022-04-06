@@ -69,7 +69,7 @@ namespace Fungus
         /// <summary>
         /// Color to display the character name in Say Dialog.
         /// </summary>
-        public virtual Color NameColor { get { return nameColor; } }
+        public virtual Color NameColor { set { nameColor = value; } get { return nameColor; } }
 
         /// <summary>
         /// Sound effect to play when this character is speaking.

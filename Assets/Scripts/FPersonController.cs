@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class FPersonController : MonoBehaviour
 {
-    const float height = 1.58f, crouch_height=1f;
+    const float height = 1.74f, crouch_height=0.6f,Ycenter = 0.8f,Ycrouch=0.3f;
     [Header("Player")]
     [Tooltip("Move speed of the character in m/s")]
     public float MoveSpeed = 2.0f;
@@ -23,6 +23,7 @@ public class FPersonController : MonoBehaviour
     public Transform Sit_Look;
     [SerializeField] float jumpHeight = 3.5f;
     bool jump;
+    public bool is_crouch= false;
     private float _speed;
     private float _animationBlend = 0f;
 
@@ -68,8 +69,14 @@ public class FPersonController : MonoBehaviour
             _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
         }
     }
+    public void ChangeState(State state){
+        Debug.Log("ChangeState");
+        stateController.ChangeState(state);
+    }
     private void Start()
     {
+        EventController.instance.StateEvent+=ChangeState;
+        stateController.ChangeState(State.Idle);
         cam_animator = _mainCamera.GetComponent<Animator>();
         stats = GetComponent<PlayerStats>();
         player = GetComponent<Player>();
@@ -106,6 +113,8 @@ public class FPersonController : MonoBehaviour
     bool stop = false; float limit=10f;
     private void Update()
     {
+       //Debug.DrawRay(controller.transform.position, Vector3.up, Color.cyan);
+        if(stateController.state == State.Pause) return;
         isGrounded = Physics.CheckSphere(transform.position, 0.1f, groundMask);
         if (isGrounded)
         {
@@ -125,21 +134,26 @@ public class FPersonController : MonoBehaviour
             }
             else
             {
-                if(isGrounded)
+                if(isGrounded&&!is_crouch)
                     stateController.ChangeState(State.Idle);
             }
         }
         else
         {
-            if (isGrounded)
+            if (isGrounded&&!is_crouch)
                 stateController.ChangeState(State.Walk);
         }
         if (_input.crouch)
         {
             if (_input.move != Vector2.zero) targetSpeed = CrouchSpeed;
-            stateController.ChangeState(State.Crouch);
+            if(!is_crouch) stateController.ChangeState(State.Crouch);
+            //
         }
-        if (_input.sprint&& targetSpeed!=0)
+        else {
+            //check ray
+            stateController.ChangeState(State.Idle);
+        }
+        if (_input.sprint&& targetSpeed!=0&&!is_crouch)
         {
             if (stop) { limit = 500f; stats.stam_anim.SetBool("warn",true); }
             if (isGrounded && player.stamina > limit && !_input.crouch)
@@ -165,9 +179,25 @@ public class FPersonController : MonoBehaviour
         }
         speed = targetSpeed;
         cam_animator.SetFloat("speed", targetSpeed);
-        if (stateController.state == State.Crouch)
-            cam_animator.SetBool("crouch", true);
-        else if(cam_animator.GetBool("crouch")) cam_animator.SetBool("crouch", false);
+       // if(is_crouch&&stateController.state != State.Crouch)stateController.ChangeState(State.Crouch);
+        if (stateController.state == State.Crouch&&!is_crouch){
+            cam_animator.SetBool("crouch", true);is_crouch=true;
+            controller.height = crouch_height;
+            controller.center =new Vector3(0,Ycrouch,0);
+        }
+        else if(cam_animator.GetBool("crouch")&&stateController.state != State.Crouch) {
+            //check ray first
+            if(CheckRayHit()){
+                stateController.ChangeState(State.Crouch);
+            }
+            else{
+            cam_animator.SetBool("crouch", false);
+            is_crouch=false;
+            controller.height = height;
+            controller.center =new Vector3(0,Ycenter,0);
+            }
+            
+            }
         float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
         _animationBlend = Mathf.Lerp(_animationBlend, speed, Time.deltaTime * SpeedChangeRate);
         Vector3 horizontalVelocity = (transform.right * _input.move.x + transform.forward * _input.move.y) * (speed + player.speed_modifier);
@@ -195,17 +225,42 @@ public class FPersonController : MonoBehaviour
             {
                 if (!C_running && !_animator.GetBool(_animIDCrouch))
                 {
-                    StartCoroutine(ChangeLook(true));
+                   // StartCoroutine(ChangeLook(true));
                 }
                 _animator.SetBool(_animIDCrouch, true);
             }
-            else if (_animator.GetBool(_animIDCrouch))
+            else if (_animator.GetBool(_animIDCrouch)&&!is_crouch)
             {
-                _animator.SetBool(_animIDCrouch, false);
-                StartCoroutine(ChangeLook(false));
+                //if(!C_running)
+               //if(!is_crouch) 
+            // if(!C_running)  StartCoroutine(ChangeLook(false));
+              // if(!is_crouch) 
+              _animator.SetBool(_animIDCrouch, false);
             }
+           // if(stateController.state!=State.Crouch){
+            //    Debug.Log("hui!!!!!!");
             _animator.SetFloat(_animIDSpeed, _animationBlend);
             _animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
+
+          //  }
+        }
+    }
+    public bool CheckRayHit()
+    {
+        RaycastHit hit;
+        Ray ray = _mainCamera.GetComponent<Camera>().ScreenPointToRay(Vector3.up);
+        if (Physics.Raycast(_mainCamera.transform.position, Vector3.up, out hit,0.7f))
+        {
+                //if(this.gameObject.transform.position.y - hit.collider.transform.position.y < 0.1f)
+                //{
+            Debug.Log(hit.collider.name);
+               // _animator.SetBool(_animIDCrouch, true);
+           // is_crouch = true;
+            Debug.DrawLine(controller.transform.position, hit.point, Color.cyan);
+            return true;
+        }
+        else{
+            return false;
         }
     }
     IEnumerator Jump()
@@ -215,46 +270,80 @@ public class FPersonController : MonoBehaviour
         verticalVelocity.y = Mathf.Sqrt(-2f * jumpHeight * gravity);
         yield return new WaitForSeconds(0.2f);
     }
-    IEnumerator ChangeLook(bool b)
-    {
+    IEnumerator ChangeLookEnd(){
+        Debug.Log("ChangeLookEnd");
         C_running = true;
         float step = 0f;
-        if (b)
-        {
+       // if (b)
+      //  {
             //controller.height = crouch_height;
+            controller.height = crouch_height;
+            controller.center =new Vector3(0,Ycrouch,0);
             while (_mainCamera.transform.position != Crouching_Look.position)
             {
                 step = 1.5f * Time.deltaTime;
                 _mainCamera.transform.position = Vector3.MoveTowards(_mainCamera.transform.position, Crouching_Look.position, step);
                 yield return new WaitForEndOfFrame();
             }
+      //  }
+      is_crouch = false;
+        C_running = false;
+        Debug.Log("ChangeLookEndEnd");
+    }
+    IEnumerator ChangeLook(bool b)
+    {
+        Debug.Log("ChangeLook Start");
+        C_running = true;
+        float step = 0f;
+        if (b)
+        {
+            //controller.height = crouch_height;
+            controller.height = crouch_height;
+            controller.center =new Vector3(0,Ycrouch,0);
+            while (_mainCamera.transform.position != Crouching_Look.position)
+            {
+                step = 1.5f * Time.deltaTime;
+                _mainCamera.transform.position = Vector3.MoveTowards(_mainCamera.transform.position, Crouching_Look.position, step);
+                yield return new WaitForSeconds(0.1f);
+            }
         }
         if (!b)
         {
             RaycastHit hit;
             Ray ray = _mainCamera.GetComponent<Camera>().ScreenPointToRay(Vector3.up);
-            if (Physics.Raycast(_mainCamera.transform.position, Vector3.up, out hit,1))
+            if (Physics.Raycast(_mainCamera.transform.position, Vector3.up, out hit,0.7f))
             {
                 //if(this.gameObject.transform.position.y - hit.collider.transform.position.y < 0.1f)
                 //{
                     Debug.Log(hit.collider.name);
                // _animator.SetBool(_animIDCrouch, true);
-
-                Debug.DrawLine(_mainCamera.transform.position, hit.point, Color.cyan);
+                is_crouch = true;
+                Debug.DrawLine(controller.transform.position, hit.point, Color.cyan);
+      //  C_running = false;
+               // StopAllCoroutines();
                // }
+               yield return new WaitForSeconds(0.1f);
             }
             else
-            {
+            {   
+                Debug.Log("huy");
                 controller.height = height;
+                /* while(controller.height < height){
+                    controller.height+=0.1f;
+                    yield return new WaitForEndOfFrame();
+                } */
+                controller.center =new Vector3(0,Ycenter,0);
                 while (_mainCamera.transform.position != Standing_look.position)
                 {
                     step = 1.5f * Time.deltaTime;
                     _mainCamera.transform.position = Vector3.MoveTowards(_mainCamera.transform.position, Standing_look.position, step);
-                    yield return new WaitForEndOfFrame();
+                    yield return new WaitForSeconds(0.1f);
                 }
+                is_crouch = false;
             }
-            
         }
+        //if(!is_crouch) _animator.SetBool(_animIDCrouch, false);
         C_running = false;
+        Debug.Log("ChangeLook-End");
     }
 }

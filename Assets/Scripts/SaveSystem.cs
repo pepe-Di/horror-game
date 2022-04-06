@@ -155,6 +155,7 @@ public class PlayerData
     public float[] position;
     public string time;
     public string[] items;
+    public string[] used_items;
     //public List<Item> items = new List<Item>();
     public PlayerData(Player player)
     {
@@ -171,7 +172,12 @@ public class PlayerData
         items = new string[player.items.Count];
         for(int i = 0; i < items.Length; i++)
         {
-            items[i] = player.items[0].Name;
+            items[i] = player.items[i].GetGmName();
+        }
+        used_items = new string[player.used_items.Count];
+        for(int i = 0; i < used_items.Length; i++)
+        {
+            used_items[i] = player.used_items[i].GetGmName();
         }
     }
 }

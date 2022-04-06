@@ -1,4 +1,5 @@
 using StarterAssets;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,7 +21,10 @@ public class PlayerInteract : MonoBehaviour
     Vector3 Ray_start_pos = new Vector3(0.5f, 0.5F, 0);
     Vector3 ray_ = new Vector3(Screen.width / 2, Screen.height / 2, 0);
     public Camera mainCam;
+    public GameObject Crosshair;
     public Image crosshair;
+    public GameObject grab_cur;
+    public GameObject eye_cur;
     private void Awake()
     {
         player_ = GetComponent<Player>();
@@ -30,6 +34,10 @@ public class PlayerInteract : MonoBehaviour
         _animator = GetComponent<Animator>();
         //player = GetComponent<Transform>();
         //mainCam = controller._mainCamera.GetComponent<Camera>();
+    }
+    void Start(){
+        
+        grab_cur.SetActive(false);
     }
     void OnTriggerEnter(Collider other)
     {
@@ -56,6 +64,8 @@ public class PlayerInteract : MonoBehaviour
     {
         if (_input.f&&!locked)
         {
+        Item i = player_.FindItem("flashlight");
+        if(i==null) return;
             StartCoroutine(Flash());
             Player.instance.StopAllCoroutines();
             flashlight.SetActive(!flash);
@@ -74,15 +84,42 @@ public class PlayerInteract : MonoBehaviour
         {
             //var selectionOutline = _selection.GetComponent<Outline>(); 
             //selectionOutline.enabled = false;
-            crosshair.sprite = Resources.Load<Sprite>("ui/Reticle");
+            Crosshair.SetActive(true);
+            grab_cur.SetActive(false);
+            eye_cur.SetActive(false);
         }
         var ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5F, 0));
         RaycastHit hit;
         if(Physics.Raycast(ray,out hit,1.5f))
-        {
+        {   
+            if (hit.transform.CompareTag("Untagged")){ return;}
+            if(hit.transform.CompareTag("Look")){
+            Crosshair.SetActive(false);
+                eye_cur.SetActive(true);
+                var selection = hit.transform;
+                _selection = selection;
+                if (_input.click)
+                {
+                    click++;
+                    if (click == 1)
+                    {
+                        Item i = new Item(hit.transform.name);
+                        GameManager.instance.StartDialogue(i.GetLookAt());
+                        if(i.Grab){
+                            StartCoroutine(Timer(hit.transform));
+                        //eye_cur.SetActive(false);
+                        }
+                    }
+                    else{
+                        click=0;
+                    }
+                }
+                return;
+            }
             if (hit.transform.CompareTag("Item"))
             {
-                crosshair.sprite = Resources.Load<Sprite>("ui/grab");
+                //crosshair.sprite = Resources.Load<Sprite>("ui/grab");
+                grab_cur.SetActive(true);
                 var selection = hit.transform;
                 //var selectionOutline = selection.GetComponent<Outline>();
                 //if (selectionOutline != null)
@@ -95,10 +132,12 @@ public class PlayerInteract : MonoBehaviour
                     click++;
                     if (click == 1)
                     {
-                        if (player_.GetItem(hit.collider.gameObject.name))
+                        if (player_.GetItem(hit.collider.gameObject))
                         {
                             try
                             {
+                                hit.transform.GetComponentInParent<ItemPos>();
+                                
                                 QuestItem qi = hit.collider.GetComponent<QuestItem>();
                                 if (qi != null)
                                 {
@@ -110,11 +149,12 @@ public class PlayerInteract : MonoBehaviour
                             catch { }
                             Destroy(hit.collider.gameObject);
                             SoundManager.instanse.PlaySe(Se.Item);
-                            crosshair.sprite = Resources.Load<Sprite>("ui/Reticle");
+                            //crosshair.sprite = Resources.Load<Sprite>("ui/Reticle");
+                            grab_cur.SetActive(false);
                         }
                         else
                         {
-                            GameManager.instance.inv.GetMessage("Инвентарь переполнен");
+                            GameManager.instance.inv.GetMessage(LocalisationSystem.TryGetLocalisedValue("message1"));
                         }
                         Debug.Log(hit.collider.gameObject.name);
                     }
@@ -123,10 +163,12 @@ public class PlayerInteract : MonoBehaviour
                         click = 0;
                     }
                 }
+                    return;
             }
             if (hit.transform.CompareTag("Door"))
             {
-                crosshair.sprite = Resources.Load<Sprite>("ui/grab");
+                //crosshair.sprite = Resources.Load<Sprite>("ui/grab");
+                grab_cur.SetActive(true);
                 var selection = hit.transform;
                 //var selectionOutline = selection.GetComponent<Outline>();
                 //if (selectionOutline != null)
@@ -139,19 +181,83 @@ public class PlayerInteract : MonoBehaviour
                     click++;
                     if (click == 1)
                     {
-                        if(!C_running) StartCoroutine(Door(hit.transform));
+                        if(!C_running) 
+                        {
+                            Door d = hit.transform.GetComponentInChildren<Door>();
+                            if(d.locked){
+                                string key_name="key"+d.index;
+                                Item key = player_.FindItem(key_name);
+                                if(key==null){
+                                    InventoryUI.instance.GetMessage(LocalisationSystem.GetLocalisedValue("message2"));
+                                   click = 0; return;
+                                }
+                                else{
+                                        string s = player_.GetSelectedItem().GetGmName();
+                                    if(s==key_name){
+
+                                    }
+                                    else{
+                                        InventoryUI.instance.GetMessage(LocalisationSystem.GetLocalisedValue("message2"));
+                                       click = 0; return;
+                                    }
+                                }
+                            }
+                            StartCoroutine(Door(hit.transform));
+                            }
                     }
                     else
                     {
                         click = 0;
                     }
                 }
+                    return;
             }
+            if (hit.transform.CompareTag("Drawer")){
+                grab_cur.SetActive(true);
+                var selection = hit.transform;
+                _selection = selection;
+                if (_input.click)
+                {
+                    click++;
+                Debug.Log("C_running = "+C_running);
+                Debug.Log("Click = "+click);
+                    if (click == 1)
+                    {
+                Debug.Log("click on drawer");
+                    if(!C_running) 
+                    {
+                        Lock l = hit.transform.GetComponent<Lock>();
+                        if(l.locked){
+                                 string key_name="key"+l.index;
+                                Item key = player_.FindItem(key_name);
+                                if(key==null){
+                                    InventoryUI.instance.GetMessage(LocalisationSystem.GetLocalisedValue("message2"));
+                                    return;
+                                }
+                                else{
+                                        string s = player_.GetSelectedItem().GetGmName();
+                                    if(s==key_name){
 
+                                    }
+                                    else{
+                                        InventoryUI.instance.GetMessage(LocalisationSystem.GetLocalisedValue("message2"));
+                                        return;
+                                    }
+                            }
+                        }
+                            Debug.Log("StartCoroutine()");StartCoroutine(Drawer(hit.transform));click = 0;
+                    }
+                    
+                }else
+                    {
+                        click = 0;
+                    }
+            }
+                    return;
         }
     }
 
-    private void OnTriggerStay(Collider other)
+     void OnTriggerStay(Collider other)
     {
         if (other.tag == "Chair")
         {
@@ -204,7 +310,7 @@ public class PlayerInteract : MonoBehaviour
         }
         if (other.tag == "Item")
         {
-            Ray ray = mainCam.ViewportPointToRay(new Vector3(0.5f, 0.5F, 0));
+            /* Ray ray = mainCam.ViewportPointToRay(new Vector3(0.5f, 0.5F, 0));
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, 2) && hit.transform.tag == "Item" && !C_running)
             {
@@ -235,7 +341,7 @@ public class PlayerInteract : MonoBehaviour
                 other.GetComponent<Outline>().enabled = false; 
                 selected = false;
                 crosshair.sprite = Resources.Load<Sprite>("ui/Reticle");
-            }
+            } */
             //if (_input.click)
             //{
             //    if (Physics.Raycast(ray, out hit,1) && hit.transform.tag == "Note" && !C_running)
@@ -251,23 +357,56 @@ public class PlayerInteract : MonoBehaviour
         yield return new WaitForEndOfFrame();
         C_running = false;
     }
+    IEnumerator Drawer(Transform transform){
+        Debug.Log("Drawer()");
+        C_running = true;
+        Lock l = transform.GetComponent<Lock>();
+        float value = l.opened?-1f:1f;
+        Vector3 forward = new Vector3(0,0,value);
+        float f = transform.localPosition.z;
+        if(l.opened){
+            //transform.localPosition -= forward;
+            //new Vector3(transform.localPosition.x,transform.localPosition.y,transform.localPosition.z-1f);
+            
+            while(transform.localPosition.z>f+value)
+            {
+                transform.localPosition += new Vector3(0, 0,0.1f*value);
+                yield return new WaitForEndOfFrame();
+                Debug.Log(transform.localPosition.z);
 
+            }
+        }
+        else{
+            while(transform.localPosition.z<f+value)
+            {
+                transform.localPosition += new Vector3(0, 0,0.1f*value);
+                yield return new WaitForEndOfFrame();
+                Debug.Log(transform.localPosition.z);
+
+            }
+           // transform.localPosition += forward;
+            //new Vector3(transform.localPosition.x,transform.localPosition.y,transform.localPosition.z+1f);
+        }
+        l.opened=!l.opened;
+        C_running = false;
+    }
     IEnumerator Door(Transform door) 
     {
         C_running = true;
         Quaternion newRotation = new Quaternion(door.rotation.x, door.rotation.y, door.rotation.z, door.rotation.w);
         int val = 1;
-        if (door.GetComponent<Door>().right_side) val = -1;
-        if (door.GetComponent<Door>().opened) { audioSource.PlayOneShot(Resources.Load("Sounds/door2") as AudioClip, volume); newRotation *= Quaternion.Euler(0, -90*val, 0); }
+        Door d = door.GetComponent<Door>();
+        if (d.right_side) val = -1;
+        if (d.opened) { audioSource.PlayOneShot(Resources.Load("Sounds/door2") as AudioClip, volume); newRotation *= Quaternion.Euler(0, -90*val, 0); }
         else { audioSource.PlayOneShot(Resources.Load("Sounds/door1") as AudioClip, volume); newRotation *= Quaternion.Euler(0, 90*val, 0); }
-        door.GetComponent<Door>().opened = !door.GetComponent<Door>().opened;
+        d.opened = !d.opened;
         Debug.Log(door.GetComponent<Door>().opened);
         while (door.rotation!=newRotation) 
         {
             door.rotation = Quaternion.Slerp(door.rotation, newRotation, 20 * Time.deltaTime);
             yield return new WaitForEndOfFrame();
         }
-        C_running = false;
+        C_running = false;click = 0;
     }
     void OnDrawGizmosSelected()
     {
@@ -343,3 +482,11 @@ public class PlayerInteract : MonoBehaviour
         }
     }
 }
+
+    IEnumerator Timer(Transform transform)
+    {
+        yield return new WaitForSeconds(0.1f);
+        transform.tag = "Item";
+    }
+}
+

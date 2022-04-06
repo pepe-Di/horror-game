@@ -100,6 +100,7 @@ namespace Fungus
             case ClickMode.ClickAnywhere:
                 if (Input.GetMouseButtonDown(0))
                 {
+                    Debug.Log("click");
                     SetClickAnywhereClickedFlag();
                 }
                 break;

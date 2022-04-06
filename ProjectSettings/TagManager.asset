@@ -18,6 +18,9 @@ TagManager:
   - Energy
   - Point
   - header
+  - Drawer
+  - Look
+  - Hide
   layers:
   - Default
   - TransparentFX
