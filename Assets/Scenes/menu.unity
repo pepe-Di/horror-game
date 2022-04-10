@@ -212,6 +212,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   alpha: 1
+  ignore: 0
 --- !u!114 &18907624
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -683,6 +684,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   alpha: 1
+  ignore: 0
 --- !u!1 &72307465
 GameObject:
   m_ObjectHideFlags: 0
@@ -1117,6 +1119,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   alpha: 1
+  ignore: 0
 --- !u!1 &110130007
 GameObject:
   m_ObjectHideFlags: 0
@@ -1973,6 +1976,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   alpha: 1
+  ignore: 0
 --- !u!1 &162729690
 GameObject:
   m_ObjectHideFlags: 0
@@ -4120,6 +4124,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   alpha: 0
+  ignore: 0
 --- !u!1 &444209104
 GameObject:
   m_ObjectHideFlags: 0
@@ -4210,6 +4215,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   alpha: 1
+  ignore: 0
 --- !u!1 &450589766
 GameObject:
   m_ObjectHideFlags: 0
@@ -4447,6 +4453,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   alpha: 1
+  ignore: 0
 --- !u!1 &471889787
 GameObject:
   m_ObjectHideFlags: 0
@@ -4874,6 +4881,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   alpha: 0
+  ignore: 0
 --- !u!114 &508484509
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5637,6 +5645,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   alpha: 1
+  ignore: 0
 --- !u!1 &591995224
 GameObject:
   m_ObjectHideFlags: 0
@@ -6416,6 +6425,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   alpha: 1
+  ignore: 0
 --- !u!1 &658922914
 GameObject:
   m_ObjectHideFlags: 0
@@ -7318,6 +7328,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   alpha: 0
+  ignore: 0
 --- !u!1 &729892438
 GameObject:
   m_ObjectHideFlags: 0
@@ -7778,6 +7789,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   alpha: 1
+  ignore: 0
 --- !u!1 &750379756
 GameObject:
   m_ObjectHideFlags: 0
@@ -8334,6 +8346,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   alpha: 1
+  ignore: 0
 --- !u!1 &772226254
 GameObject:
   m_ObjectHideFlags: 0
@@ -8760,6 +8773,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   alpha: 0
+  ignore: 0
 --- !u!114 &794574645
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9361,6 +9375,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   alpha: 1
+  ignore: 0
 --- !u!1 &846076614
 GameObject:
   m_ObjectHideFlags: 0
@@ -10517,6 +10532,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   alpha: 0
+  ignore: 0
 --- !u!114 &923898276
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11633,6 +11649,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   alpha: 1
+  ignore: 0
 --- !u!1 &1001979531
 GameObject:
   m_ObjectHideFlags: 0
@@ -11994,6 +12011,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   alpha: 1
+  ignore: 0
 --- !u!114 &1048834957
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12252,6 +12270,7 @@ MonoBehaviour:
   particles_on: 0
   vsync_count: 0
   prts: {fileID: 0}
+  localization: {fileID: 0}
   selectedSlot: -1
   cartridge: {fileID: 0}
 --- !u!4 &1057100596
@@ -12603,6 +12622,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   alpha: 0
+  ignore: 0
 --- !u!114 &1075266014
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18525,6 +18545,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   alpha: 1
+  ignore: 0
 --- !u!114 &1198397147
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18877,6 +18898,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   alpha: 0
+  ignore: 0
 --- !u!114 &1213549551
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19168,6 +19190,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   alpha: 1
+  ignore: 0
 --- !u!1 &1258577716
 GameObject:
   m_ObjectHideFlags: 0
@@ -19497,6 +19520,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   alpha: 0
+  ignore: 0
 --- !u!1 &1280236535
 GameObject:
   m_ObjectHideFlags: 0
@@ -22445,6 +22469,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   alpha: 0
+  ignore: 0
 --- !u!1 &1527617722
 GameObject:
   m_ObjectHideFlags: 0
@@ -22775,6 +22800,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   alpha: 1
+  ignore: 0
 --- !u!1 &1550911369
 GameObject:
   m_ObjectHideFlags: 0
@@ -23171,6 +23197,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   alpha: 1
+  ignore: 0
 --- !u!1 &1569203880
 GameObject:
   m_ObjectHideFlags: 0
@@ -23337,6 +23364,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   alpha: 1
+  ignore: 0
 --- !u!114 &1569607192
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23688,6 +23716,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   alpha: 0
+  ignore: 0
 --- !u!1 &1614760624
 GameObject:
   m_ObjectHideFlags: 0
@@ -23778,6 +23807,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   alpha: 1
+  ignore: 0
 --- !u!114 &1641343118 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 886229881055582222, guid: cf4e20d9e3e01554cb31f90b53149112, type: 3}
@@ -24059,6 +24089,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   alpha: 1
+  ignore: 0
 --- !u!114 &1651600332
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24257,6 +24288,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   alpha: 1
+  ignore: 0
 --- !u!1 &1678378729
 GameObject:
   m_ObjectHideFlags: 0
@@ -24503,6 +24535,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   alpha: 1
+  ignore: 0
 --- !u!1 &1720930988
 GameObject:
   m_ObjectHideFlags: 0
@@ -24798,6 +24831,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   alpha: 1
+  ignore: 0
 --- !u!1 &1736458791
 GameObject:
   m_ObjectHideFlags: 0
@@ -25246,6 +25280,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   alpha: 1
+  ignore: 0
 --- !u!1 &1753239120
 GameObject:
   m_ObjectHideFlags: 0
@@ -25501,6 +25536,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   alpha: 1
+  ignore: 0
 --- !u!1 &1785780246
 GameObject:
   m_ObjectHideFlags: 0
@@ -25666,6 +25702,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   alpha: 1
+  ignore: 0
 --- !u!1 &1789541201
 GameObject:
   m_ObjectHideFlags: 0
@@ -27086,6 +27123,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   alpha: 0
+  ignore: 0
 --- !u!1 &1941314330
 GameObject:
   m_ObjectHideFlags: 0

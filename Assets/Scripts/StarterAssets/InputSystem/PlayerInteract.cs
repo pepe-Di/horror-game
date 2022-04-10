@@ -148,7 +148,7 @@ public class PlayerInteract : MonoBehaviour
                             }
                             catch { }
                             Destroy(hit.collider.gameObject);
-                            SoundManager.instanse.PlaySe(Se.Item);
+                            SoundManager.instanñe.PlaySe(Se.Item);
                             //crosshair.sprite = Resources.Load<Sprite>("ui/Reticle");
                             grab_cur.SetActive(false);
                         }

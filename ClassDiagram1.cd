@@ -1,0 +1,283 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="MenuManager" Collapsed="true">
+    <Position X="11.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAYIeJaouawVIE64MIAhQwhlAFBQQAKBMMAgAw6AUEE=</HashCode>
+      <FileName>Assets\Scripts\MenuManager.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="instance" />
+      <Field Name="gameData" />
+      <Field Name="character" />
+      <Field Name="localization" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Player" Collapsed="true">
+    <Position X="7" Y="2.25" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Events" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <NestedTypes>
+      <Delegate Name="Player.OnHpChange">
+        <TypeIdentifier>
+          <NewMemberFileName>Assets\Scripts\Player.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>ECAAgDQARCARREQEAAgQAAAQggBACAQUAAFACQAQIEA=</HashCode>
+      <FileName>Assets\Scripts\Player.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FPersonController" Collapsed="true">
+    <Position X="7" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BBUDAAgYAyIQBBUAyMgIJgICACEwDaAJrACAABDAAEw=</HashCode>
+      <FileName>Assets\Scripts\FPersonController.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="stateController" />
+      <Field Name="player" />
+      <Field Name="_input" />
+      <Field Name="stats" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="GameData" Collapsed="true">
+    <Position X="9.5" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAIAgAAAIAAAAAgIAAqAQCAAAEEMQBgAACBAAABAAAA=</HashCode>
+      <FileName>Assets\Scripts\GameData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EventController" Collapsed="true">
+    <Position X="1.25" Y="2.25" Width="1.5" />
+    <Members>
+      <Event Name="DoorEvent" Hidden="true" />
+      <Event Name="endQEvent" Hidden="true" />
+      <Event Name="FrameEvent" Hidden="true" />
+      <Event Name="StateEvent" Hidden="true" />
+      <Event Name="updateQEvent" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAGwAAIAAQQAAIAoAAAAAAAAAAhAAACAYAAEAAAA0EA=</HashCode>
+      <FileName>Assets\Scripts\EventController.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="instance" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="PlayerStats" Collapsed="true">
+    <Position X="10" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAABAAACAAQAAAEACAAAAAAAAAAIAAAAEAACAAiAE=</HashCode>
+      <FileName>Assets\Scripts\PlayerStats.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SaveSystem" Collapsed="true">
+    <Position X="1.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAACgQAAAAAAABgAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\SaveSystem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Options" Collapsed="true">
+    <Position X="5.25" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAgAAAIAAAAAgIAAqAQCAAAEEMABgAACBAAAAAAIA=</HashCode>
+      <FileName>Assets\Scripts\SaveSystem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PlayerData" Collapsed="true">
+    <Position X="12.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAABAAAAAAAAAgAIAAAAgAEAAAAAABAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\SaveSystem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SaveSlot" Collapsed="true">
+    <Position X="3" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAAAAAAAAAAAAAAAAEBAAIAAAAAgBAQAA=</HashCode>
+      <FileName>Assets\Scripts\SaveSystem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameManager" Collapsed="true">
+    <Position X="3.5" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CEwAMAAAgiIQIAQAAAAAAAgQAABAAAwAAABACQgAAkE=</HashCode>
+      <FileName>Assets\Scripts\GameManager.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="player_" />
+      <Field Name="flowchart" />
+      <Field Name="instance" />
+      <Field Name="inv" />
+      <Field Name="_input" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="LocalisationSystem" Collapsed="true">
+    <Position X="1.25" Y="7" Width="1.75" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="LocalisationSystem.Language" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Assets\Scripts\LocalisationSystem.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAgAAgAAAAACAAAgAAAgAAACAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\LocalisationSystem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SoundManager" Collapsed="true">
+    <Position X="1.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAQAAAAAACSAAAACAAAAAAEAAAAAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\SoundManager.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="instanсe" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="SeClip" Collapsed="true">
+    <Position X="7.25" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAgAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\SoundManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BgClip" Collapsed="true">
+    <Position X="3" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAgAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\SoundManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StateController" Collapsed="true">
+    <Position X="10" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAAAAAAAAAAAAAAAAAEAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\StateController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Fungus.Flowchart" Collapsed="true">
+    <Position X="3.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="InventoryUI" Collapsed="true">
+    <Position X="5.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACIABAEAECAABgAAAAgEAAAAAABAAAADAAAA5AAAAEA=</HashCode>
+      <FileName>Assets\Scripts\InventoryUI.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="instance" />
+      <Field Name="player" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="MouseLook" Collapsed="true">
+    <Position X="10" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAQAICAEgCIQAgAAEEAAQFgAAAAAAQEAACAAACAAAEA=</HashCode>
+      <FileName>Assets\Scripts\MouseLook.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_input" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="StarterAssets.StarterAssetsInputs" Collapsed="true">
+    <Position X="7" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQDAQAAEAADAACAAAsAAFgCAQDiCTQQAggGAIQLAeE=</HashCode>
+      <FileName>Assets\Scripts\StarterAssets\InputSystem\StarterAssetsInputs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Fungus.Character" Collapsed="true">
+    <Position X="14" Y="0.5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Fungus.Localization" Collapsed="true">
+    <Position X="14" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="QuestManager" Collapsed="true">
+    <Position X="1.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACACACACAAAoCAgAAAAAAAAABAAABAACAAAAAACEA=</HashCode>
+      <FileName>Assets\Scripts\QuestManager.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="instance" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="CSVLoader" Collapsed="true">
+    <Position X="3.25" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAABAAAAAAAAAABAAAAAAAAAEAAAAQAAIAA=</HashCode>
+      <FileName>Assets\Scripts\CSVLoader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DataManager" Collapsed="true">
+    <Position X="7.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAACAAAAgBBAAAAQAUBMBAAACIIAAAABwIAEE=</HashCode>
+      <FileName>Assets\Scripts\DataManager.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="instance" />
+      <Field Name="gameData" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="PlayerInteract" Collapsed="true">
+    <Position X="9.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAQAKAjIQKEUAAAAAAABAAAAEECABYEgCAgAOAkA=</HashCode>
+      <FileName>Assets\Scripts\StarterAssets\InputSystem\PlayerInteract.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_input" />
+      <Field Name="controller" />
+      <Field Name="player_" />
+    </ShowAsAssociation>
+  </Class>
+  <Enum Name="Bg" Collapsed="true">
+    <Position X="10.5" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\SoundManager.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Se" Collapsed="true">
+    <Position X="10.75" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAgA=</HashCode>
+      <FileName>Assets\Scripts\SoundManager.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="State" Collapsed="true">
+    <Position X="12.5" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAABAAgAAAAAAAAAEAEACAAAAIAAAAEAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\StateController.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="UIColor" Collapsed="true">
+    <Position X="12.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAACACAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\DataManager.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

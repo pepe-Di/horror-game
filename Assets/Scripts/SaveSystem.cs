@@ -11,7 +11,6 @@ public static class SaveSystem
             path = Application.persistentDataPath +"/SaveSlot_" + i + ".ini";
             if (File.Exists(path))
             {
-                //���������
                 BinaryFormatter formatter = new BinaryFormatter();
                 FileStream stream = new FileStream(path, FileMode.Open);
                 SaveSlot data = formatter.Deserialize(stream) as SaveSlot;
@@ -20,7 +19,6 @@ public static class SaveSystem
             }
             else
             {
-                //��������� ����
                 SaveSlot saveSlot = new SaveSlot(text[i]);
                 saveSlot.name = "Empty slot";
                 saveSlots[i] = saveSlot;
