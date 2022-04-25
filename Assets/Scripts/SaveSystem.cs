@@ -154,12 +154,12 @@ public class PlayerData
     public string time;
     public string[] items;
     public string[] used_items;
-    //public List<Item> items = new List<Item>();
+    public int[] quests;
+    public int[] finished_quests;
     public PlayerData(Player player)
     {
         time = System.DateTime.Now.ToString();
         sceneIndex = 2;
-        //GameManager.instance.GetSceneIndex();
         hp = player.hp;
         stamina = player.stamina;
         name = player.name_;
@@ -176,6 +176,16 @@ public class PlayerData
         for(int i = 0; i < used_items.Length; i++)
         {
             used_items[i] = player.used_items[i].GetGmName();
+        }
+        quests = new int[player.quests.Count];
+        for(int i = 0; i < quests.Length; i++)
+        {
+            quests[i] = player.quests[i].id;
+        }
+        finished_quests = new int[player.finished_quests.Count];
+        for(int i = 0; i < finished_quests.Length; i++)
+        {
+            finished_quests[i] = player.finished_quests[i].id;
         }
     }
 }

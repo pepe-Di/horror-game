@@ -16,25 +16,7 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: fe62d8bee2f16304daf545bb518813cd
-  m_SerializeEntries:
-  - m_GUID: 7e98e31dfe310e64d9230dbb6a0a9346
-    m_Address: Russian (ru)
-    m_ReadOnly: 1
-    m_SerializedLabels:
-    - Locale
-    m_mainAssetType: UnityEngine.Localization.Locale, Unity.Localization, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-    m_MainAsset: {fileID: 0}
-    m_TargetAsset: {fileID: 0}
-  - m_GUID: d1245a12fa83d244cbe50b350ada2bb2
-    m_Address: English (en)
-    m_ReadOnly: 1
-    m_SerializedLabels:
-    - Locale
-    m_mainAssetType: UnityEngine.Localization.Locale, Unity.Localization, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-    m_MainAsset: {fileID: 0}
-    m_TargetAsset: {fileID: 0}
+  m_SerializeEntries: []
   m_ReadOnly: 1
   m_Settings: {fileID: 11400000, guid: 45269dfd9781a734eba5e832d862b1bc, type: 2}
   m_SchemaSet:

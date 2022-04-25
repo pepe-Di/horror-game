@@ -59,8 +59,8 @@ public class Item
     {
         switch (type)
         {
-            case itemType.Food: return LocalisationSystem.TryGetLocalisedValue("desc0") + value+ LocalisationSystem.TryGetLocalisedValue("desc2")+speed+LocalisationSystem.TryGetLocalisedValue("desc3");
-            case itemType.Drink: return LocalisationSystem.TryGetLocalisedValue("desc1") + value + LocalisationSystem.TryGetLocalisedValue("desc5")+speed+ LocalisationSystem.TryGetLocalisedValue("desc3");
+            case itemType.Food: return LocalisationSystem.TryGetLocalisedValue("desc0") + value+" "+ LocalisationSystem.TryGetLocalisedValue("desc2")+speed+" "+LocalisationSystem.TryGetLocalisedValue("desc3");
+            case itemType.Drink: return LocalisationSystem.TryGetLocalisedValue("desc1") + value +" "+ LocalisationSystem.TryGetLocalisedValue("desc5")+speed+" "+ LocalisationSystem.TryGetLocalisedValue("desc3");
             case itemType.Battery: return LocalisationSystem.TryGetLocalisedValue("desc4") + value;
             case itemType.Drug: return LocalisationSystem.TryGetLocalisedValue("desc0") + value;
             case itemType.Flashlight: return LocalisationSystem.TryGetLocalisedValue("desc6");
@@ -120,17 +120,17 @@ public class Item
     }
     public void Use()
     {
+        switch (type)
+        {
+            case itemType.Flashlight: return;
+            default: break;
+        }
         if(questId>=0)
         {
             EventController.instance.EndQEvent(questId);
             Debug.Log(questId);
-            EventController.instance.UpdateQEvent();
+         //   EventController.instance.UpdateQEvent();
             questId = -1;
-        }
-        switch (type)
-        {
-            case itemType.Flashlight: break;
-            default: break;
         }
     }
     ~Item () { }

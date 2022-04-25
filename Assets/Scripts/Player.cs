@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public bool loaded=false;
     public int lastQIndex=-1;
     public static Player instance;
     public string name_;
@@ -12,6 +13,7 @@ public class Player : MonoBehaviour
     public List<Item> items=new List<Item>();
     public List<Item> used_items=new List<Item>();
     public List<Quest> quests = new List<Quest>();
+    public List<Quest> finished_quests = new List<Quest>();
     public GameObject selectedItem;
     private int selectedID;
     public float speed_modifier=0;
@@ -21,7 +23,7 @@ public class Player : MonoBehaviour
     void Awake()
     {
         instance = this;
-        EventController.instance.FlashEvent += EnergyChange;
+        //EventController.instance.FlashEvent += EnergyChange;
         EventController.instance.QEvent += AddQ;
         EventController.instance.endQEvent += EndQuest;
     }
@@ -43,6 +45,13 @@ public class Player : MonoBehaviour
             if (i.GetGmName() == name) return i;
         }
         return null;
+    }public Item FindUsedItem(string name)
+    {
+        foreach (Item i in used_items)
+        {
+            if (i.GetGmName() == name) return i;
+        }
+        return null;
     }
     public void EndQuest(int id)
     {
@@ -50,6 +59,7 @@ public class Player : MonoBehaviour
         {
             lastQIndex = id;
             quests.Remove(QuestManager.instance.quests[id]);
+            finished_quests.Add(QuestManager.instance.quests[id]);
             if (QuestManager.instance.quests[id].isConsistent)
             {
                 StartCoroutine(StartQ(id));
@@ -125,7 +135,7 @@ public class Player : MonoBehaviour
             case itemType.Battery: { energy += items[selectedID].value; if (energy > full_energy) energy = full_energy; break; }
             case itemType.Drug: RegenerateHP(items[selectedID].value, 1); break;
             case itemType.Flashlight: return; 
-            case itemType.Key: return; 
+            case itemType.Key: if(FindUsedItem("key0")==null){used_items.Add(items[selectedID]); }return; 
             case itemType.Card: return; 
             default: return;
         }
@@ -135,8 +145,15 @@ public class Player : MonoBehaviour
         GameManager.instance.inv.UpdateData(); 
         selectedID = -1;
     }
+    public bool FindQ(int value){
+        foreach(Quest q in quests){
+            if (q.id==value) return false;
+        }
+        return true;
+    }
     public void LoadData(PlayerData data)
     {
+        if(loaded) return;
         name_ = data.name;
         Fungus.Character character = GetComponent<Fungus.Character>();
         character.nameText = data.name;
@@ -152,10 +169,27 @@ public class Player : MonoBehaviour
         }
         //items.Clear();
         InventoryUI.instance.UpdateData();
+        used_items.Clear();
         for (int i=0; i<data.used_items.Length;i++)
         {
            used_items.Add(new Item(data.used_items[i]));
         }
+        quests.Clear();
+        for (int i=0; i<data.quests.Length;i++)
+        {
+           quests.Add(QuestManager.instance.quests[data.quests[i]]);
+           if(i==data.quests.Length-1) { 
+               lastQIndex = data.quests[i];
+               //StartCoroutine(StartQ(data.quests[i]-1));
+               }
+        }
+        finished_quests.Clear();
+        for (int i=0; i<data.finished_quests.Length;i++)
+        {
+           finished_quests.Add(QuestManager.instance.quests[data.finished_quests[i]]);
+        }
+        EventController.instance.UpdateQEvent();
+        loaded = true;
         Debug.Log("player loaded");
     }
     public bool GetItem(GameObject gm)
@@ -217,5 +251,10 @@ public class Player : MonoBehaviour
             yield return new WaitForSeconds(1);
             Debug.Log("energy "+energy);
         }
+    }
+    void OnDisable(){
+        
+        EventController.instance.QEvent -= AddQ;
+        EventController.instance.endQEvent -= EndQuest;
     }
 }

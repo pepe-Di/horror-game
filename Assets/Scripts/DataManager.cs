@@ -60,7 +60,7 @@ public class DataManager : MonoBehaviour
     }
     public void NewGame()
     {
-        FindObjectOfType<LevelLoader>().LoadLevel(2);
+        FindObjectOfType<LevelLoader>().LoadLevel(1);
        // GameObject player = (GameObject)Instantiate(Resources.Load("Prefs/Player Variant"));
     }
     public void LoadGame()
@@ -68,7 +68,7 @@ public class DataManager : MonoBehaviour
         
             loaded = true;
             SaveSlot data = SaveSystem.LoadPlayer();
-            FindObjectOfType<LevelLoader>().LoadLevel(data.playerData.sceneIndex);
+            FindObjectOfType<LevelLoader>().LoadLevel(1);
            
             Debug.Log("LoadGame()");
         

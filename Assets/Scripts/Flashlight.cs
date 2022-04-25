@@ -10,10 +10,12 @@ public class Flashlight : MonoBehaviour
     public List<Image> imgs=new List<Image>();
     private float value,speed=200f;
     Color color, transponent;
+    bool started = false;
     // Start is called before the first frame update
     void Start()
     {
-        ui.SetActive(true);
+        if(!started){
+ ui.SetActive(true);
         imgs.AddRange(energybar.GetComponentsInChildren<Image>());
         imgs.Reverse();
         color = imgs[0].color;
@@ -22,17 +24,20 @@ public class Flashlight : MonoBehaviour
         value = Player.instance.full_energy / (imgs.Count-1);
         Debug.Log(value);
         EventController.instance.FlashEvent += EnergyBarChange;
-        EventController.instance.StartFlashEvent(speed);
+        EventController.instance.StartFlashEvent(speed);started=true;
+        }
+       
     }
     public void EnergyBarChange(float value)
     {
+        if(GameManager.instance.player_!=null)GameManager.instance.player_.EnergyChange(value);
         StartCoroutine(EnergyChange());
     }
     IEnumerator EnergyChange()
     {
         while (true)
         {
-            float f = Player.instance.energy / value;
+            float f = GameManager.instance.player_.energy / value;
             int t = (int)f + 1;
             for (int i = 0; i < t; i++)
             {
@@ -54,13 +59,16 @@ public class Flashlight : MonoBehaviour
     {
         StopAllCoroutines();
         ui.SetActive(false);
-        //EventController.instance.FlashEvent -= EnergyBarChange;
+        EventController.instance.FlashEvent -= EnergyBarChange;
     }
     private void OnEnable()
     {
-        ui.SetActive(true);
-        //EventController.instance.FlashEvent += EnergyBarChange;
+        if(started){
+ui.SetActive(true);
+        EventController.instance.FlashEvent += EnergyBarChange;
         EventController.instance.StartFlashEvent(speed);
+        }
+        
     }
     // Update is called once per frame
     void Update()

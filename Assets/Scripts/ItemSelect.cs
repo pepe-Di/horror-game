@@ -11,11 +11,12 @@ public class ItemSelect : MonoBehaviour
     public GameObject content;
     public InventoryUI inventory;
     public GameObject view;
-    public int selectedID = 0;
+    public int selectedID = 0,lastId;
     private int start_i=0,end_i=7;
     public int max_items;
     int max_cell = 7;
     public bool C_run = false;
+    public List<GameObject> cells = new List<GameObject>();
     public List<GameObject> items = new List<GameObject>();
     // Start is called before the first frame update
     void Start()
@@ -26,6 +27,7 @@ public class ItemSelect : MonoBehaviour
     }
     public void GetItems()
     {
+        SoundManager.instance.PlaySe(Se.Click);
         foreach (GameObject obj in items)
         {
             Destroy(obj);
@@ -49,13 +51,16 @@ public class ItemSelect : MonoBehaviour
         {
             GameObject gm = Instantiate(Resources.Load<GameObject>("Prefs/Items/Item"));
             Image im = gm.GetComponentInChildren<Image>();
-            im.sprite = Resources.Load<Sprite>("Prefs/Items/" + inventory.player.items[i].Name);
+            im.sprite = Resources.Load<Sprite>("Prefs/Items/" + inventory.player.items[i].GetGmName());
+            im.color = DataManager.instance.GetPalette().fg.color;
+            cells[i].GetComponent<Image>().color = DataManager.instance.GetPalette().bg.color;
             im.SetNativeSize(); 
             Button b = gm.GetComponentInChildren<Button>();
-            b.gameObject.name = inventory.player.items[i].Name;
+            b.gameObject.name = inventory.player.items[i].GetGmName();
             if (i == selectedID)
             {
-                im.color = Color.red;
+                im.color = DataManager.instance.GetPalette().bg.color;
+                cells[i].GetComponent<Image>().color = DataManager.instance.GetPalette().fg.color;
             }
             gm.transform.SetParent(content.transform);
             items.Add(gm);
@@ -68,12 +73,14 @@ public class ItemSelect : MonoBehaviour
         {
             view.SetActive(true);
             if (selectedID > 0) { selectedID--; }
+           // else return;
             if(!C_run) StartCoroutine(GetItem());
         }
         else if(_input.scroll.y < 0)
         {
             view.SetActive(true);
             if (selectedID < max_items-1) { selectedID++; }
+            //else return;
             if (!C_run) StartCoroutine(GetItem()); 
         }
         else 

@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class InventoryUI : MonoBehaviour
 {
     public static InventoryUI instance;
+    public GameObject imgBg;
     public Text Message;
     public int inv_size = 15;
     public GameObject descWindow;
@@ -18,6 +19,8 @@ public class InventoryUI : MonoBehaviour
     // Update is called once per frame
     void Awake(){
         instance = this;
+        Message.gameObject.SetActive(false);
+        imgBg.SetActive(false);
     }
     private void Start()=>Player.instance.onHpChange += onPlayerHpChange;
     public void onPlayerHpChange(float value)
@@ -38,14 +41,17 @@ public class InventoryUI : MonoBehaviour
             Image i = gm.GetComponentInChildren<Image>();
             i.sprite = Resources.Load<Sprite>("Prefs/Items/" + item.GetGmName());
             i.SetNativeSize();
+            i.color = DataManager.instance.GetPalette().fg.color;
             Button b = gm.GetComponentInChildren<Button>();
             b.gameObject.name = item.GetGmName();
+            b.transition = Button.Transition.None;
             b.onClick.AddListener(()=> 
             {
                 try
                 {
                     if (!C)
                     {
+                        SoundManager.instance.PlaySe(Se.Click);
                         if (descWindow.name == item.GetGmName())
                         {
                             descWindow.SetActive(false);
@@ -57,8 +63,10 @@ public class InventoryUI : MonoBehaviour
                             descWindow.SetActive(true);
                             descWindow.name = item.GetGmName();
                             Image img = descWindow.GetComponentInChildren<Image>();
-                            img.sprite = i.sprite;
-                            img.SetNativeSize(); StartCoroutine(Desc(item));
+                            img.sprite = Resources.Load<Sprite>("Prefs/Items/" + item.GetGmName());
+                            img.SetNativeSize(); 
+                            img.color = DataManager.instance.GetPalette().fg.color;
+                            StartCoroutine(Desc(item));
                             return;
                         }
                     }
@@ -103,6 +111,9 @@ public class InventoryUI : MonoBehaviour
                 GameObject o = Instantiate(Resources.Load<GameObject>("Prefs/Items/" + item.GetGmName()));
                 o.transform.SetParent(itemPos);
                 o.transform.localPosition = Vector3.zero;
+               Rigidbody rb = o.GetComponent<Rigidbody>();
+               rb.isKinematic= true;
+                rb.useGravity = false;
                 o.AddComponent<InteractItem>();
                 //Destroy(o.GetComponent<Outline>());
                 player.SetItem(o, player.items.IndexOf(item));
@@ -117,11 +128,13 @@ public class InventoryUI : MonoBehaviour
     {
         Message.text = message;
         Message.gameObject.SetActive(true);
+        imgBg.SetActive(true);
         StartCoroutine(End());
     }
     IEnumerator End()
     {
         yield return new WaitForSeconds(2);
         Message.gameObject.SetActive(false);
+        imgBg.SetActive(false);
     }
 }

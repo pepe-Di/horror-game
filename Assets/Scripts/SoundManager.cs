@@ -8,14 +8,14 @@ public class SoundManager : MonoBehaviour
     AudioSource seAS, bgAS;
     [SerializeField] public List<BgClip> bgClips;
     [SerializeField]public List<SeClip> seClips;
-    public static SoundManager instanсe;
+    public static SoundManager instance;
     void Awake()
     {
         var objs = gameObject.GetComponents<AudioSource>();
         seAS = objs[0]; 
         bgAS = objs[1];
-        if (instanсe != null) Destroy(this);
-        else instanсe = this;
+        if (instance != null) Destroy(this);
+        else instance = this;
     }
     public void PlaySe(Se se)
     {

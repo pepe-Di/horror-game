@@ -10,16 +10,27 @@ public class QuestManager : MonoBehaviour
     public List<Quest> quests = new List<Quest>();
     public List<GameObject> qs = new List<GameObject>();
     public Text qName;
+    public GameObject bgImg;
     // Start is called before the first frame update
     void Awake()
     {
         instance = this;
-        quests.Add(new Quest(questType.ToPoint, "������� � ����� WASD", false));
-        quests.Add(new Quest(questType.Grab, "����� ������ � ������� ���", true));
-        quests.Add(new Quest(questType.Use, "������������ ������ �� ������� F", true, "flashlight"));
+        quests.Add(new Quest(questType.ToPoint, "move to the desk", false));
+        quests.Add(new Quest(questType.Grab, "grab the flashlight", true, "flashlight"));
+        quests.Add(new Quest(questType.Use, "use the flashlight", true, "flashlight"));
+        quests.Add(new Quest(questType.ToPoint, "exit the room", false));
+        quests.Add(new Quest(questType.Grab, "find a key", false, "key0"));
+        quests.Add(new Quest(questType.ToPoint, "exit the school", false));
+        int i=0;
+        foreach(Quest q in quests){
+            q.id = i;
+            i++;
+        }
     }
     private void Start()
-    {
+    {   
+        qName.text = "";
+        bgImg.SetActive(false);
         EventController.instance.QEvent += ChangeQName;
         EventController.instance.endQEvent += DeleteQName;
         EventController.instance.updateQEvent += UpdateContent;
@@ -30,12 +41,14 @@ public class QuestManager : MonoBehaviour
     }
     public void ChangeQName(int id)
     {
+        bgImg.SetActive(true);
         qName.text = LocalisationSystem.TryGetLocalisedValue("quest"+id);
-        //qName.text = quests[id].name;
+       // qName.text = quests[id].name;
     }
     public void DeleteQName(int id)
     {
         qName.text = "";
+        bgImg.SetActive(false);
         Debug.Log("DeleteQ!!!!!!!!!!!!!");
     }
     public bool TryToInvoke(int id)
@@ -61,7 +74,8 @@ public class QuestManager : MonoBehaviour
         foreach(Quest q in Player.instance.quests)
         {
             GameObject gm = Instantiate(Resources.Load<GameObject>("Prefs/UI/quest"));
-            gm.GetComponentInChildren<Text>().text = LocalisationSystem.TryGetLocalisedValue("quest"+id); 
+            gm.GetComponentInChildren<Text>().text = LocalisationSystem.TryGetLocalisedValue("quest"+q.id); 
+            Debug.Log("Q!"+LocalisationSystem.TryGetLocalisedValue("quest"+q.id));
             gm.transform.SetParent(content.transform);
             qs.Add(gm);
             id++;
@@ -70,5 +84,10 @@ public class QuestManager : MonoBehaviour
     void OnEnable(){
         Debug.Log("OnEnable!!!!!!!!!!!!!");
 
+    }
+    void OnDisable(){
+        EventController.instance.QEvent-= ChangeQName;
+        EventController.instance.endQEvent -= DeleteQName;
+        EventController.instance.updateQEvent -= UpdateContent;
     }
 }

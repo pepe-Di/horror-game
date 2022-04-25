@@ -39,7 +39,7 @@ public class EventController : MonoBehaviour
     }
     public void StartFlashEvent(float value)
     {
-        FlashEvent?.Invoke(value);
+       if(GameManager.instance.player_!=null) FlashEvent?.Invoke(value);
     }
     public void StartItemEvent(int id)
     {
@@ -51,14 +51,16 @@ public class EventController : MonoBehaviour
     }
     public void StartQEvent(int id)
     {
-        Debug.Log("StartQEvent");
+        if(id==-1)return;
+        Debug.Log("StartQEvent "+id);
         QEvent?.Invoke(id);
+        updateQEvent?.Invoke();
     }
     public void EndQEvent(int id)
     {
-        Debug.Log("EndQEvent");
+        Debug.Log("EndQEvent "+id);
         endQEvent?.Invoke(id);
-        //updateQEvent?.Invoke();
+        updateQEvent?.Invoke();
     }
     public void UpdateQEvent()
     {

@@ -18,7 +18,7 @@ public class FinishTrigger : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             EventController.instance.EndQEvent(id);
-            EventController.instance.UpdateQEvent();
+         //   EventController.instance.UpdateQEvent();
             Destroy(this.gameObject);
         }
     }

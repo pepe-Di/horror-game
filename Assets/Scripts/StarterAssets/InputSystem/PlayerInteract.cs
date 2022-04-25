@@ -25,6 +25,7 @@ public class PlayerInteract : MonoBehaviour
     public Image crosshair;
     public GameObject grab_cur;
     public GameObject eye_cur;
+    
     private void Awake()
     {
         player_ = GetComponent<Player>();
@@ -39,23 +40,7 @@ public class PlayerInteract : MonoBehaviour
         
         grab_cur.SetActive(false);
     }
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.tag == "Chair")
-        {
-            Debug.Log("Press E to sit");
-            //if (_input.interact) { }
-        }
-        if (other.tag == "Note")
-        {
-            Debug.Log("note trigger enter");
-            //if (_input.interact) { }
-        }
-        if (other.tag == "Door")
-        {
-            Debug.Log("door trigger enter");
-        }
-    }
+    
     public bool C_running = false, selected=false;
     int click = 0;
     Outline gm;
@@ -66,8 +51,15 @@ public class PlayerInteract : MonoBehaviour
         {
         Item i = player_.FindItem("flashlight");
         if(i==null) return;
+        if(i.questId>=0)
+        {
+            EventController.instance.EndQEvent(i.questId);
+            Debug.Log(i.questId);
+          //  EventController.instance.UpdateQEvent();
+            i.questId = -1;
+        }
             StartCoroutine(Flash());
-            Player.instance.StopAllCoroutines();
+           // if(player_!=null)player_.StopAllCoroutines();
             flashlight.SetActive(!flash);
             flash = !flash;
         }
@@ -77,6 +69,15 @@ public class PlayerInteract : MonoBehaviour
         locked = true;
         yield return new WaitForSeconds(0.2f);
         locked = false;
+    }
+    bool lock_=false;
+    IEnumerator QuestItem(int id){
+        lock_=true;
+        EventController.instance.EndQEvent(id);
+       // EventController.instance.UpdateQEvent();
+        Debug.Log("Qi " + id);
+        yield return new WaitForSeconds(0.1f);
+        lock_=false;
     }
     private void Update()
     {
@@ -118,7 +119,6 @@ public class PlayerInteract : MonoBehaviour
             }
             if (hit.transform.CompareTag("Item"))
             {
-                //crosshair.sprite = Resources.Load<Sprite>("ui/grab");
                 grab_cur.SetActive(true);
                 var selection = hit.transform;
                 //var selectionOutline = selection.GetComponent<Outline>();
@@ -142,13 +142,15 @@ public class PlayerInteract : MonoBehaviour
                                 if (qi != null)
                                 {
                                     EventController.instance.EndQEvent(qi.id);
-                                    EventController.instance.UpdateQEvent();
+                                  //  EventController.instance.UpdateQEvent();
                                     Debug.Log("Qi " + qi.id);
+                                    //StartCoroutine(QuestItem(qi.id));
+                                    
                                 }
                             }
                             catch { }
                             Destroy(hit.collider.gameObject);
-                            SoundManager.instanñe.PlaySe(Se.Item);
+                            SoundManager.instance.PlaySe(Se.Item);
                             //crosshair.sprite = Resources.Load<Sprite>("ui/Reticle");
                             grab_cur.SetActive(false);
                         }
@@ -187,32 +189,47 @@ public class PlayerInteract : MonoBehaviour
                             if(d.locked){
                                 string key_name="key"+d.index;
                                 Item key = player_.FindItem(key_name);
+                                Item used_key = player_.FindUsedItem(key_name);
+                                if(used_key!=null)
+                                {
+                                    d.locked=false;
+                                }
+                                else{
                                 if(key==null){
+                                    if(Player.instance.FindQ(d.Qindex)){
+                                        EventController.instance.StartQEvent(d.Qindex);
+                                      //  EventController.instance.UpdateQEvent();
+                                    }
                                     InventoryUI.instance.GetMessage(LocalisationSystem.GetLocalisedValue("message2"));
                                    click = 0; return;
                                 }
                                 else{
                                         string s = player_.GetSelectedItem().GetGmName();
                                     if(s==key_name){
-
-                                    }
+                                        if(!Player.instance.FindQ(d.Qindex)){
+                                        EventController.instance.EndQEvent(d.Qindex);
+                                      //  EventController.instance.UpdateQEvent();}
+                                        Player.instance.UseItem();
+                                    }}
                                     else{
                                         InventoryUI.instance.GetMessage(LocalisationSystem.GetLocalisedValue("message2"));
                                        click = 0; return;
                                     }
                                 }
                             }
-                            StartCoroutine(Door(hit.transform));
                             }
-                    }
-                    else
-                    {
-                        click = 0;
+                            StartCoroutine(Door(hit.transform));
                     }
                 }
-                    return;
+                else{
+                    click = 0;
+                }
+                    
             }
-            if (hit.transform.CompareTag("Drawer")){
+            return;
+            }
+            if (hit.transform.CompareTag("Drawer"))
+            {
                 grab_cur.SetActive(true);
                 var selection = hit.transform;
                 _selection = selection;
@@ -254,103 +271,11 @@ public class PlayerInteract : MonoBehaviour
                     }
             }
                     return;
-        }
+        
     }
-
-     void OnTriggerStay(Collider other)
-    {
-        if (other.tag == "Chair")
-        {
-            if (_input.interact)
-            {
-                Debug.Log("pressing e");
-                if (!C_running && !_animator.GetBool("Crouch") && !_animator.GetBool("Sit"))
-                {
-                    _animator.SetBool("Sit", true);
-                    StartCoroutine(Sit(other.GetComponent<Transform>()));
-                }
-                else if (!C_running && _animator.GetBool("Sit"))
-                {
-                    Debug.Log("press e");
-                    _animator.SetBool("Sit", false);
-                    StartCoroutine(Sit(other.GetComponent<Transform>()));
-                }
-            }
         }
-        if (other.tag == "Door")
-        {
-            if (_input.click)
-            {
-                //Ray ray = controller._mainCamera.GetComponent<Camera>().ViewportPointToRay(new Vector3(0.5f, 0.5F, 0));
-                //RaycastHit hit;
-                //if (Physics.Raycast(ray, out hit) && hit.transform.tag == "Door" && !C_running)
-                //{
-                //    StartCoroutine(Door(other.transform));
-                //}
-            }
         }
-        if (other.tag == "Switch")
-        {
-            if (_input.click)
-            {
-                int layerMask = 1 << 5;
-                Debug.Log("click"); layerMask = ~layerMask;
-                Ray ray = controller._mainCamera.GetComponent<Camera>().ViewportPointToRay(new Vector3(0.5f, 0.5F, 0));
-                RaycastHit hit;
-                if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
-                {
-                    Debug.DrawLine(ray.origin, hit.point, Color.red);
-                    Debug.Log(hit.transform.name);
-                }
-                 if (Physics.Raycast(ray, out hit) && hit.transform.tag == "Switch")
-                {
-                    other.GetComponent<Switch>().Switching();
-                }
-            }
-        }
-        if (other.tag == "Item")
-        {
-            /* Ray ray = mainCam.ViewportPointToRay(new Vector3(0.5f, 0.5F, 0));
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, 2) && hit.transform.tag == "Item" && !C_running)
-            {
-                if (!selected)
-                {
-                    hit.collider.gameObject.GetComponent<Outline>().enabled = true;
-                    selected = true;
-                    crosshair.sprite = Resources.Load<Sprite>("ui/grab");
-                }
-                else { }
-                if (_input.click&& hit.collider.gameObject.GetComponent<Outline>().enabled)
-                {
-                    click++;
-                    if (click == 1)
-                    {
-                        player_.GetItem(hit.collider.gameObject.name);
-                        Debug.Log(hit.collider.gameObject.name);
-                        Destroy(hit.collider.gameObject);
-                    }
-                    else
-                    {
-                        click = 0;
-                    }
-                }
-            }
-            else
-            {
-                other.GetComponent<Outline>().enabled = false; 
-                selected = false;
-                crosshair.sprite = Resources.Load<Sprite>("ui/Reticle");
-            } */
-            //if (_input.click)
-            //{
-            //    if (Physics.Raycast(ray, out hit,1) && hit.transform.tag == "Note" && !C_running)
-            //    {
-            //        Debug.Log("click on note");
-            //    }
-            //}
-        }
-    }
+     
     IEnumerator Switch() 
     {
         C_running = true; 
@@ -466,23 +391,7 @@ public class PlayerInteract : MonoBehaviour
         c.enabled = true;
         C_running = false;
     }
-    void OnTriggerExit(Collider other)
-    {
-        if (other.tag == "Chair")
-        {
-            Debug.Log("exit area");
-        }
-        if (other.tag == "Item")
-        {
-            if (selected)
-            {
-                selected = false;
-                other.gameObject.GetComponent<Outline>().enabled = false;
-            }
-        }
-    }
-}
-
+   
     IEnumerator Timer(Transform transform)
     {
         yield return new WaitForSeconds(0.1f);

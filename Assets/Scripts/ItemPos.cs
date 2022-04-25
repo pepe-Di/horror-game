@@ -6,4 +6,5 @@ public class ItemPos : MonoBehaviour
 {
     [SerializeField] public string Name;
     [SerializeField] public int index;
+    [SerializeField] public bool look;
 }

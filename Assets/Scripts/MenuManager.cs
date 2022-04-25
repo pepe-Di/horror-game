@@ -45,6 +45,7 @@ public class MenuManager : MonoBehaviour
     public static MenuManager instance;
     public Fungus.Localization localization;
     Frame frame;GameObject player; Fungus.Character character;
+    public GameObject NamePanel;
     // Start is called before the first frame update
     private void Awake()
     {
@@ -75,8 +76,17 @@ public class MenuManager : MonoBehaviour
         drops[1].Value = curRes;
         drops[1].RefreshShownValue();
     }
+    public bool IsLocalization(){
+        if(localization!=null) return true;
+        else return false;
+    }
+    public void FindLoc(){
+        localization = FindObjectOfType<Fungus.Localization>();
+    }
     void Start()
     {
+        if(localization==null){localization = FindObjectOfType<Fungus.Localization>();}
+        
         if(GameManager.instance!=null)
         {
             player = GameManager.instance.Player;
@@ -124,7 +134,8 @@ public class MenuManager : MonoBehaviour
         createDrops();
         if (stDrop != null)
         {
-            SetStyle(gameData.style);
+            if(DataManager.instance==null) Debug.Log("null");
+            else SetStyle(gameData.style);
         }
         UpdateData();
         var obj = FindObjectsOfType<DataManager>();
@@ -495,7 +506,7 @@ public class MenuManager : MonoBehaviour
     }
     public void SetParticles(bool isOn)
     {
-        particles_on = isOn;
+        /* particles_on = isOn;
         prts.enabled = isOn;
         if(isOn==false){
            var objs = GameObject.FindObjectsOfType<Particle>();
@@ -503,7 +514,7 @@ public class MenuManager : MonoBehaviour
         {
             Destroy(o.gameObject);
         }
-        }
+        } */
     }
     public void SetTxtSpeed(float value)
     {
@@ -534,7 +545,7 @@ public class MenuManager : MonoBehaviour
         gameData.ForceSerialization();
         SaveSystem.SaveOptions(new Options(gameData));
         LangChanger();
-            Debug.Log(" frame_mode  "+frame_mode);
+        DataManager.instance.selectedPalette = gameData.style;
     }
     public void ClearSlot()
     {
@@ -553,10 +564,25 @@ public class MenuManager : MonoBehaviour
     {
             if (selectedSlot != -1)
             {
+                Debug.Log("selected slot "+  selectedSlot);
                 DataManager.instance.selectedSlot = selectedSlot;
                 gameData.cur_slot = selectedSlot;
+                SaveOpts();
                 DataManager.instance.LoadGame();
             }
+    }
+    public void UnSelectSlot(){
+
+        if(selectedSlot!=-1)
+        {
+            ExitUI(slots[selectedSlot]);
+            ExitUI(slots[selectedSlot+4]);
+            slots[selectedSlot].GetComponent<Slot>().selected = false;
+            slots[selectedSlot+4].GetComponent<Slot>().selected = false;
+            DataManager.saveSlots[selectedSlot].selected = false;
+            selectedSlot = -1;
+            gameData.cur_slot = selectedSlot;
+        }
     }
     public int selectedSlot = -1;
    public GameObject cartridge;
@@ -566,6 +592,9 @@ public class MenuManager : MonoBehaviour
         cartridge = Instantiate(Resources.Load<GameObject>("ui/gif/cartridge"),gm.transform);
         cartridge.transform.localPosition = new Vector2(Xdistance, Ydistance);
         Debug.Log(cartridge.name);
+    }
+    public void SaveOpts(){
+        SaveSystem.SaveOptions(new Options(gameData));
     }
     public void SelectSlot(GameObject gm)
     {
@@ -617,8 +646,17 @@ public class MenuManager : MonoBehaviour
         if (selectedSlot != -1) 
         { 
             DataManager.instance.selectedSlot = selectedSlot;
-            FindObjectOfType<LevelLoader>().LoadLevel(1);
+          //  FindObjectOfType<LevelLoader>().LoadLevel(1);
+            NamePanel.SetActive(true);
         }
+    }
+    public void InputName(InputField inputField){
+        if(inputField.text!=""){
+            PlayerPrefs.SetString("name", inputField.text);
+            //lv.LoadLevel(2);
+            //DataManager.instance.NewGame();
+            SaveOpts();
+            FindObjectOfType<LevelLoader>().LoadLevel(1);}
     }
     public void ResetSettings()
     {
@@ -671,8 +709,5 @@ public class MenuManager : MonoBehaviour
     public void OnExit()
     {
         Application.Quit();
-    }
-    void Update()
-    {
     }
 }

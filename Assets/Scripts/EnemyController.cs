@@ -5,8 +5,8 @@ using UnityEngine.AI;
 
 public class EnemyController : MonoBehaviour
 {
-	public float lookRadius = 10f;  // Detection range for player
-
+	public float lookRadius = 2f;  // Detection range for player
+	public Animator _anim;
 	Transform target;   // Reference to the player
 	NavMeshAgent agent; // Reference to the NavMeshAgent
 	//CharacterCombat combat;
@@ -14,6 +14,7 @@ public class EnemyController : MonoBehaviour
 	// Use this for initialization
 	void Start()
 	{
+		_anim = GetComponentInChildren<Animator>();
 		target = GameManager.instance.Player.transform;
 		agent = GetComponent<NavMeshAgent>();
 		//combat = GetComponent<CharacterCombat>();
@@ -30,7 +31,7 @@ public class EnemyController : MonoBehaviour
 		{
 			// Move towards the target
 			agent.SetDestination(target.position);
-
+			_anim.SetBool("walk",true);
 			// If within attacking distance
 			if (distance <= agent.stoppingDistance)
 			{
@@ -43,6 +44,7 @@ public class EnemyController : MonoBehaviour
 				FaceTarget();   // Make sure to face towards the target
 			}
 		}
+		else if(_anim.GetBool("walk")) _anim.SetBool("walk",false);
 	}
 
 	// Rotate to face the target
@@ -59,4 +61,9 @@ public class EnemyController : MonoBehaviour
 		Gizmos.color = Color.red;
 		Gizmos.DrawWireSphere(transform.position, lookRadius);
     }
+}
+public enum enemyState
+{
+	Idle,
+	Walk
 }

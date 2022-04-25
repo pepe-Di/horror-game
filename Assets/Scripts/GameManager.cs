@@ -19,6 +19,8 @@ public class GameManager : MonoBehaviour
     public InventoryUI inv;
     public Fungus.Flowchart flowchart;
     public List<Transform> itemsPos;
+    public List<QuestTrigger> qtriggers;
+    public bool loaded=false;
     // Start is called before the first frame update
     private void Awake()
     {
@@ -40,7 +42,23 @@ public class GameManager : MonoBehaviour
         // Player = GameObject.Find("Player");
         //  Player.SetActive(true); 
         
-        menu.SetActive(false); LoadData();
+        menu.SetActive(false); 
+           //SpawnAllItems();
+         if(PlayerPrefs.HasKey("name"))
+        {
+            SpawnAllItems();
+            //StartDialogue("0");
+        loaded=true;
+        }
+        else 
+        {
+                LoadData(); 
+                var o = FindObjectsOfType<QuestTrigger>();
+                foreach(QuestTrigger t in o){
+                qtriggers.Add(t);
+                }
+                StartCoroutine(DelQTriggers());
+            }
         try {
            // LoadData();
             //if (DataManager.instance.loaded) 
@@ -50,6 +68,17 @@ public class GameManager : MonoBehaviour
             //} 
         }
         catch { Debug.Log("catch"); }
+        
+    }
+    IEnumerator DelQTriggers(){
+        yield return new WaitUntil(()=>player_.loaded);
+        foreach(QuestTrigger trigger in qtriggers)
+        {
+             var q = player_.quests.Where(c=>c.id==trigger.id).FirstOrDefault();
+             var fq = player_.finished_quests.Where(c=>c.id==trigger.id).FirstOrDefault();
+             if(q!=null||fq!=null) Destroy(trigger.gameObject);
+        }
+        loaded=true;
     }
    public void StartDialogue(string blockName){
        flowchart.ExecuteBlock(blockName);
@@ -70,10 +99,22 @@ public class GameManager : MonoBehaviour
         SpawnItems();
        // inv.UpdateData(this);
     }
+    public void SpawnAllItems(){
+        foreach(Transform pos in itemsPos)
+        {
+            ItemPos ip = pos.GetComponent<ItemPos>();
+            GameObject gm = Instantiate(Resources.Load<GameObject>("Prefs/Items/"+ip.Name),pos);
+            gm.name = ip.Name;
+            if(ip.look)gm.tag="Look";
+            gm.transform.localPosition = new Vector3(0,0,0);
+            gm.transform.localRotation = Quaternion.Euler(0,0,0);
+        }
+    }
     public void SpawnItems(){
         foreach(Transform pos in itemsPos)
         {
             ItemPos ip = pos.GetComponent<ItemPos>();
+
             var item = player_.items.Where(c=>c.GetGmName()==ip.Name&&c.Id==ip.index).FirstOrDefault();
             var it = player_.used_items.Where(c=>c.GetGmName()==ip.Name&&c.Id==ip.index).FirstOrDefault();
             if(it!=null||item!=null) 
@@ -82,7 +123,9 @@ public class GameManager : MonoBehaviour
             }
             else{
                 GameObject gm = Instantiate(Resources.Load<GameObject>("Prefs/Items/"+ip.Name),pos);
-                gm.transform.localScale = new Vector3(1,1,1);
+                gm.name = ip.Name;
+                gm.transform.localPosition = new Vector3(0,0,0);
+                gm.transform.localRotation = Quaternion.Euler(0,0,0);
             }
         }
     }
