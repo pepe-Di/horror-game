@@ -189,5 +189,6 @@ public enum questType
     ToPoint,
     Use,
     Grab,
-    Puzzle
+    Puzzle,
+    Hide
 }

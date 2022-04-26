@@ -27,7 +27,7 @@ public class PlayerStats : MonoBehaviour
         if (stamina >= max_stam) stamina_bar.gameObject.SetActive(false); 
         else
         {
-            stam_anim.SetFloat("stamina", stamina);
+            //stam_anim.SetFloat("stamina", stamina);
             stamina_bar.gameObject.SetActive(true);
             stamina_bar.sizeDelta = new Vector2(max_stam_width * stamina / max_stam, stamina_bar.sizeDelta.y);
         }

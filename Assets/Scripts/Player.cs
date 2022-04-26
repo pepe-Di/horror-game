@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
     public int lastQIndex=-1;
     public static Player instance;
     public string name_;
-    public float hp, stamina, max_stamina=1000f,max_hp=10000f, energy, full_energy=5000f;
+    public float hp, stamina, max_stamina=5000f,max_hp=10000f, energy, full_energy=15000f;
     public State state; 
     public List<Item> items=new List<Item>();
     public List<Item> used_items=new List<Item>();
@@ -26,6 +26,14 @@ public class Player : MonoBehaviour
         //EventController.instance.FlashEvent += EnergyChange;
         EventController.instance.QEvent += AddQ;
         EventController.instance.endQEvent += EndQuest;
+    }
+    public int HideQ()
+    {
+        foreach(Quest q in quests)
+        {
+            if(q.Type == questType.Hide) return q.id;
+        }
+        return -1;
     }
     public void AddQ(int id)
     {
@@ -45,7 +53,8 @@ public class Player : MonoBehaviour
             if (i.GetGmName() == name) return i;
         }
         return null;
-    }public Item FindUsedItem(string name)
+    }
+    public Item FindUsedItem(string name)
     {
         foreach (Item i in used_items)
         {

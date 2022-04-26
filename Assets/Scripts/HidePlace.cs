@@ -11,7 +11,15 @@ public class HidePlace : MonoBehaviour
     }
 
 void OnTriggerEnter(Collider other){
-        if(other.tag=="Player") Debug.Log("Player enters");
+        if(other.tag=="Player") 
+        {
+            Debug.Log("Player enters");
+            int id = GameManager.instance.player_.HideQ();
+            if (id>=0)
+            {
+                EventController.instance.EndQEvent(id);
+            }
+        }
     }
     void OnTriggerStay(Collider other){
         if(other.tag=="Player") {}

@@ -21,6 +21,7 @@ public class QuestManager : MonoBehaviour
         quests.Add(new Quest(questType.ToPoint, "exit the room", false));
         quests.Add(new Quest(questType.Grab, "find a key", false, "key0"));
         quests.Add(new Quest(questType.ToPoint, "exit the school", false));
+        quests.Add(new Quest(questType.Hide, "Hide somewhere", false));
         int i=0;
         foreach(Quest q in quests){
             q.id = i;

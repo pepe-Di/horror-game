@@ -73,6 +73,8 @@ public class FPersonController : MonoBehaviour
         Debug.Log("ChangeState");
         stateController.ChangeState(state);
     }
+     //Color bg,fg;
+    // Image img;
     private void Start()
     {
         EventController.instance.StateEvent+=ChangeState;
@@ -109,6 +111,25 @@ public class FPersonController : MonoBehaviour
         _animIDFreeFall = Animator.StringToHash("FreeFall");
         _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
         _animIDCrouch = Animator.StringToHash("Crouch");
+    }
+    bool warn=false;
+    IEnumerator ChangeStaminaColor()
+    {
+        Debug.Log("ChangeStaminaColor()");
+        
+        Image img = stats.stamina_bar.GetComponent<Image>();
+        Color bg = DataManager.instance.GetPalette().bg.color;
+        Color fg = DataManager.instance.GetPalette().fg.color;
+        /*while(warn)
+        {   
+            img.color = bg;
+            yield return new WaitForSecondsRealtime(0.2f);
+            img.color = fg;
+        }*/
+        if(warn)img.color = bg;
+        else img.color = fg;
+        yield return new WaitForSecondsRealtime(0.2f);
+        Debug.Log("ChangeStaminaColor() end");
     }
     bool stop = false; float limit=10f;
     private void Update()
@@ -155,7 +176,15 @@ public class FPersonController : MonoBehaviour
         }
         if (_input.sprint&& targetSpeed!=0&&!is_crouch)
         {
-            if (stop) { limit = 500f; stats.stam_anim.SetBool("warn",true); }
+            if (stop) 
+            { 
+                limit = 500f;
+                if(!warn) {
+                    warn=true;
+                StartCoroutine(ChangeStaminaColor());
+                }
+                //stats.stam_anim.SetBool("warn",true); 
+            }
             if (isGrounded && player.stamina > limit && !_input.crouch)
             {
                 targetSpeed = SprintSpeed;
@@ -164,9 +193,13 @@ public class FPersonController : MonoBehaviour
                 stats.ChangeStaminaBar(player.stamina);
                 if (stop)
                 {
+                    if(warn) {
+                    warn=false;
+                StartCoroutine(ChangeStaminaColor());
+                }
                     stop = !stop;
                     limit = 10f;
-                    stats.stam_anim.SetBool("warn", false);
+                   // stats.stam_anim.SetBool("warn", false);
                 }
             }
         }

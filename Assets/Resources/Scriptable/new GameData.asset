@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   master_vol: -7.089493
   music_vol: -80
-  effects_vol: -11.934298
+  effects_vol: -18.677738
   vol: 0.44210494
   vol1: 0.0001
-  vol2: 0.25309592
+  vol2: 0.116442926
   sens: 1.7873718
   txt_speed: 2
   lg: 0
