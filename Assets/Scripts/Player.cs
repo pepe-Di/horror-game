@@ -167,6 +167,7 @@ public class Player : MonoBehaviour
         Fungus.Character character = GetComponent<Fungus.Character>();
         character.nameText = data.name;
         Debug.Log(data.name);
+        
         hp = data.hp;
         items.Clear();
         stamina = data.stamina;

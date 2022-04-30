@@ -12,4 +12,25 @@ public class Door : MonoBehaviour
    void Awake(){
        opened = false;
    }
+   void OnTriggerEnter(Collider other){
+       if(other.tag=="Enemy"){
+           if(!timer) StartCoroutine(Wait());
+       }
+   }
+   IEnumerator Wait(){
+       yield return new WaitForSeconds(0.5f);
+       timer = true;
+   }
+   bool timer = false;
+   void OnTriggerStay(Collider other){
+       if(other.tag=="Enemy"&&timer){
+           if(!locked){
+               //open
+           } 
+           else{
+               other.GetComponent<EnemyController>().route=false;
+           }
+            timer = false;
+       }
+   }
 }

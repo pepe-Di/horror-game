@@ -21,6 +21,8 @@ TagManager:
   - Drawer
   - Look
   - Hide
+  - Target
+  - Enemy
   layers:
   - Default
   - TransparentFX

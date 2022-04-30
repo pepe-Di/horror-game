@@ -67,7 +67,7 @@ public class DataManager : MonoBehaviour
     {
         
             loaded = true;
-            SaveSlot data = SaveSystem.LoadPlayer();
+           // SaveSlot data = SaveSystem.LoadPlayer();
             FindObjectOfType<LevelLoader>().LoadLevel(1);
            
             Debug.Log("LoadGame()");
@@ -75,7 +75,7 @@ public class DataManager : MonoBehaviour
     }
     public void SaveData()
     {
-        SaveSystem.SavePlayer(FindObjectOfType<Player>()); Debug.Log("SaveData()");
+       // SaveSystem.SavePlayer(FindObjectOfType<Player>()); Debug.Log("SaveData()");
     }
     void Update()
     {

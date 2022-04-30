@@ -71,14 +71,15 @@ public static class SaveSystem
             Debug.LogError("Save file not found in " + path);
         }
     }
-    public static void SavePlayer(Player player)
+    public static void SavePlayer(Player player, EnemyController enemy)
     {
         try
         {
             int selectedSlot = DataManager.instance.gameData.cur_slot;
             BinaryFormatter formatter = new BinaryFormatter();
             PlayerData data = new PlayerData(player);
-            DataManager.saveSlots[selectedSlot].Rewrite(data);
+            AIdata aiData = new AIdata(enemy);
+            DataManager.saveSlots[selectedSlot].Rewrite(data,aiData);
             string path = Application.persistentDataPath + "/SaveSlot_" + selectedSlot + ".ini";
             FileStream stream = new FileStream(path, FileMode.Create); Debug.Log(data.name);
             formatter.Serialize(stream, DataManager.saveSlots[selectedSlot]);
@@ -142,6 +143,24 @@ public class Options
 
     public bool Fc { get => fc; set => fc = value; }
 }
+[System.Serializable]
+public class AIdata{
+    public float[] position;
+    public float[] rotation;
+    public int state;
+    public AIdata(EnemyController enemy)
+    {
+        position = new float[3];
+        rotation = new float[3];
+        position[0] = enemy.transform.position.x;
+        position[1] = enemy.transform.position.y;
+        position[2] = enemy.transform.position.z;
+        rotation[0] = enemy.transform.rotation.x;
+        rotation[1] = enemy.transform.rotation.y;
+        rotation[2] = enemy.transform.rotation.z;
+        state = ((int)enemy.state);
+    }
+}
 
 [System.Serializable]
 public class PlayerData
@@ -156,6 +175,7 @@ public class PlayerData
     public string[] used_items;
     public int[] quests;
     public int[] finished_quests;
+    public int state;
     public PlayerData(Player player)
     {
         time = System.DateTime.Now.ToString();
@@ -167,6 +187,7 @@ public class PlayerData
         position[0] = player.transform.position.x;
         position[1] = player.transform.position.y;
         position[2] = player.transform.position.z;
+        state = ((int)player.state);
         items = new string[player.items.Count];
         for(int i = 0; i < items.Length; i++)
         {
@@ -192,6 +213,7 @@ public class PlayerData
 [System.Serializable]
 public class SaveSlot
 {
+    public AIdata aiData;
     public PlayerData playerData;
     public string name;
     public string text;
@@ -202,24 +224,27 @@ public class SaveSlot
         this.text = text;
         isEmpty = true;
     }
-    public void Rewrite(PlayerData playerData)
+    public void Rewrite(PlayerData playerData, AIdata aiData)
     {
         name = playerData.name+"'s slot";
         text = playerData.name + " " + playerData.time;
         this.playerData = playerData; 
+        this.aiData = aiData; 
         isEmpty = false;
     }
     public void Clear()
     {
         name = "Empty slot";
         playerData = null; 
+        aiData = null;
         isEmpty = true;
     }
-    public SaveSlot(PlayerData playerData)
+    public SaveSlot(PlayerData playerData,  AIdata aiData)
     {
         name = "";
         text = playerData.name + " "+ playerData.time;
         this.playerData = playerData;
+        this.aiData = aiData; 
         isEmpty = false;
     }
 }

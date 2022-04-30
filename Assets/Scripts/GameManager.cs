@@ -8,6 +8,7 @@ using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
+    public EnemyController enemy;
     public LevelLoader lv;
     public GameObject options;
     public static GameManager instance;
@@ -96,6 +97,7 @@ public class GameManager : MonoBehaviour
     {
         SaveSlot data = SaveSystem.LoadPlayer();
         player_.LoadData(data.playerData);
+        enemy.LoadEnemy(data.aiData);
         SpawnItems();
        // inv.UpdateData(this);
     }
@@ -151,7 +153,7 @@ public class GameManager : MonoBehaviour
     {
         //Time.timeScale = 1f;
         Debug.Log("cur_slot " + DataManager.instance.gameData.cur_slot);
-        SaveSystem.SavePlayer(instance.Player.GetComponent<Player>());
+        SaveSystem.SavePlayer(instance.Player.GetComponent<Player>(),instance.enemy);
         lv.LoadLevel(0);
 
     }
