@@ -48,12 +48,15 @@ public class EnemyController : MonoBehaviour
 			if(Physics.Raycast(look.transform.position, -transform.position+playerTarget.position, out hit, lookRadius)){
 				Debug.Log("tag "+hit.collider.tag);
 				if(hit.collider.tag=="Player"){
+					if(!triggered){
 					state = aiState.Triggered;
-				agent.speed = triggered_speed;
-				target = playerTarget;
-				agent.SetDestination(target.position);
-				_anim.SetBool("walk",true);
-				triggered=true;
+					agent.speed = triggered_speed;
+					target = playerTarget;
+					agent.SetDestination(target.position);
+					_anim.SetBool("walk",true);
+					triggered=true;
+					}
+					
 				return;
 				}
 				else{
