@@ -16,6 +16,8 @@ namespace StarterAssets
 		public bool crouch;
 		public bool interact;
 		public bool click;
+		public bool middleMouse;
+		public bool middleMouseUp;
 		public float mouseX;
 		public float mouseY;
 		public bool esc;
@@ -74,7 +76,14 @@ namespace StarterAssets
 		{
 			if (!locked_input) JumpInput(value.isPressed);
 		}
-
+		public void OnMiddleMouse(InputValue value)
+		{
+			if (!locked_input) MiddleMouseInput(value.isPressed);
+		}
+		public void OnMiddleMouseUp(InputValue value)
+		{
+			if (!locked_input) MiddleMouseUpInput(value.isPressed);
+		}
 		public void OnZoom(InputValue value)
 		{
 			if (!locked_input) ZoomInput(value.isPressed);
@@ -139,7 +148,14 @@ namespace StarterAssets
 		{
 			jump = newJumpState;
 		}
-
+		public void MiddleMouseInput(bool newMiddleMouseState)
+		{
+			middleMouse = newMiddleMouseState;
+		}
+		public void MiddleMouseUpInput(bool newMiddleMouseUpState)
+		{
+			middleMouseUp = newMiddleMouseUpState;
+		}
 		public void ZoomInput(bool newZoomState)
 		{
 			zoom = newZoomState;

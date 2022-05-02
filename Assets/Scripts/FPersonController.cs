@@ -77,6 +77,7 @@ public class FPersonController : MonoBehaviour
     // Image img;
     private void Start()
     {
+        
         EventController.instance.StateEvent+=ChangeState;
         stateController.ChangeState(State.Idle);
         cam_animator = _mainCamera.GetComponent<Animator>();
@@ -131,11 +132,20 @@ public class FPersonController : MonoBehaviour
         yield return new WaitForSecondsRealtime(0.2f);
         Debug.Log("ChangeStaminaColor() end");
     }
-    bool stop = false; float limit=10f;
+    bool stop = false, press=false; float limit=10f;
+    IEnumerator Wait(){press = true;
+    
+        yield return new WaitForSeconds(0.5f);
+        press = false;
+    }
     private void Update()
     {
        //Debug.DrawRay(controller.transform.position, Vector3.up, Color.cyan);
         if(stateController.state == State.Pause) return;
+        if(_input.middleMouse&&!press){
+            SoundManager.instance.PlaySe(Se.Kick);
+            StartCoroutine(Wait());
+        }
         isGrounded = Physics.CheckSphere(transform.position, 0.1f, groundMask);
         if (isGrounded)
         {

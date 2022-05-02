@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8085706244510009711}
   m_Layer: 0
   m_Name: locker_1
-  m_TagString: Untagged
+  m_TagString: Look
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295

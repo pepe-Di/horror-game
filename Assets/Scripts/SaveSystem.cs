@@ -176,8 +176,10 @@ public class PlayerData
     public int[] quests;
     public int[] finished_quests;
     public int state;
+    public int seed;
     public PlayerData(Player player)
     {
+        seed = player.seed;
         time = System.DateTime.Now.ToString();
         sceneIndex = 2;
         hp = player.hp;

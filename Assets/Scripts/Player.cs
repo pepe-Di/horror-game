@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public int seed;
     public bool loaded=false;
     public int lastQIndex=-1;
     public static Player instance;
@@ -163,6 +164,7 @@ public class Player : MonoBehaviour
     public void LoadData(PlayerData data)
     {
         if(loaded) return;
+        seed = data.seed;
         name_ = data.name;
         Fungus.Character character = GetComponent<Fungus.Character>();
         character.nameText = data.name;

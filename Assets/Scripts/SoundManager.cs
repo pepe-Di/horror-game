@@ -34,7 +34,10 @@ public enum Bg
 public enum Se
 {
     Item,
-    Click
+    Click,
+    Open,
+    Close,
+    Kick
 }
 [System.Serializable]
 public class SeClip

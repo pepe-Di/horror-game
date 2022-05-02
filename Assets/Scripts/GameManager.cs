@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     public List<Transform> itemsPos;
     public List<QuestTrigger> qtriggers;
     public bool loaded=false;
+    public int seed;
     // Start is called before the first frame update
     private void Awake()
     {
@@ -48,6 +49,10 @@ public class GameManager : MonoBehaviour
          if(PlayerPrefs.HasKey("name"))
         {
             SpawnAllItems();
+            seed = (int)System.DateTime.Now.Ticks;
+            Debug.Log("seed: "+seed);
+            Random.InitState(seed);
+            player_.seed = seed;
             //StartDialogue("0");
         loaded=true;
         }
@@ -96,6 +101,7 @@ public class GameManager : MonoBehaviour
     public void LoadData()
     {
         SaveSlot data = SaveSystem.LoadPlayer();
+        seed = data.playerData.seed;
         player_.LoadData(data.playerData);
         enemy.LoadEnemy(data.aiData);
         SpawnItems();

@@ -12,12 +12,17 @@ public class EnemyController : MonoBehaviour
 	public Animator _anim;
 	Transform target, playerTarget;   // Reference to the player
 	NavMeshAgent agent; // Reference to the NavMeshAgent
+	public GameObject targetsParent;
 	//CharacterCombat combat;
 	public List<Transform> targets;
 
 	// Use this for initialization
 	void Start()
 	{
+		var tar = targetsParent.GetComponentsInChildren<Transform>();
+		foreach(Transform t in tar){
+			targets.Add(t);
+		}
 		_anim = GetComponentInChildren<Animator>();
 		playerTarget = GameManager.instance.Player.transform;
 		agent = GetComponent<NavMeshAgent>();
@@ -100,13 +105,17 @@ public class EnemyController : MonoBehaviour
 			route=true;
 			return;
 		}
-		else if(Vector3.Distance(target.position, transform.position)<=agent.stoppingDistance&&!c)
+		//else if(Vector3.Distance(target.position, transform.position)<=agent.stoppingDistance&&!c)
+		//{
+		//	StartCoroutine(Wait());
+		//}
+		else if(agent.velocity.magnitude<0.01f)
 		{
-			state = aiState.Wait;
-			StartCoroutine(Wait());
+			if(!c)StartCoroutine(Wait());
+			//route = false;
 		}
-		else if(agent.velocity.magnitude<0.1f){
-			route = false;
+		else{
+			StopCoroutine(Wait());
 		}
 		//if(_anim.GetBool("walk")) _anim.SetBool("walk",false);
 			
@@ -127,8 +136,9 @@ public class EnemyController : MonoBehaviour
 	IEnumerator Wait()
 	{
 		c=true;
+		state = aiState.Wait;
 		_anim.SetBool("walk",false);
-		yield return new WaitForSeconds(Random.Range(0.1f,2f));
+		yield return new WaitForSeconds(Random.Range(1f,5f));
 		route = false;
 		c=false;
 	}

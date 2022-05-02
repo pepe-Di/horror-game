@@ -121,6 +121,22 @@ public class @Controls_ : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Press(behavior=2)""
+                },
+                {
+                    ""name"": ""MiddleMouse"",
+                    ""type"": ""Button"",
+                    ""id"": ""e4fc24ac-2b4f-4a07-9d97-224e83684da5"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(pressPoint=0.5,behavior=2)""
+                },
+                {
+                    ""name"": ""MiddleMouseUp"",
+                    ""type"": ""Button"",
+                    ""id"": ""8ced0f98-06ef-4e15-a101-0654266e1147"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(pressPoint=0.5,behavior=1)""
                 }
             ],
             ""bindings"": [
@@ -467,12 +483,78 @@ public class @Controls_ : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""2646da9f-4d66-4565-9258-114000c4404f"",
+                    ""path"": ""<Gamepad>/dpad"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Scroll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""74ac26bc-3da0-4272-a8ec-c77024acfe96"",
                     ""path"": ""<Keyboard>/f"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
                     ""action"": ""F"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a92b1459-32d3-4b45-865f-3b2d37f87ec2"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""F"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3cf2f44c-1e65-44f9-a6c3-d1004899bfae"",
+                    ""path"": ""<Mouse>/middleButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MiddleMouse"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ae2de523-8bcb-45ae-97d1-0a1b6bf382a3"",
+                    ""path"": ""<Gamepad>/rightStickPress"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MiddleMouse"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6f49b4cb-d9c7-4289-81ce-8cce35b8414b"",
+                    ""path"": ""<Mouse>/middleButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MiddleMouseUp"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fb8c1268-2ec5-4c7c-8e2d-cdb281c6a18b"",
+                    ""path"": ""<Gamepad>/rightStickPress"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MiddleMouseUp"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -544,6 +626,8 @@ public class @Controls_ : IInputActionCollection, IDisposable
         m_Player_Zoom = m_Player.FindAction("Zoom", throwIfNotFound: true);
         m_Player_Scroll = m_Player.FindAction("Scroll", throwIfNotFound: true);
         m_Player_F = m_Player.FindAction("F", throwIfNotFound: true);
+        m_Player_MiddleMouse = m_Player.FindAction("MiddleMouse", throwIfNotFound: true);
+        m_Player_MiddleMouseUp = m_Player.FindAction("MiddleMouseUp", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -606,6 +690,8 @@ public class @Controls_ : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Zoom;
     private readonly InputAction m_Player_Scroll;
     private readonly InputAction m_Player_F;
+    private readonly InputAction m_Player_MiddleMouse;
+    private readonly InputAction m_Player_MiddleMouseUp;
     public struct PlayerActions
     {
         private @Controls_ m_Wrapper;
@@ -623,6 +709,8 @@ public class @Controls_ : IInputActionCollection, IDisposable
         public InputAction @Zoom => m_Wrapper.m_Player_Zoom;
         public InputAction @Scroll => m_Wrapper.m_Player_Scroll;
         public InputAction @F => m_Wrapper.m_Player_F;
+        public InputAction @MiddleMouse => m_Wrapper.m_Player_MiddleMouse;
+        public InputAction @MiddleMouseUp => m_Wrapper.m_Player_MiddleMouseUp;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -671,6 +759,12 @@ public class @Controls_ : IInputActionCollection, IDisposable
                 @F.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnF;
                 @F.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnF;
                 @F.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnF;
+                @MiddleMouse.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMiddleMouse;
+                @MiddleMouse.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMiddleMouse;
+                @MiddleMouse.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMiddleMouse;
+                @MiddleMouseUp.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMiddleMouseUp;
+                @MiddleMouseUp.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMiddleMouseUp;
+                @MiddleMouseUp.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMiddleMouseUp;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -714,6 +808,12 @@ public class @Controls_ : IInputActionCollection, IDisposable
                 @F.started += instance.OnF;
                 @F.performed += instance.OnF;
                 @F.canceled += instance.OnF;
+                @MiddleMouse.started += instance.OnMiddleMouse;
+                @MiddleMouse.performed += instance.OnMiddleMouse;
+                @MiddleMouse.canceled += instance.OnMiddleMouse;
+                @MiddleMouseUp.started += instance.OnMiddleMouseUp;
+                @MiddleMouseUp.performed += instance.OnMiddleMouseUp;
+                @MiddleMouseUp.canceled += instance.OnMiddleMouseUp;
             }
         }
     }
@@ -769,5 +869,7 @@ public class @Controls_ : IInputActionCollection, IDisposable
         void OnZoom(InputAction.CallbackContext context);
         void OnScroll(InputAction.CallbackContext context);
         void OnF(InputAction.CallbackContext context);
+        void OnMiddleMouse(InputAction.CallbackContext context);
+        void OnMiddleMouseUp(InputAction.CallbackContext context);
     }
 }
