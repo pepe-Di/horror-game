@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class Flashlight : MonoBehaviour
 {
+    Coroutine c = null;
     public GameObject ui;
     public GameObject energybar;
     public List<Image> imgs=new List<Image>();
@@ -30,7 +31,10 @@ public class Flashlight : MonoBehaviour
     }
     public void EnergyBarChange(float value)
     {
-        if(GameManager.instance.player_!=null)GameManager.instance.player_.EnergyChange(value);
+        if(GameManager.instance.player_!=null)  {
+            //GameManager.instance.player_.EnergyChange(value);
+            c = StartCoroutine(GameManager.instance.player_.ChangeEnergy(value));
+            }
         StartCoroutine(EnergyChange());
     }
     IEnumerator EnergyChange()
@@ -58,6 +62,7 @@ public class Flashlight : MonoBehaviour
     private void OnDisable()
     {
         StopAllCoroutines();
+        if(c!=null) StopCoroutine(c);
         ui.SetActive(false);
         EventController.instance.FlashEvent -= EnergyBarChange;
     }

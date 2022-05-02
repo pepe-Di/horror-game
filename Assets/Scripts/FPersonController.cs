@@ -145,6 +145,17 @@ public class FPersonController : MonoBehaviour
         if(_input.middleMouse&&!press){
             SoundManager.instance.PlaySe(Se.Kick);
             StartCoroutine(Wait());
+            var ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5F, 0));
+            RaycastHit hit;
+            if(Physics.Raycast(ray,out hit,1.5f))
+            {
+                if(hit.rigidbody!=null){
+                   Rigidbody rb = hit.transform.GetComponent<Rigidbody>();
+                   // hit.rigidbody.isKinematic = false;
+                    hit.rigidbody.AddForce(transform.forward*150);
+                    //hit.rigidbody.isKinematic = true;
+                }
+            }
         }
         isGrounded = Physics.CheckSphere(transform.position, 0.1f, groundMask);
         if (isGrounded)

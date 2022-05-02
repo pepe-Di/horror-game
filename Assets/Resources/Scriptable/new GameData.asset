@@ -25,7 +25,7 @@ MonoBehaviour:
   res: 8
   style: 0
   last_slot: -1
-  cur_slot: 1
+  cur_slot: 2
   frame_limit: 4
   fc: 1
   frame_mode: 0

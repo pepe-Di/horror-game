@@ -101,7 +101,7 @@ public class GameManager : MonoBehaviour
     public void LoadData()
     {
         SaveSlot data = SaveSystem.LoadPlayer();
-        seed = data.playerData.seed;
+        seed = data.playerData.seed;Debug.Log("seed: "+seed);
         player_.LoadData(data.playerData);
         enemy.LoadEnemy(data.aiData);
         SpawnItems();

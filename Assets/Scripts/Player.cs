@@ -254,7 +254,7 @@ public class Player : MonoBehaviour
             time--;
         }
     }
-    IEnumerator ChangeEnergy(float value)
+    public IEnumerator ChangeEnergy(float value)
     {
         while (true)
         {
