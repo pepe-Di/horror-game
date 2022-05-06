@@ -43,7 +43,11 @@ public class GameManager : MonoBehaviour
         // menu = GameObject.Find("ui");
         // Player = GameObject.Find("Player");
         //  Player.SetActive(true); 
-        
+        var iposes = FindObjectsOfType<ItemPos>();
+        itemsPos.Clear();
+        foreach(ItemPos itp in iposes){
+            itemsPos.Add(itp.transform);
+        }
         menu.SetActive(false); 
            //SpawnAllItems();
          if(PlayerPrefs.HasKey("name"))

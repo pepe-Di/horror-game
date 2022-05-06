@@ -25,6 +25,7 @@ public class PlayerInteract : MonoBehaviour
     public Image crosshair;
     public GameObject grab_cur;
     public GameObject eye_cur;
+    public GameObject hit_cur;
 
     private void Awake()
     {
@@ -45,7 +46,7 @@ public class PlayerInteract : MonoBehaviour
     public bool C_running = false, selected = false;
     int click = 0;
     Outline gm;
-    private Transform _selection;
+    private Transform _selection, hit_selection;
     private void FixedUpdate()
     {
         if (_input.f && !locked)
@@ -91,11 +92,21 @@ public class PlayerInteract : MonoBehaviour
             grab_cur.SetActive(false);
             eye_cur.SetActive(false);
         }
+        if(hit_selection!=null){
+            Crosshair.SetActive(true);
+            hit_cur.SetActive(false);
+        }
         var ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5F, 0));
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, 1.5f))
         {
             if (hit.transform.CompareTag("Untagged")) { return; }
+            if(hit.transform.CompareTag("Hit")){
+                Crosshair.SetActive(false);
+                hit_cur.SetActive(true);
+                var selection = hit.transform;
+                hit_selection = selection;
+            }
             if (hit.transform.CompareTag("Look"))
             {
                 Crosshair.SetActive(false);
@@ -196,13 +207,13 @@ public class PlayerInteract : MonoBehaviour
                             {
                                 i++;
                             }
-                            if (i >= 2)
-                            {
-                                foreach (Door d_ in doors)
-                                {
+                         //   if (i >= 2)
+                         //   {
+                         //       foreach (Door d_ in doors)
+                         //       {
                                   //  if(!CheckForKey(d_)) return;
-                                }
-                            }
+                          //      }
+                           // }
                             //else{
                             Door d = hit.transform.GetComponentInChildren<Door>();
                             if (d.locked)

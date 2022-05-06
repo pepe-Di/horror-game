@@ -99,6 +99,7 @@ public class Item
             case "Tomato": _name = "Томат"; value = 20f; speed = 20f; type = itemType.Food; break;
             case "key0": index=6;_name = Name;  type = itemType.Key; break;
             case "card0": index=7;_name = Name;  type = itemType.Card; look=true; break;
+            case "key1": index=8;_name = Name;  type = itemType.Key; break;
             case "laptop": index=-1;grab = false; look=true; break;
 
             default: index=-1; break;

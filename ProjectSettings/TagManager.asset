@@ -23,6 +23,7 @@ TagManager:
   - Hide
   - Target
   - Enemy
+  - Hit
   layers:
   - Default
   - TransparentFX
