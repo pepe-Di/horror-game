@@ -40,7 +40,6 @@ public class PlayerInteract : MonoBehaviour
     void Start()
     {
 
-        grab_cur.SetActive(false);
     }
 
     public bool C_running = false, selected = false;
@@ -81,6 +80,12 @@ public class PlayerInteract : MonoBehaviour
         Debug.Log("Qi " + id);
         yield return new WaitForSeconds(0.1f);
         lock_ = false;
+    }
+    bool on=false;
+    IEnumerator OnComputer(){
+        on=true;
+        yield return new WaitForSeconds(0.2f);
+        on=false;
     }
     private void Update()
     {
@@ -132,6 +137,30 @@ public class PlayerInteract : MonoBehaviour
                     }
                 }
                 return;
+            }
+            if(hit.transform.CompareTag("Computer"))
+            {
+                grab_cur.SetActive(true);
+                var selection = hit.transform;
+                _selection = selection;
+                if (_input.click)
+                {
+                    click++;
+                    if (click == 1&&!on)
+                    {
+                        try
+                        {
+                            StartCoroutine(OnComputer());
+                            hit.transform.GetComponent<PasswordInput>().On();
+                        }
+                        catch{}
+                    }
+                    else
+                    {
+                        click = 0;
+                    }
+                    return;
+                }
             }
             if (hit.transform.CompareTag("Item"))
             {
@@ -491,6 +520,16 @@ public class PlayerInteract : MonoBehaviour
     {
         yield return new WaitForSeconds(0.1f);
         transform.tag = "Item";
+    }
+    void OnDisable(){
+            Crosshair.SetActive(false);
+            grab_cur.SetActive(false);
+            eye_cur.SetActive(false);
+            hit_cur.SetActive(false);
+    }
+    void OnEnable(){
+        grab_cur.SetActive(false);
+        Crosshair.SetActive(true);
     }
 }
 

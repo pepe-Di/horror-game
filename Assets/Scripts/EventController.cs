@@ -15,6 +15,9 @@ public class EventController : MonoBehaviour
     public event Action<int> endQEvent;
     public event Action updateQEvent;
     public event Action<string> SayEvent;
+    public event Action<bool> CameraEvent;
+    public event Action<bool> FreezeCamera;
+    public event Action OffComputerUI;
     private void Awake()
     {
         if (instance == null)
@@ -22,6 +25,20 @@ public class EventController : MonoBehaviour
         else Destroy(gameObject);
 
         DontDestroyOnLoad(gameObject);
+    }
+    public void StartFreezeCamera(bool b)
+    {
+        Debug.Log("StartFreezeCamera");
+        FreezeCamera?.Invoke(b);
+    }
+    public void OffComputerUIEvent(){
+        Debug.Log("OffComputerUIEvent");
+        OffComputerUI?.Invoke();
+    }
+    public void StartCameraEvent(bool b)
+    {
+        Debug.Log("StartCameraEvent");
+        CameraEvent?.Invoke(b);
     }
     public void StartDialogueEvent(string blockName)
     {

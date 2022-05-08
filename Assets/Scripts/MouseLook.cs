@@ -19,6 +19,7 @@ public class MouseLook : MonoBehaviour
     int normal = 60;
     float smooth = 5f;
     private bool isZoomed = false;
+    Camera _camera;
     public void SensChange(float value)
     {
         sensitivityX = 8f * value; 
@@ -35,15 +36,57 @@ public class MouseLook : MonoBehaviour
     }
     private void Start()
     {
+        _camera = playerCamera.GetComponent<Camera>();
+        
+        EventController.instance.CameraEvent+=ChangeCameraLook;
         animator = playerCamera.gameObject.GetComponent<Animator>();
         _input = GetComponent<StarterAssetsInputs>();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false; EventController.instance.FrameEvent += ChangeCameraLook;
     }
+    bool freeze = false;
+    void FreezeCamera(bool b){
+        Debug.Log("FreezeCamera");
+        animator.SetBool("paused", b);
+        
+        if (b){ EventController.instance.ChangeStateEvent(State.Freeze);
+        freeze = true; this.enabled = false;}
+        else {EventController.instance.ChangeStateEvent(State.Idle);//??
+            freeze = false;
+        }
+    }
+    IEnumerator WaitForTransform(){
+        yield return new WaitUntil(()=>b);
+        this.enabled = false;
+    }
+    public void ChangeCameraLook(Transform transform, bool freeze){
+        
+        Debug.Log("ChangeCameraLook func");
+        StartCoroutine(ChangeCamLook(transform, freeze));
+    }
+    bool b = false;
+    IEnumerator ChangeCamLook(Transform t, bool freeze){
+        float step;
+        Debug.Log("ChangeCamLookStart");
+        while (_camera.transform.position != t.position)
+            {
+                step = 1.5f * Time.deltaTime;
+                _camera.transform.position = Vector3.MoveTowards(_camera.transform.position, t.position, step);
+                yield return new WaitForEndOfFrame();
+                Debug.Log("");
+            }
+        Debug.Log("ChangeCamLook");
+            FreezeCamera(freeze);
+    }
+    void SetCamera(bool b){
+        GetComponent<PlayerInteract>().enabled = b;
+        _camera.transform.gameObject.SetActive(b);
+        Debug.Log("bru");
+    }
     IEnumerator Zoom(int i) 
     {
         C_running = true;
-        GetComponentInChildren<Camera>().fieldOfView = Mathf.Lerp(GetComponentInChildren<Camera>().fieldOfView, i, Time.deltaTime * smooth);
+        _camera.fieldOfView = Mathf.Lerp(_camera.fieldOfView, i, Time.deltaTime * smooth);
         yield return new WaitForEndOfFrame();
         C_running = false;
     }
@@ -92,5 +135,13 @@ public class MouseLook : MonoBehaviour
     {
         mouseX = mouseInput.x * sensitivityX;
         mouseY = mouseInput.y * sensitivityY;
+    }
+    void OnEnable(){
+        EventController.instance.CameraEvent+=SetCamera;
+        EventController.instance.FreezeCamera+=FreezeCamera;
+    }
+    void OnDisable(){
+        EventController.instance.CameraEvent-=SetCamera;
+        EventController.instance.FreezeCamera-=FreezeCamera;
     }
 }

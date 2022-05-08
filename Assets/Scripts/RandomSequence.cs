@@ -10,7 +10,7 @@ public class RandomSequence : MonoBehaviour
     {
         var lockers = GetComponentsInChildren<GameObject>();
         yield return new WaitUntil(()=>GameManager.instance.loaded);
-        Random.InitState(GameManager.instance.seed);
+       // Random.InitState(GameManager.instance.seed);
 
     }
 

@@ -22,5 +22,6 @@ public enum State
     Sprint,
     Crouch,
     Jump,
-    Sit
+    Sit,
+    Freeze
 }

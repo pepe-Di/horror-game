@@ -24,6 +24,7 @@ TagManager:
   - Target
   - Enemy
   - Hit
+  - Computer
   layers:
   - Default
   - TransparentFX
@@ -34,9 +35,9 @@ TagManager:
   - Player
   - Enemy
   - YuME_TileMap
-  - 
-  - 
-  - 
+  - UI_monitor
+  - noise
+  - messageUI
   - 
   - 
   - 

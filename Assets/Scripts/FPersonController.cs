@@ -142,6 +142,7 @@ public class FPersonController : MonoBehaviour
     {
        //Debug.DrawRay(controller.transform.position, Vector3.up, Color.cyan);
         if(stateController.state == State.Pause) return;
+        if(stateController.state == State.Freeze) return;
         if(_input.middleMouse&&!press){
             SoundManager.instance.PlaySe(Se.Kick);
             StartCoroutine(Wait());

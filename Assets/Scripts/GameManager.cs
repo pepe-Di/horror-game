@@ -8,6 +8,7 @@ using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
+    public StateController state;
     public EnemyController enemy;
     public LevelLoader lv;
     public GameObject options;
@@ -92,6 +93,7 @@ public class GameManager : MonoBehaviour
     }
    public void StartDialogue(string blockName){
        flowchart.ExecuteBlock(blockName);
+       EventController.instance.ChangeStateEvent(State.Talk);
    }
     // Update is called once per frame
     public int GetSceneIndex()
@@ -172,14 +174,20 @@ public class GameManager : MonoBehaviour
     {
         
     }
+    Transform t;
+    bool b= false;
     void Update()
     {
         if (_input.esc)
         {
+           // if(state.state == State.Freeze){
+               //b=true;
+           // }
     //        Debug.Log(Time.timeScale);
     //        Debug.Log(C_running);
-            if (!C_running)
+            if (!C_running){
             StartCoroutine(OpenMenu());
+            }
             //Transition.LoadScene("0");
             //if (menu.activeSelf)
             //{
@@ -187,6 +195,23 @@ public class GameManager : MonoBehaviour
             //}
             //else Time.timeScale = 1;
         }
+        if(_input.zoom&&state.state == State.Freeze&&!b)
+        {
+            Debug.Log("State.Freeze");
+            b=true;
+            //player_.GetComponent<MouseLook>().enabled = true;
+           // t.position = new Vector3(0.001f,1.44f,0.011f);
+            EventController.instance.StartCameraEvent(true);
+            EventController.instance.ChangeStateEvent(State.Idle);
+            EventController.instance.OffComputerUIEvent();
+            StartCoroutine(Waiter());
+        }
+    }
+    public IEnumerator Waiter(){
+        Debug.Log("wait()00");
+        b=true;
+        yield return new WaitForSeconds(0.5f);
+        b=false;
     }
     public IEnumerator Esc()
     {
@@ -196,7 +221,7 @@ public class GameManager : MonoBehaviour
     bool C_running = false;
     public IEnumerator OpenMenu()
     {
-        Debug.Log("q");
+        Debug.Log("openmenu()");
         C_running = true;
         if (!menu.activeSelf)
         {
