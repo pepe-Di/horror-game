@@ -64,6 +64,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   alpha: 1
+  ignore: 0
 --- !u!114 &2764028766044818554
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73,16 +74,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 2764028766044818821}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f858ac962c798384b975e0fa2529a74f, type: 3}
+  m_Script: {fileID: 11500000, guid: 98a978d890607c34995bd40704fa400d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   minX: -400
   maxX: 400
-  maxY: 330
+  maxY: 350
   minY: -334
   speed: 0
   max_speed: 1
-  min_speed: 0.1
+  min_speed: 0.5
   Ydelta: 200
   timer: 0.1
 --- !u!114 &4715506612243499467

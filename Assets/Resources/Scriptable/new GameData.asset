@@ -29,4 +29,4 @@ MonoBehaviour:
   frame_limit: 4
   fc: 1
   frame_mode: 0
-  particles: 0
+  particles: 1

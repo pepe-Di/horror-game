@@ -7,7 +7,7 @@ public class Particle : MonoBehaviour
 {
     Animator animator;
     Transform transform_;
-    [SerializeField] public float minX = -400f, maxX = 400f, maxY = 350f, minY = -334f,speed,max_speed=0.0001f,min_speed=0.00002f;
+    [SerializeField] public float minX = -400f, maxX = 400f, maxY = 350f, minY = -334f,speed,max_speed=0.01f,min_speed=0.002f;
     [SerializeField] public float Ydelta = 200f, timer=0.1f;
     // Start is called before the first frame update
     IEnumerator Start()

@@ -507,7 +507,7 @@ public class MenuManager : MonoBehaviour
     }
     public void SetParticles(bool isOn)
     {
-        /* particles_on = isOn;
+         particles_on = isOn;
         prts.enabled = isOn;
         if(isOn==false){
            var objs = GameObject.FindObjectsOfType<Particle>();
@@ -515,7 +515,7 @@ public class MenuManager : MonoBehaviour
         {
             Destroy(o.gameObject);
         }
-        } */
+        } 
     }
     public void SetTxtSpeed(float value)
     {
