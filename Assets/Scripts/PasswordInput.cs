@@ -14,12 +14,6 @@ public class PasswordInput : MonoBehaviour
         screen.SetActive(false);
         noise_screen.SetActive(false);
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     public void On()
     {
         if(isOn) {Off(); return;}

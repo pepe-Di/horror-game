@@ -84,7 +84,7 @@ public class PlayerInteract : MonoBehaviour
     bool on=false;
     IEnumerator OnComputer(){
         on=true;
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.5f);
         on=false;
     }
     private void Update()
@@ -151,7 +151,33 @@ public class PlayerInteract : MonoBehaviour
                         try
                         {
                             StartCoroutine(OnComputer());
+                            _selection = null;
+                            //if(GameManager.instance._input.cursorLocked)
                             hit.transform.GetComponent<PasswordInput>().On();
+                        }
+                        catch{}
+                    }
+                    else
+                    {
+                        click = 0;
+                    }
+                    return;
+                }
+            }
+            if(hit.transform.CompareTag("Note"))
+            {
+                eye_cur.SetActive(true);
+                var selection = hit.transform;
+                _selection = selection;
+                if (_input.click)
+                {
+                    click++;
+                    if (click == 1&&!on)
+                    {
+                        try
+                        {
+                            StartCoroutine(OnComputer());
+                            if(GameManager.instance.state.state!=State.Freeze)hit.transform.GetComponent<PuzzleLook>().ChangeLook();
                         }
                         catch{}
                     }
@@ -522,10 +548,10 @@ public class PlayerInteract : MonoBehaviour
         transform.tag = "Item";
     }
     void OnDisable(){
-            Crosshair.SetActive(false);
-            grab_cur.SetActive(false);
-            eye_cur.SetActive(false);
-            hit_cur.SetActive(false);
+           // Crosshair.SetActive(false);
+           // grab_cur.SetActive(false);
+           // eye_cur.SetActive(false);
+           // hit_cur.SetActive(false);
     }
     void OnEnable(){
         grab_cur.SetActive(false);

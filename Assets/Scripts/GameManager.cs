@@ -93,7 +93,7 @@ public class GameManager : MonoBehaviour
     }
    public void StartDialogue(string blockName){
        flowchart.ExecuteBlock(blockName);
-       EventController.instance.ChangeStateEvent(State.Talk);
+       if(state.state!=State.Freeze)EventController.instance.ChangeStateEvent(State.Talk);
    }
     // Update is called once per frame
     public int GetSceneIndex()
@@ -178,7 +178,19 @@ public class GameManager : MonoBehaviour
     bool b= false;
     void Update()
     {
-        if (_input.esc)
+        if(_input.esc&&state.state == State.Freeze&&!b){
+            Debug.Log("State.Freeze");
+            b=true;
+            //player_.GetComponent<MouseLook>().enabled = true;
+           // t.position = new Vector3(0.001f,1.44f,0.011f);
+           
+            EventController.instance.StartCameraEvent(true);
+            EventController.instance.ChangeStateEvent(State.Idle);
+            EventController.instance.OffComputerUIEvent();
+            EventController.instance.OffPuzzleUIEvent();
+            StartCoroutine(Waiter());
+        }
+        else if (_input.esc&&!b)
         {
            // if(state.state == State.Freeze){
                //b=true;
@@ -201,9 +213,12 @@ public class GameManager : MonoBehaviour
             b=true;
             //player_.GetComponent<MouseLook>().enabled = true;
            // t.position = new Vector3(0.001f,1.44f,0.011f);
+           
+            CursorLock(true);
             EventController.instance.StartCameraEvent(true);
             EventController.instance.ChangeStateEvent(State.Idle);
             EventController.instance.OffComputerUIEvent();
+            EventController.instance.OffPuzzleUIEvent();
             StartCoroutine(Waiter());
         }
     }
@@ -211,12 +226,27 @@ public class GameManager : MonoBehaviour
         Debug.Log("wait()00");
         b=true;
         yield return new WaitForSeconds(0.5f);
+            CursorLock(true);
         b=false;
     }
     public IEnumerator Esc()
     {
         C_running = true;
         yield return new WaitForSecondsRealtime(0.2f); C_running = false;
+    }
+    public void CursorLock(bool b){
+        if(b){
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            _input.locked_input = false;
+            _input.cursorInputForLook = true;
+        }
+        else{
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            _input.cursorInputForLook = false;
+            _input.locked_input = true;
+        }
     }
     bool C_running = false;
     public IEnumerator OpenMenu()

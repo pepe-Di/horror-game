@@ -50,8 +50,9 @@ public class Item
         switch(name){
             case "Cola Can": return "look0";
             case "card0": return "look1";
-            case "laptop": return "look1";
+            case "laptop": return "look0";
             case "image0": return "look1";
+            case "omamori": return "look2";
             default: return "look0";
         }
     }
@@ -75,7 +76,7 @@ public class Item
     {
         this.name = name;
         questId = -1;
-        Debug.Log(name);
+        //Debug.Log(name);
         switch (name)
         {
             case "Cola Can": index=0;_name = Name; value = 1f; speed = 30f; type = itemType.Drink; look=true; break;
@@ -101,6 +102,8 @@ public class Item
             case "card0": index=7;_name = Name;  type = itemType.Card; look=true; break;
             case "key1": index=8;_name = Name;  type = itemType.Key; break;
             case "laptop": index=-1;grab = false; look=true; break;
+            case "notepad": index=9; _name = Name; type=itemType.Card; look=true; grab=true; break;
+            case "omamori": index=10; _name = Name; type=itemType.Card; look=true; grab=true; break;
 
             default: index=-1; break;
         }
@@ -116,7 +119,7 @@ public class Item
             default: grab = false; break;
         }
         if(index==-1) grab = false;
-        Debug.Log(grab);
+      //  Debug.Log(grab);
        
     }
     public void Use()

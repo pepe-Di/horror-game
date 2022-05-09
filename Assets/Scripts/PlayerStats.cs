@@ -1,21 +1,34 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerStats : MonoBehaviour
 {
     public RectTransform stamina_bar, hp_bar;
+    public  List<GameObject> hp;
     public Animator stam_anim;
     public float max_stam,max_hp, max_stam_width, max_hp_width;
     void Start()
     {
         //stam_anim = stamina_bar.gameObject.GetComponent<Animator>();
-        max_hp = GetComponent<Player>().max_hp;
+        max_hp = GetComponent<Player>().maxHp;
         max_stam = GetComponent<Player>().max_stamina;
         max_stam_width = stamina_bar.sizeDelta.x;
         max_hp_width = hp_bar.sizeDelta.x;
         hp_bar.gameObject.SetActive(false);
         stamina_bar.gameObject.SetActive(false);
+        Player.instance.onHpChange += onPlayerHpChange;
+        hp_bar.gameObject.SetActive(true);
+    }
+    public void onPlayerHpChange(float value)
+    {
+        int i = (int)value;
+        Debug.Log(i+" onPlayerHpChange!");
+        for(int j=0; j<hp.Count;j++){
+            if(j>=i) hp[j].SetActive(false);
+            else hp[j].SetActive(true);
+        }
     }
     public void ChangeParams(float hp, float stamina)
     {

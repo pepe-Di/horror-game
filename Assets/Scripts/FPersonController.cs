@@ -70,7 +70,7 @@ public class FPersonController : MonoBehaviour
         }
     }
     public void ChangeState(State state){
-        Debug.Log("ChangeState");
+      //  Debug.Log("ChangeState");
         stateController.ChangeState(state);
     }
      //Color bg,fg;

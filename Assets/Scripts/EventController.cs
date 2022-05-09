@@ -9,6 +9,7 @@ public class EventController : MonoBehaviour
     public event Action<State> StateEvent;
     public event Action<bool> FrameEvent;
     public event Action<float> FlashEvent;
+    public event Action<float, float> HPChange;
     public event Action<int> ItemEvent;
     public event Action<int> DoorEvent;
     public event Action<int> QEvent;
@@ -18,6 +19,7 @@ public class EventController : MonoBehaviour
     public event Action<bool> CameraEvent;
     public event Action<bool> FreezeCamera;
     public event Action OffComputerUI;
+    public event Action OffPuzzleUI;
     private void Awake()
     {
         if (instance == null)
@@ -31,9 +33,18 @@ public class EventController : MonoBehaviour
         Debug.Log("StartFreezeCamera");
         FreezeCamera?.Invoke(b);
     }
+    public void StartHPchange(float value,float speed)
+    {
+        Debug.Log("StartHPchange");
+        HPChange?.Invoke(value,speed);
+    }
     public void OffComputerUIEvent(){
         Debug.Log("OffComputerUIEvent");
         OffComputerUI?.Invoke();
+    }
+    public void OffPuzzleUIEvent(){
+        Debug.Log("OffPuzzleUIEvent");
+        OffPuzzleUI?.Invoke();
     }
     public void StartCameraEvent(bool b)
     {
@@ -47,7 +58,7 @@ public class EventController : MonoBehaviour
     }
     public void ChangeStateEvent(State state)
     {
-        Debug.Log("ChangeStateEvent");
+       // Debug.Log("ChangeStateEvent");
         StateEvent?.Invoke(state);
     }
     public void StartFrameEvent(bool frame_mode)

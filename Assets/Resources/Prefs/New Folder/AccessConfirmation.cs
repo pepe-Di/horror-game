@@ -69,6 +69,7 @@ public class AccessConfirmation : MonoBehaviour
         } 
         if(pass){
             screen.SetActive(true);
+            EventController.instance.StartDialogueEvent("monitor_look");
             this.enabled = false;
         }
         else{

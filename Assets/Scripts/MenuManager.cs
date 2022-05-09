@@ -119,6 +119,7 @@ public class MenuManager : MonoBehaviour
         prts = GameObject.FindObjectOfType<Particles>();
         particles_on = gameData.particles;
         frame_mode = gameData.frame_mode;
+        if(player!=null) player.GetComponent<MouseLook>().ChangeCameraLook(frame_mode);
         FrameRateDrop(gameData.frame_limit);
         StyleUIChanger();
         txt = GameObject.FindObjectsOfType<Text>();

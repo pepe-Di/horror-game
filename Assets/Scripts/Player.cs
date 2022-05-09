@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
     public int lastQIndex=-1;
     public static Player instance;
     public string name_;
+    public float Hp, maxHp;
     public float hp, stamina, max_stamina=5000f,max_hp=10000f, energy, full_energy=15000f;
     public State state; 
     public List<Item> items=new List<Item>();
@@ -27,6 +28,7 @@ public class Player : MonoBehaviour
         //EventController.instance.FlashEvent += EnergyChange;
         EventController.instance.QEvent += AddQ;
         EventController.instance.endQEvent += EndQuest;
+        EventController.instance.HPChange += ChangeHP;
     }
     public int HideQ()
     {
@@ -112,6 +114,27 @@ public class Player : MonoBehaviour
     {
         StartCoroutine(ChangeEnergy(value));
     }
+    public void ChangeHP(float value, float speed)
+    {
+        //if (Hp>0&&Hp < maxHp||Hp==) 
+       // {
+            StartCoroutine(ChangeHP_(value, speed));
+      //  }
+    }
+    IEnumerator ChangeHP_(float value, float speed){
+        float hp_ = value/speed;
+        while (speed != 0)
+        {
+            Hp += hp_;
+            Debug.Log("Hp"+Hp);
+            onHpChange.Invoke(Hp);
+            if (Hp>maxHp) { Hp = maxHp;
+            onHpChange.Invoke(Hp); break; }
+            else if(Hp<0){Hp=0; onHpChange.Invoke(Hp); break;}
+            yield return new WaitForSeconds(1);
+            speed--;
+        }
+    }
     public void SetItem(GameObject g, int i)
     {
         selectedItem = g;
@@ -140,10 +163,10 @@ public class Player : MonoBehaviour
         items[selectedID].Use();
         switch (items[selectedID].type)
         {
-            case itemType.Food: RegenerateHP(items[selectedID].value, items[selectedID].speed); break;
+            case itemType.Food: ChangeHP(items[selectedID].value, items[selectedID].speed); break;
             case itemType.Drink: ChangeSpeed(items[selectedID].value, items[selectedID].speed); break;
             case itemType.Battery: { energy += items[selectedID].value; if (energy > full_energy) energy = full_energy; break; }
-            case itemType.Drug: RegenerateHP(items[selectedID].value, 1); break;
+            case itemType.Drug: ChangeHP(items[selectedID].value, 1); break;
             case itemType.Flashlight: return; 
             case itemType.Key: if(FindUsedItem("key0")==null){used_items.Add(items[selectedID]); }return; 
             case itemType.Card: return; 

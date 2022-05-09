@@ -83,7 +83,7 @@ public class QuestManager : MonoBehaviour
         }
     }
     void OnEnable(){
-        Debug.Log("OnEnable!!!!!!!!!!!!!");
+      //  Debug.Log("OnEnable!!!!!!!!!!!!!");
 
     }
     void OnDisable(){

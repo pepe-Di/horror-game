@@ -38,7 +38,7 @@ public class MouseLook : MonoBehaviour
     {
         _camera = playerCamera.GetComponent<Camera>();
         
-        EventController.instance.CameraEvent+=ChangeCameraLook;
+        //EventController.instance.CameraEvent+=ChangeCameraLook;
         animator = playerCamera.gameObject.GetComponent<Animator>();
         _input = GetComponent<StarterAssetsInputs>();
         Cursor.lockState = CursorLockMode.Locked;
@@ -81,7 +81,7 @@ public class MouseLook : MonoBehaviour
     void SetCamera(bool b){
         GetComponent<PlayerInteract>().enabled = b;
         _camera.transform.gameObject.SetActive(b);
-        Debug.Log("bru");
+        Debug.Log("SetCamera");
     }
     IEnumerator Zoom(int i) 
     {
