@@ -6,10 +6,10 @@ public class RandomSequence : MonoBehaviour
 {
     public List<GameObject> lockers;
     // Start is called before the first frame update
-    IEnumerator Start()
+    void Start()
     {
-        var lockers = GetComponentsInChildren<GameObject>();
-        yield return new WaitUntil(()=>GameManager.instance.loaded);
+      //  var lockers = GetComponentsInChildren<GameObject>();
+      //  yield return new WaitUntil(()=>GameManager.instance.loaded);
        // Random.InitState(GameManager.instance.seed);
 
     }

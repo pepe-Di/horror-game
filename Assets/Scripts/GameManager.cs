@@ -8,6 +8,7 @@ using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
+    CharacterController cc;
     public StateController state;
     public EnemyController enemy;
     public LevelLoader lv;
@@ -24,14 +25,18 @@ public class GameManager : MonoBehaviour
     public List<QuestTrigger> qtriggers;
     public bool loaded=false;
     public int seed;
+    public Animator blackout_animator;
     // Start is called before the first frame update
     private void Awake()
     {
         instance = this;
     }
+    public Vector3 gameover_pos;
     void Start()
     {
+        EventController.instance.BlackOut+=BlackOut;
         EventController.instance.SayEvent+=StartDialogue;
+        EventController.instance.GameOver+=GameOver;
         //flowchart.ExecuteBlock("0");
       //  DontDestroyOnLoad(instance.gameObject);
         if (_mainCamera == null)
@@ -39,6 +44,7 @@ public class GameManager : MonoBehaviour
             _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
         }
         player_ = Player.GetComponent<Player>();
+        cc= Player.GetComponent<CharacterController>();
         //  _input = FindObjectOfType<StarterAssetsInputs>();
         // lv = FindObjectOfType<LevelLoader>();
         // menu = GameObject.Find("ui");
@@ -53,6 +59,7 @@ public class GameManager : MonoBehaviour
            //SpawnAllItems();
          if(PlayerPrefs.HasKey("name"))
         {
+            gameover_pos = player_.transform.position;
             SpawnAllItems();
             seed = (int)System.DateTime.Now.Ticks;
             Debug.Log("seed: "+seed);
@@ -63,14 +70,14 @@ public class GameManager : MonoBehaviour
         }
         else 
         {
-                LoadData(); 
-                var o = FindObjectsOfType<QuestTrigger>();
-                foreach(QuestTrigger t in o){
-                qtriggers.Add(t);
-                }
-                StartCoroutine(DelQTriggers());
+            LoadData(); 
+            var o = FindObjectsOfType<QuestTrigger>();
+            foreach(QuestTrigger t in o){
+            qtriggers.Add(t);
             }
-        try {
+            StartCoroutine(DelQTriggers());
+        }
+    try {
            // LoadData();
             //if (DataManager.instance.loaded) 
             //{ 
@@ -104,14 +111,39 @@ public class GameManager : MonoBehaviour
     {
         DataManager.instance.SaveData(); 
     }
+    AIdata ai_data;
     public void LoadData()
     {
         SaveSlot data = SaveSystem.LoadPlayer();
         seed = data.playerData.seed;Debug.Log("seed: "+seed);
         player_.LoadData(data.playerData);
         enemy.LoadEnemy(data.aiData);
+       // ai_data = data.aiData;
         SpawnItems();
        // inv.UpdateData(this);
+    }
+    public AIdata GetEnemyData(){
+        return ai_data;
+    }
+    public void GameOver()
+    {
+        StartCoroutine(BlackOutGameOver());
+        Debug.Log("GameOver");
+    }
+    IEnumerator BlackOutGameOver()
+    {
+        state.state = State.Freeze; 
+        blackout_animator.SetBool("start",true);
+        yield return new WaitForSeconds(1f);
+        blackout_animator.SetBool("start",false);
+        blackout_animator.SetBool("end",true);
+        yield return new WaitForSeconds(0.5f);
+        cc.enabled = false;
+        Player.transform.position = new Vector3(gameover_pos.x,gameover_pos.y,gameover_pos.z);
+        cc.enabled=true;
+        yield return new WaitForSeconds(0.5f);
+        blackout_animator.SetBool("end",false);
+        state.state = State.Idle;
     }
     public void SpawnAllItems(){
         foreach(Transform pos in itemsPos)
@@ -147,8 +179,19 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("a");
     }
+    public void BlackOut(){
+        StartCoroutine(StartBlackOut());
+    }
+    IEnumerator StartBlackOut(){
+        state.state = State.Freeze;
+        blackout_animator.SetTrigger("start 0");
+        yield return new WaitForSeconds(2f);
+        blackout_animator.SetTrigger("end 0");
+        state.state = State.Idle;
+    }
     public void ContinueButton()
     {
+        SoundManager.instance.PlayBg(Bg.scene1);
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         _input.locked_input = false;
@@ -251,6 +294,8 @@ public class GameManager : MonoBehaviour
     bool C_running = false;
     public IEnumerator OpenMenu()
     {
+        SoundManager.instance.PlaySe(Se.Click2);
+        SoundManager.instance.PlayBg(Bg.noise);
         Debug.Log("openmenu()");
         C_running = true;
         if (!menu.activeSelf)

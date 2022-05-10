@@ -162,6 +162,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   alpha: 1
+  ignore: 0
 --- !u!114 &886229881055582222
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -174,6 +175,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 196493f768df6c7469f3a48a8185bc07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_OnValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
   options:
   - English
   - Russian
@@ -190,7 +194,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: -3078690722257211301, guid: 3f4313d3946c4eb4baa615ce8a35dbce, type: 2}
   m_audioClip: {fileID: 8300000, guid: 012f112eb9b74ec48a927f912e37ba18, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0

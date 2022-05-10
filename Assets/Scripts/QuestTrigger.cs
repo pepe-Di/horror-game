@@ -6,10 +6,12 @@ public class QuestTrigger : MonoBehaviour
 {
     public int id;
     public GameObject finish;
+    bool loaded=false;
 
     IEnumerator Start()
     {
         yield return new WaitUntil(()=>GameManager.instance.loaded); 
+        loaded = true;
         try
         {
             Debug.Log("hui");
@@ -58,6 +60,7 @@ public class QuestTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            if(!loaded) return;
             if (QuestManager.instance.TryToInvoke(id))
             {
                 EventController.instance.StartQEvent(id);

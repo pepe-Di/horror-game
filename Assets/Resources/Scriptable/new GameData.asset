@@ -12,18 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 331f45afd0a4f914980b63da67c7e5de, type: 3}
   m_Name: new GameData
   m_EditorClassIdentifier: 
-  master_vol: -7.089493
-  music_vol: -80
-  effects_vol: -8.816404
-  vol: 0.44210494
-  vol1: 0.0001
-  vol2: 0.362393
+  master_vol: -1.7809759
+  music_vol: -8.096493
+  effects_vol: -5.596489
+  vol: 0.81461275
+  vol1: 0.39370903
+  vol2: 0.52501965
   sens: 1.6565105
   txt_speed: 2
-  lg: 1
+  lg: 0
   q: 0
-  res: 8
-  style: 0
+  res: 10
+  style: 1
   last_slot: -1
   cur_slot: 0
   frame_limit: 4

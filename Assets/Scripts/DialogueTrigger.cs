@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class DialogueTrigger : MonoBehaviour
 {
+    public Bg clip;
+    public bool music;
     // Start is called before the first frame update
     public string value;
     void Start()
@@ -16,6 +18,7 @@ public class DialogueTrigger : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             EventController.instance.StartDialogueEvent(value);
+            if(music) SoundManager.instance.PlayBg(clip);
             Destroy(this.gameObject);
         }
     }

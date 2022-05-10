@@ -193,11 +193,13 @@ public class Player : MonoBehaviour
         character.nameText = data.name;
         Debug.Log(data.name);
         
-        hp = data.hp;
+        Hp = data.hp;
+        GetComponent<PlayerStats>().onPlayerHpChange(Hp);
         items.Clear();
         stamina = data.stamina;
         Vector3 position = new Vector3(data.position[0], data.position[1], data.position[2]);
         transform.position = position;
+        GameManager.instance.gameover_pos = position;
         for (int i=0; i<data.items.Length;i++)
         {
            items.Add(new Item(data.items[i]));

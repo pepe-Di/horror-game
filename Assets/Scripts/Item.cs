@@ -79,25 +79,25 @@ public class Item
         //Debug.Log(name);
         switch (name)
         {
-            case "Cola Can": index=0;_name = Name; value = 1f; speed = 30f; type = itemType.Drink; look=true; break;
-            case "Carrot": _name = "морковь"; value = 50f; speed = 20f; type = itemType.Food; break;
+            case "Cola Can" : index=0;_name = Name; value = 1f; speed = 30f; type = itemType.Drink; look=true; break;
+            case "Carrot": _name = "морковь"; value = 5f; speed = 20f; type = itemType.Food; break;
             case "Coffee": _name = "кофейный напиток"; value = 3f; speed = 50f; type = itemType.Drink; break;
             case "Coffee2": _name = "кофейный напиток"; value = 2f; speed = 30f; type = itemType.Drink; break;
             case "flashlight": index=1;_name = Name; type = itemType.Flashlight; break;
             case "battery": index=2;_name = Name; value = 1000f; type = itemType.Battery; break;
             case "big battery": index=3;_name = Name; value = 2000f; type = itemType.Battery; break;
-            case "Chips": _name = "чипсы"; value = -10f; speed = 10f; type = itemType.Food; break;
-            case "kit": index=4;_name = Name; value = 1000f; type = itemType.Drug; break;
-            case "beans": _name = "консерва"; value = 20f; speed = 120f; type = itemType.Food; break;
+            case "Chips": _name = "чипсы"; value = -2f; speed = 10f; type = itemType.Food; break;
+            case "kit": index=4;_name = Name; value = 4f; type = itemType.Drug; break;
+            case "beans": _name = "консерва"; value = 3f; speed = 120f; type = itemType.Food; break;
             case "Bottle": _name = "вода"; value = 0.01f; speed = 70f; type = itemType.Drink; break;
-            case "Cheese": _name = "сыр"; value = 80f; speed = 60f; type = itemType.Food; break;
-            case "Mozzarella": _name = "моцарелла"; value = 80f; speed = 60f; type = itemType.Food; break;
-            case "Meat": _name = "мясо"; value = -40f; speed = 10f; type = itemType.Food; break;
-            case "Milk": _name = "молоко"; value = -4f; speed = 70f; type = itemType.Drink; break;
-            case "pills": index=5;_name = Name; value = 500f; type = itemType.Drug; break;
-            case "Yogurt": _name = "Йогурт"; value = 1500f; speed = 120f; type = itemType.Food; break;
-            case "Sandwich": _name = "Бутерброд"; value = 150f; speed = 90f; type = itemType.Food; break;
-            case "Tomato": _name = "Томат"; value = 20f; speed = 20f; type = itemType.Food; break;
+            case "Cheese": _name = "сыр"; value = 4f; speed = 60f; type = itemType.Food; break;
+            case "Mozzarella": _name = "моцарелла"; value = 15f; speed = 60f; type = itemType.Food; break;
+            case "Meat": _name = "мясо"; value = -4f; speed = 10f; type = itemType.Food; break;
+            case "Milk": _name = "молоко"; value = -2f; speed = 60f; type = itemType.Drink; break;
+            case "pills": index=5;_name = Name; value = 2f; type = itemType.Drug; break;
+            case "Yogurt": _name = "Йогурт"; value = 5f; speed = 120f; type = itemType.Food; break;
+            case "Sandwich": _name = "Бутерброд"; value = 1f; speed = 90f; type = itemType.Food; break;
+            case "Tomato": _name = "Томат"; value = 2f; speed = 20f; type = itemType.Food; break;
             case "key0": index=6;_name = Name;  type = itemType.Key; break;
             case "card0": index=7;_name = Name;  type = itemType.Card; look=true; break;
             case "key1": index=8;_name = Name;  type = itemType.Key; break;

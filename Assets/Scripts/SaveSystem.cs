@@ -182,7 +182,7 @@ public class PlayerData
         seed = player.seed;
         time = System.DateTime.Now.ToString();
         sceneIndex = 2;
-        hp = player.hp;
+        hp = player.Hp;
         stamina = player.stamina;
         name = player.name_;
         position = new float[3];

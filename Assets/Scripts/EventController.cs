@@ -5,6 +5,7 @@ using System;
 
 public class EventController : MonoBehaviour
 {
+    public event Action<AIdata> LoadEnemy;
     public static EventController instance;
     public event Action<State> StateEvent;
     public event Action<bool> FrameEvent;
@@ -20,13 +21,29 @@ public class EventController : MonoBehaviour
     public event Action<bool> FreezeCamera;
     public event Action OffComputerUI;
     public event Action OffPuzzleUI;
+    public event Action GameOver;
+    public event Action BlackOut;
     private void Awake()
     {
         if (instance == null)
             instance = this;
         else Destroy(gameObject);
 
-        DontDestroyOnLoad(gameObject);
+       // DontDestroyOnLoad(gameObject);
+    }
+    public void StartBlackOut(){
+        Debug.Log("StartBlackOut");
+        BlackOut?.Invoke();
+    }
+    public void GameOverEvent(){
+        Debug.Log("GameOverEvent");
+        StartHPchange(-1f,1f);
+        GameOver?.Invoke();
+    }
+    public void StartEnemyLoad(AIdata data)
+    {
+        Debug.Log("StartFreezeCamera");
+        LoadEnemy?.Invoke(data);
     }
     public void StartFreezeCamera(bool b)
     {

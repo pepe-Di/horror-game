@@ -9,6 +9,13 @@ public class SoundManager : MonoBehaviour
     [SerializeField] public List<BgClip> bgClips;
     [SerializeField]public List<SeClip> seClips;
     public static SoundManager instance;
+    bool isPlaying;
+    Bg clip;
+    public bool IsPlaying 
+    {
+        get { return isPlaying; }
+        set {}
+    }
     void Awake()
     {
         var objs = gameObject.GetComponents<AudioSource>();
@@ -17,19 +24,33 @@ public class SoundManager : MonoBehaviour
         if (instance != null) Destroy(this);
         else instance = this;
     }
+
     public void PlaySe(Se se)
     {
         seAS.PlayOneShot(seClips.Where(c=>c.name == se).FirstOrDefault().clip);
     }
+    public void StopBg(){
+        bgAS.Stop();
+    }
     public void PlayBg(Bg bg)
     {
+        if(clip==bg) return;
+        StopBg();
+        //bgAS.loop = true;
+        clip = bg;
         bgAS.PlayOneShot(bgClips.Where(c => c.name == bg).FirstOrDefault().clip);
+        bgAS.loop = true;
     }
 }
 public enum Bg
 {
     scene1,
-    scene2
+    scene2,
+    menu,
+    spooky,
+    endBg,
+    fnaf,
+    noise
 }
 public enum Se
 {
@@ -37,7 +58,9 @@ public enum Se
     Click,
     Open,
     Close,
-    Kick
+    Kick,
+    Screamer,
+    Click2
 }
 [System.Serializable]
 public class SeClip

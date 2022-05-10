@@ -8,8 +8,10 @@ public class Locker : MonoBehaviour
    void OnMouseDown(){
        if(!c){
         Debug.Log(this.gameObject.name);
+        //EventController.instance.StartDialogueEvent("look2");
         puzzle.AddToList(this.gameObject.name);
         StartCoroutine(Wait());
+        SoundManager.instance.PlaySe(Se.Item);
        }
    }
    bool c=false;

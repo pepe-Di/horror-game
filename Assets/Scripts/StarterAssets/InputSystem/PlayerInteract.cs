@@ -140,6 +140,7 @@ public class PlayerInteract : MonoBehaviour
             }
             if(hit.transform.CompareTag("Computer"))
             {
+                Crosshair.SetActive(false);
                 grab_cur.SetActive(true);
                 var selection = hit.transform;
                 _selection = selection;
@@ -166,6 +167,7 @@ public class PlayerInteract : MonoBehaviour
             }
             if(hit.transform.CompareTag("Note"))
             {
+                Crosshair.SetActive(false);
                 eye_cur.SetActive(true);
                 var selection = hit.transform;
                 _selection = selection;
@@ -187,9 +189,17 @@ public class PlayerInteract : MonoBehaviour
                     }
                     return;
                 }
+            }if(hit.transform.CompareTag("locker"))
+            {
+                Crosshair.SetActive(false);
+                eye_cur.SetActive(true);
+                var selection = hit.transform;
+                _selection = selection;
+                return;
             }
             if (hit.transform.CompareTag("Item"))
             {
+                Crosshair.SetActive(false);
                 grab_cur.SetActive(true);
                 var selection = hit.transform;
                 //var selectionOutline = selection.GetComponent<Outline>();
@@ -240,6 +250,7 @@ public class PlayerInteract : MonoBehaviour
             }
             if (hit.transform.CompareTag("Door"))
             {
+                Crosshair.SetActive(false);
                 //crosshair.sprite = Resources.Load<Sprite>("ui/grab");
                 grab_cur.SetActive(true);
                 var selection = hit.transform;
@@ -326,6 +337,7 @@ public class PlayerInteract : MonoBehaviour
             }
             if (hit.transform.CompareTag("Drawer"))
             {
+                Crosshair.SetActive(false);
                 grab_cur.SetActive(true);
                 var selection = hit.transform;
                 _selection = selection;
@@ -363,7 +375,8 @@ public class PlayerInteract : MonoBehaviour
                                     }
                                 }
                             }
-                            Debug.Log("StartCoroutine()"); StartCoroutine(Drawer(hit.transform)); click = 0;
+                            Debug.Log("StartCoroutine()");
+                             StartCoroutine(Drawer(hit.transform)); click = 0;
                         }
 
                     }
@@ -449,6 +462,7 @@ public class PlayerInteract : MonoBehaviour
                 Debug.Log(transform.localPosition.z);
 
             }
+            SoundManager.instance.PlaySe(Se.Close);
         }
         else
         {
@@ -457,8 +471,8 @@ public class PlayerInteract : MonoBehaviour
                 transform.localPosition += new Vector3(0, 0, 0.1f * value);
                 yield return new WaitForEndOfFrame();
                 Debug.Log(transform.localPosition.z);
-
             }
+            SoundManager.instance.PlaySe(Se.Open);
             // transform.localPosition += forward;
             //new Vector3(transform.localPosition.x,transform.localPosition.y,transform.localPosition.z+1f);
         }
@@ -472,8 +486,8 @@ public class PlayerInteract : MonoBehaviour
         int val = 1;
         Door d = door.GetComponent<Door>();
         if (d.right_side) val = -1;
-        if (d.opened) { audioSource.PlayOneShot(Resources.Load("Sounds/door2") as AudioClip, volume); newRotation *= Quaternion.Euler(0, -90 * val, 0); }
-        else { audioSource.PlayOneShot(Resources.Load("Sounds/door1") as AudioClip, volume); newRotation *= Quaternion.Euler(0, 90 * val, 0); }
+        if (d.opened) { SoundManager.instance.PlaySe(Se.Close); newRotation *= Quaternion.Euler(0, -90 * val, 0); }
+        else { SoundManager.instance.PlaySe(Se.Open); newRotation *= Quaternion.Euler(0, 90 * val, 0); }
         d.opened = !d.opened;
         Debug.Log(door.GetComponent<Door>().opened);
         while (door.rotation != newRotation)
@@ -548,10 +562,10 @@ public class PlayerInteract : MonoBehaviour
         transform.tag = "Item";
     }
     void OnDisable(){
-           // Crosshair.SetActive(false);
-           // grab_cur.SetActive(false);
-           // eye_cur.SetActive(false);
-           // hit_cur.SetActive(false);
+        Crosshair.SetActive(false);
+        grab_cur.SetActive(false);
+        eye_cur.SetActive(false);
+        hit_cur.SetActive(false);
     }
     void OnEnable(){
         grab_cur.SetActive(false);

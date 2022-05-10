@@ -25,6 +25,7 @@ TagManager:
   - Enemy
   - Hit
   - Computer
+  - locker
   layers:
   - Default
   - TransparentFX
