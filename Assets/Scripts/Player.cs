@@ -40,6 +40,7 @@ public class Player : MonoBehaviour
     }
     public void AddQ(int id)
     {
+        //if(FindQ(id)) return;
         Quest q = QuestManager.instance.quests[id];
         if (q.Type==questType.Use)
         {
@@ -134,6 +135,7 @@ public class Player : MonoBehaviour
             yield return new WaitForSeconds(1);
             speed--;
         }
+        if(Hp<=0) EventController.instance.GameOverEvent();
     }
     public void SetItem(GameObject g, int i)
     {
@@ -148,7 +150,6 @@ public class Player : MonoBehaviour
         switch(items[i].type){
             case itemType.Flashlight: break;
             case itemType.Key: break; 
-            case itemType.Card: break; 
             default: InventoryUI.instance.GetMessage(LocalisationSystem.TryGetLocalisedValue("message0")); break;
         }
     }
@@ -169,7 +170,7 @@ public class Player : MonoBehaviour
             case itemType.Drug: ChangeHP(items[selectedID].value, 1); break;
             case itemType.Flashlight: return; 
             case itemType.Key: if(FindUsedItem("key0")==null){used_items.Add(items[selectedID]); }return; 
-            case itemType.Card: return; 
+            case itemType.Card: EventController.instance.StartDialogueEvent(items[selectedID].GetGmName()); return; 
             default: return;
         }
         Destroy(selectedItem);

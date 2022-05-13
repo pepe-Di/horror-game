@@ -32,4 +32,50 @@ SAY.Flowchart.41.Я,,??,??
 SAY.Flowchart.42.,,"Да я сломал 4ю стену, и что ты мне сделаешь?","Yes, I broke the 4th wall, and what will you do to me?"
 SAY.Flowchart.43.Я,,Закрой unity шизоид.,Close unity schizoid.
 SAY.Flowchart.44.,,ок.,ok.
-CHARACTER.Я,,Я,
+SAY.Flowchart.47.Я,,Что там спрятано?,What is hidden there?
+SAY.Flowchart.55.,,Вы начинаете вспоминать.,You started to remember.
+SAY.Flowchart.49.,,Неизвестно когда это произошло.,It is not known when it happened.
+SAY.Flowchart.50.,,"Старое здание было заброшено, и причиной тому были захватившие место духи.","The old building was abandoned, and the reason was the spirits that took over the place."
+SAY.Flowchart.51.,,"Всякий живой, кто посещал проклятое место был изгнан из внешнего мира.",Anyone who visited the cursed place was banished from the outside world.
+SAY.Flowchart.53.Я,,...,...
+SAY.Flowchart.54.Я,,Что это за место?,Where I am?
+SAY.Flowchart.66.,,Вы начинаете вспоминать.,You started to remember.
+SAY.Flowchart.57.??,,"Сегодня 11 января, я пишу это чтобы не потерять себя.","Today is January 11, I am writing this so as not to lose myself."
+SAY.Flowchart.58.??,,"Как только я добрался до комнаты охраны, я смог выйти в сеть.","As soon as I got to the security room, I was able to go online."
+SAY.Flowchart.59.??,,"Теперь я уверен, что смогу справиться со своей работой.",Now I'm sure I can do my job.
+SAY.Flowchart.67.,,Вы начинаете вспоминать.,You started to remember.
+SAY.Flowchart.61.??,,Я расставил ловушки по периметру здания. ,I've set traps around the perimeter of the building.
+SAY.Flowchart.62.??,,Теперь ему будет сложнее выбраться на поверхность.,Now it'll be more difficult for him to get to the surface.
+SAY.Flowchart.63.??,,"вот только теперь я заперт внутри, похоже мои дни сочтены.","but now I'm locked inside, probably my days are numbered."
+SAY.Flowchart.64.??,,Я чувствую что он идет за мной.,I feel like he's stalking me.
+SAY.Flowchart.68.,,Вы начинаете вспоминать.,You started to remember.
+SAY.Flowchart.69.??,,"Если кто-то услышит меня, я застрял в потайной комнате.","If anyone hears me, I'm stuck in a secret room."
+SAY.Flowchart.70.??,,И я ощущаю его холодное присутствие.,And I feel his cold presence.
+SAY.Flowchart.71.??,,Мне всего лишь нужно было выполнить свою работу.,I just had to do my job.
+SAY.Flowchart.72.??,,"Я не знаю как там Макс, я оставил его у главного входа.","I don't know how Max is, I left him at the main entrance."
+SAY.Flowchart.73.??,,Это мой сторожевой пес. Он был у меня еще до того как я начал заниматься экзорцизмом.,It is my watchdog. I had it even before I started doing exorcisms.
+SAY.Flowchart.74.??,,Неужели все кончено?,Is it all over?
+SAY.Flowchart.77.,,Вы начинаете вспоминать.,You started to remember.
+SAY.Flowchart.78.??,,Я все-таки смог выйти! Не знаю что бы я делал если бы не макс.,I was able to get out! I don't know what I'd do without max.
+SAY.Flowchart.79.??,,Я уже у выхода. Вот только не могу бросить его там. ,I'm near the enterance. I just can't leave it there.
+SAY.Flowchart.80.??,,"Придется вернуться. Если я попадусь, он поглотит меня и все мои воспоминания.","I have to return. If I get caught, it will consume me with all my memories."
+SAY.Flowchart.81.??,,Но другого выхода у меня нет!,But I have no choice!
+SAY.Flowchart.82.Я,,...,...
+SAY.Flowchart.76.,,Вы вспомнили все.,You remembered everything.
+SAY.Flowchart.83.,,Теперь вы знаете кто вы.,Now you know who you are.
+SAY.Flowchart.85.,,Вы чувствуете удачу,You feel lucky.
+SAY.Flowchart.89.,,каким то образом он защищает меня.,somehow it protects me.
+SAY.Flowchart.88.Я,,Это японский амулет для защиты от духов.,It is a Japanese amulet that should protect from spirits.
+SAY.Flowchart.92.Я,,Я должен найти комнату охраны?,so I need to find a security room...
+SAY.Flowchart.93.Я,,"У меня была тройка по математике, как мне решить это уравнение.","I got a C in math, how do I solve this equation."
+SAY.Flowchart.95.Я,,"так, похоже я на месте.","So, I'm here."
+SAY.Flowchart.97.Я,,Я наконец-то выбрался.,I'm finally out.
+SAY.Flowchart.98.Я,,"Но был ли в этом смысл после всего, что я узнал.",But did it make any sense after all I've known.
+SAY.Flowchart.99.Я,,Может было бы лучше вернуться назад.,Maybe it'd be better to go back.
+SAY.Flowchart.100.Я,,"Но мне как-то все равно, даже если кто-то может пострадать от моих рук.",But somehow I don't care if someone gets hurt because of me.
+SAY.Flowchart.101.Я,,Я dead inside now.,I'm dead inside now.
+SAY.Flowchart.102.Я,,"Поэтому даже если бы я хотел защитить то, что мне дорого, у меня этого попросту нету.","Therefore, even if I wanted to protect what is important to me, I simply do not have it."
+SAY.Flowchart.103.Я,,Исход неважен. Возможно я успокоюсь и сгину. Или же сгинет весь мир.,The end doesn't matter. Maybe I'll calm down and perish. Or the whole world will perish.
+SAY.Flowchart.104.Я,,я так или иначе принимаю это. значит так суждено было случится.,I'll accept it anyway. than it was destined to happen.
+SAY.Flowchart.105.Я,,...,...
+CHARACTER.??,,??,??

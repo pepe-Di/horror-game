@@ -37,7 +37,6 @@ public class EventController : MonoBehaviour
     }
     public void GameOverEvent(){
         Debug.Log("GameOverEvent");
-        StartHPchange(-1f,1f);
         GameOver?.Invoke();
     }
     public void StartEnemyLoad(AIdata data)

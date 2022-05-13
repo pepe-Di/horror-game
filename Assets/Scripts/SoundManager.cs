@@ -5,12 +5,12 @@ using UnityEngine;
 
 public class SoundManager : MonoBehaviour
 {
-    AudioSource seAS, bgAS;
+    public AudioSource seAS, bgAS, altBg;
     [SerializeField] public List<BgClip> bgClips;
     [SerializeField]public List<SeClip> seClips;
     public static SoundManager instance;
     bool isPlaying;
-    Bg clip;
+    public Bg clip, lastClip;
     public bool IsPlaying 
     {
         get { return isPlaying; }
@@ -19,8 +19,9 @@ public class SoundManager : MonoBehaviour
     void Awake()
     {
         var objs = gameObject.GetComponents<AudioSource>();
-        seAS = objs[0]; 
-        bgAS = objs[1];
+        //seAS = objs[0]; 
+       // bgAS = objs[1];
+       // altBg = objs[2];
         if (instance != null) Destroy(this);
         else instance = this;
     }
@@ -29,17 +30,38 @@ public class SoundManager : MonoBehaviour
     {
         seAS.PlayOneShot(seClips.Where(c=>c.name == se).FirstOrDefault().clip);
     }
+    public void PauseBg(){
+        bgAS.Pause();
+    }
     public void StopBg(){
         bgAS.Stop();
     }
+    public void StopAltBg(){
+        altBg.Stop();
+    }
+    public void ResumeLastBg(){
+        if(clip==lastClip) return;
+        if(altBg.isPlaying) StopAltBg();
+        bgAS.Play();
+        clip = lastClip;
+    }
     public void PlayBg(Bg bg)
     {
-        if(clip==bg) return;
-        StopBg();
-        //bgAS.loop = true;
+        if(lastClip==bg||clip==bg) return;
+        if(bgAS.isPlaying) StopBg();
+        if(altBg.isPlaying) StopAltBg();
         clip = bg;
+        lastClip = bg;
         bgAS.PlayOneShot(bgClips.Where(c => c.name == bg).FirstOrDefault().clip);
-        bgAS.loop = true;
+    }
+    //bool altBg_playing=false,bg_playing=false
+    public void PlayAltBg(Bg bg)
+    {
+        if(lastClip==bg||clip==bg) return;
+        if(bgAS.isPlaying) PauseBg();
+        if(altBg.isPlaying) StopAltBg();
+        clip = bg;
+        altBg.PlayOneShot(bgClips.Where(c => c.name == bg).FirstOrDefault().clip);
     }
 }
 public enum Bg
@@ -50,7 +72,8 @@ public enum Bg
     spooky,
     endBg,
     fnaf,
-    noise
+    noise,
+    gameover
 }
 public enum Se
 {

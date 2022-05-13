@@ -22,6 +22,7 @@ public class QuestManager : MonoBehaviour
         quests.Add(new Quest(questType.Grab, "find a key", false, "key0"));
         quests.Add(new Quest(questType.ToPoint, "exit the school", false));
         quests.Add(new Quest(questType.Hide, "Hide somewhere", false));
+        quests.Add(new Quest(questType.ToPoint, "Find security room", false));
         int i=0;
         foreach(Quest q in quests){
             q.id = i;
@@ -62,7 +63,7 @@ public class QuestManager : MonoBehaviour
         {
             return true;
         }
-        return false;
+       return false;
     }
     public void UpdateContent()
     {

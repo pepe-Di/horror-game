@@ -23,6 +23,7 @@ public class EnemyController : MonoBehaviour
 	{
 		this.gameObject.transform.position = new Vector3(data.position[0],data.position[1],data.position[2]);
 		state = (aiState)data.state;
+		GameManager.instance.enemy_pos = new Vector3(data.position[0],data.position[1],data.position[2]);
 	}
 	void Start()
 	{
@@ -52,6 +53,7 @@ public class EnemyController : MonoBehaviour
 		{	
 			if(!wait){
 				StartCoroutine(Wait_());
+				EventController.instance.StartHPchange(-1,1);
 				EventController.instance.GameOverEvent();
 			}
 			//SoundManager.instance.PlaySe(Se.Screamer);
@@ -62,7 +64,7 @@ public class EnemyController : MonoBehaviour
 			if(state!=aiState.Near&&state!=aiState.Triggered&&state!=aiState.Search)
 			{
 				state = aiState.Near;
-				SoundManager.instance.PlayBg(Bg.spooky);
+				SoundManager.instance.PlayAltBg(Bg.spooky);
 				//return;
 			}
 			else if(state==aiState.Near)//near the player
@@ -75,7 +77,7 @@ public class EnemyController : MonoBehaviour
 					if(hit.collider.tag=="Player") //triggers
 					{
 						state = aiState.Triggered;
-						SoundManager.instance.PlayBg(Bg.fnaf);
+						SoundManager.instance.PlayAltBg(Bg.fnaf);
 						agent.speed = triggered_speed;
 						target = playerTarget;
 						agent.SetDestination(target.position);
@@ -94,7 +96,7 @@ public class EnemyController : MonoBehaviour
 					Debug.Log("tag "+hit.collider.tag);
 					if(hit.collider.tag=="Player") //moves towards
 					{
-						SoundManager.instance.PlayBg(Bg.fnaf);
+						SoundManager.instance.PlayAltBg(Bg.fnaf);
 						agent.speed = triggered_speed;
 						target = playerTarget;
 						_anim.SetBool("walk",true);
@@ -124,7 +126,7 @@ public class EnemyController : MonoBehaviour
 		}
 			else if(state==aiState.Search)
 		{
-			SoundManager.instance.PlayBg(Bg.fnaf);
+			SoundManager.instance.PlayAltBg(Bg.fnaf);
 			FaceTarget(playerTarget);
 			agent.isStopped=false;
 			RaycastHit hit;
@@ -152,7 +154,7 @@ public class EnemyController : MonoBehaviour
 		else if(state==aiState.Near)
 		{
 			state=aiState.Idle;
-			SoundManager.instance.PlayBg(Bg.scene1);
+			SoundManager.instance.ResumeLastBg();
 		}
 		//else if(state!=aiState.Idle&&state!=aiState.Wait&&state!=aiState.Search)
 		//{
@@ -164,7 +166,7 @@ public class EnemyController : MonoBehaviour
 			if(state!=aiState.Near) //?
 			{
 				state = aiState.Idle;
-				SoundManager.instance.PlayBg(Bg.scene1);
+				SoundManager.instance.ResumeLastBg();
 			}
 			while(prev==route_id){
 				route_id = Random.Range(0,targets.Count);
@@ -200,7 +202,7 @@ public class EnemyController : MonoBehaviour
 		Debug.Log("search() "+secs);
 		yield return new WaitForSeconds(secs);
 		state=aiState.Idle;
-		SoundManager.instance.PlayBg(Bg.scene1);
+		SoundManager.instance.ResumeLastBg();
 		c=false;
 	}
 	IEnumerator Wait()

@@ -562,10 +562,16 @@ public class PlayerInteract : MonoBehaviour
         transform.tag = "Item";
     }
     void OnDisable(){
+        try{
         Crosshair.SetActive(false);
         grab_cur.SetActive(false);
         eye_cur.SetActive(false);
         hit_cur.SetActive(false);
+
+        }
+        catch{
+
+        }
     }
     void OnEnable(){
         grab_cur.SetActive(false);

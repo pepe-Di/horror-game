@@ -32,6 +32,8 @@ public class DataManager : MonoBehaviour
             colors.Add(new Color_("Lemon", 233f / 255f, 233f / 255f, 131f / 255f));
             colors.Add(new Color_("Light Yellow", 200f / 255f, 200f / 255f, 168f / 255f));
             colors.Add(new Color_("Grass", 70f / 255f, 100f / 255f, 100f / 255f));
+            colors.Add(new Color_("Pink", 217f / 255f, 152f / 255f, 191f / 255f));
+            colors.Add(new Color_("Sky", 84f / 255f, 71f / 255f, 144f / 255f));
         }
         if (palettes.Count == 0)
         {
@@ -39,6 +41,7 @@ public class DataManager : MonoBehaviour
             palettes.Add(new ColorPalette("Marine", colors.Where(c=>c.Name == "Dark Blue").FirstOrDefault(), colors.Where(c => c.Name == "White Blue").FirstOrDefault()));
             palettes.Add(new ColorPalette("Daylight", colors.Where(c => c.Name == "Dark Red").FirstOrDefault(), colors.Where(c => c.Name == "Lemon").FirstOrDefault()));
             palettes.Add(new ColorPalette("Dandelion", colors.Where(c => c.Name == "Grass").FirstOrDefault(), colors.Where(c => c.Name == "Light Yellow").FirstOrDefault()));
+            palettes.Add(new ColorPalette("Sakura", colors.Where(c => c.Name == "Sky").FirstOrDefault(), colors.Where(c => c.Name == "Pink").FirstOrDefault()));
         }
         text = new string[] { LocalisationSystem.TryGetLocalisedValue("A slot"), LocalisationSystem.TryGetLocalisedValue("B slot"), LocalisationSystem.TryGetLocalisedValue("C slot"), LocalisationSystem.TryGetLocalisedValue("D slot") };
         SaveSystem.OnAwake(saveSlots, text);

@@ -26,17 +26,20 @@ public class GameManager : MonoBehaviour
     public bool loaded=false;
     public int seed;
     public Animator blackout_animator;
+    public Animator gameover_animator;
+    public Animator start_animator;
     // Start is called before the first frame update
     private void Awake()
     {
         instance = this;
     }
-    public Vector3 gameover_pos;
+    public Vector3 gameover_pos,enemy_pos;
     void Start()
     {
         EventController.instance.BlackOut+=BlackOut;
         EventController.instance.SayEvent+=StartDialogue;
         EventController.instance.GameOver+=GameOver;
+        start_animator.SetBool("start",true);
         //flowchart.ExecuteBlock("0");
       //  DontDestroyOnLoad(instance.gameObject);
         if (_mainCamera == null)
@@ -60,6 +63,7 @@ public class GameManager : MonoBehaviour
          if(PlayerPrefs.HasKey("name"))
         {
             gameover_pos = player_.transform.position;
+            enemy_pos = enemy.transform.position;
             SpawnAllItems();
             seed = (int)System.DateTime.Now.Ticks;
             Debug.Log("seed: "+seed);
@@ -67,6 +71,7 @@ public class GameManager : MonoBehaviour
             player_.seed = seed;
             //StartDialogue("0");
         loaded=true;
+        StartDialogue("Start");
         }
         else 
         {
@@ -126,10 +131,30 @@ public class GameManager : MonoBehaviour
         return ai_data;
     }
     public void GameOver()
-    {
-        StartCoroutine(BlackOutGameOver());
+    {   
         Debug.Log("GameOver");
+        if(player_.Hp<=0)
+        {
+            StartCoroutine(GameOverScreen());
+        }
+        else StartCoroutine(BlackOutGameOver());
     }
+    IEnumerator GameOverScreen()
+    {
+        state.state = State.Freeze; 
+       // gameover_animator.gameObject.SetActive(true);
+        blackout_animator.SetBool("start",true);
+        yield return new WaitForSeconds(1f);
+         cc.enabled = false;
+        Player.transform.position = new Vector3(gameover_pos.x,gameover_pos.y,gameover_pos.z);
+        enemy.transform.position = new Vector3(enemy_pos.x,enemy_pos.y,enemy_pos.z);
+        cc.enabled=true;
+        SoundManager.instance.PlayAltBg(Bg.gameover);
+        gameover_animator.SetBool("start",true);
+        yield return new WaitForSeconds(6f);
+        gmanim_end=true;ToMenu();
+    }
+    bool gmanim_end=false;
     IEnumerator BlackOutGameOver()
     {
         state.state = State.Freeze; 
@@ -140,6 +165,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         cc.enabled = false;
         Player.transform.position = new Vector3(gameover_pos.x,gameover_pos.y,gameover_pos.z);
+        enemy.transform.position = new Vector3(enemy_pos.x,enemy_pos.y,enemy_pos.z);
         cc.enabled=true;
         yield return new WaitForSeconds(0.5f);
         blackout_animator.SetBool("end",false);
@@ -149,11 +175,18 @@ public class GameManager : MonoBehaviour
         foreach(Transform pos in itemsPos)
         {
             ItemPos ip = pos.GetComponent<ItemPos>();
-            GameObject gm = Instantiate(Resources.Load<GameObject>("Prefs/Items/"+ip.Name),pos);
-            gm.name = ip.Name;
-            if(ip.look)gm.tag="Look";
-            gm.transform.localPosition = new Vector3(0,0,0);
-            gm.transform.localRotation = Quaternion.Euler(0,0,0);
+            try{
+                Debug.Log(ip.Name + ip.index+" loaded.");
+                 GameObject gm = Instantiate(Resources.Load<GameObject>("Prefs/Items/"+ip.Name),pos);
+                gm.name = ip.Name;
+                if(ip.look)gm.tag="Look";
+                gm.transform.localPosition = new Vector3(0,0,0);
+                gm.transform.localRotation = Quaternion.Euler(0,0,0);
+            }
+            catch{
+                Debug.Log(ip.Name+" not found! Index: "+ip.index);
+            }
+           
         }
     }
     public void SpawnItems(){
@@ -168,10 +201,17 @@ public class GameManager : MonoBehaviour
                 Debug.Log("item found");
             }
             else{
+                
+                try{
                 GameObject gm = Instantiate(Resources.Load<GameObject>("Prefs/Items/"+ip.Name),pos);
+                Debug.Log(ip.Name + ip.index+" loaded.");
                 gm.name = ip.Name;
                 gm.transform.localPosition = new Vector3(0,0,0);
                 gm.transform.localRotation = Quaternion.Euler(0,0,0);
+                }
+                catch{
+                    Debug.Log(ip.Name+" not found! Index: "+ip.index);
+                }
             }
         }
     }
@@ -191,7 +231,7 @@ public class GameManager : MonoBehaviour
     }
     public void ContinueButton()
     {
-        SoundManager.instance.PlayBg(Bg.scene1);
+        SoundManager.instance.ResumeLastBg();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         _input.locked_input = false;
@@ -211,6 +251,11 @@ public class GameManager : MonoBehaviour
         SaveSystem.SavePlayer(instance.Player.GetComponent<Player>(),instance.enemy);
         lv.LoadLevel(0);
 
+    }
+    public void ToMenu(){
+       if(gmanim_end) {
+           CursorLock(false);
+           lv.LoadLevel(0);}
     }
     bool gamePaused = false;
     private void FixedUpdate()
@@ -295,7 +340,7 @@ public class GameManager : MonoBehaviour
     public IEnumerator OpenMenu()
     {
         SoundManager.instance.PlaySe(Se.Click2);
-        SoundManager.instance.PlayBg(Bg.noise);
+        SoundManager.instance.PlayAltBg(Bg.noise);
         Debug.Log("openmenu()");
         C_running = true;
         if (!menu.activeSelf)

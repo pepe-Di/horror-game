@@ -110,6 +110,7 @@ public class InventoryUI : MonoBehaviour
                 }
                 GameObject o = Instantiate(Resources.Load<GameObject>("Prefs/Items/" + item.GetGmName()));
                 o.transform.SetParent(itemPos);
+                o.tag="Untagged";
                 o.transform.localPosition = Vector3.zero;
                Rigidbody rb = o.GetComponent<Rigidbody>();
                rb.isKinematic= true;

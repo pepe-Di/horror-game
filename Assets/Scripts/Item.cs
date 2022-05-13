@@ -53,6 +53,9 @@ public class Item
             case "laptop": return "look0";
             case "image0": return "look1";
             case "omamori": return "look2";
+            case "vent_door": return "vent_look";
+            case "hint": EventController.instance.StartQEvent(7); return "hint";
+            case "riddle_board": return "riddle";
             default: return "look0";
         }
     }
@@ -81,15 +84,15 @@ public class Item
         {
             case "Cola Can" : index=0;_name = Name; value = 1f; speed = 30f; type = itemType.Drink; look=true; break;
             case "Carrot": _name = "морковь"; value = 5f; speed = 20f; type = itemType.Food; break;
-            case "Coffee": _name = "кофейный напиток"; value = 3f; speed = 50f; type = itemType.Drink; break;
+            case "Coffee": index=13;_name = Name; value = 3f; speed = 50f; type = itemType.Drink; break;
             case "Coffee2": _name = "кофейный напиток"; value = 2f; speed = 30f; type = itemType.Drink; break;
             case "flashlight": index=1;_name = Name; type = itemType.Flashlight; break;
             case "battery": index=2;_name = Name; value = 1000f; type = itemType.Battery; break;
             case "big battery": index=3;_name = Name; value = 2000f; type = itemType.Battery; break;
-            case "Chips": _name = "чипсы"; value = -2f; speed = 10f; type = itemType.Food; break;
+            case "Chips":index=14; _name = Name; value = -2f; speed = 10f; type = itemType.Food; break;
             case "kit": index=4;_name = Name; value = 4f; type = itemType.Drug; break;
             case "beans": _name = "консерва"; value = 3f; speed = 120f; type = itemType.Food; break;
-            case "Bottle": _name = "вода"; value = 0.01f; speed = 70f; type = itemType.Drink; break;
+            case "Bottle": index=12;_name = Name; value = 0.01f; speed = 70f; type = itemType.Drink; break;
             case "Cheese": _name = "сыр"; value = 4f; speed = 60f; type = itemType.Food; break;
             case "Mozzarella": _name = "моцарелла"; value = 15f; speed = 60f; type = itemType.Food; break;
             case "Meat": _name = "мясо"; value = -4f; speed = 10f; type = itemType.Food; break;
@@ -104,7 +107,8 @@ public class Item
             case "laptop": index=-1;grab = false; look=true; break;
             case "notepad": index=9; _name = Name; type=itemType.Card; look=true; grab=true; break;
             case "omamori": index=10; _name = Name; type=itemType.Card; look=true; grab=true; break;
-
+            case "card1": index=11;_name = Name;  type = itemType.Card; look=true; break;
+            case "ticket": index=15;_name = Name;  type = itemType.Card; look=true; break;
             default: index=-1; break;
         }
         switch (type)
@@ -115,7 +119,7 @@ public class Item
             case itemType.Drug: grab = true; break;
             case itemType.Flashlight: grab = true; break;
             case itemType.Key: grab = true; break;
-            case itemType.Card: grab = true; break;
+            case itemType.Card: grab = true; EventController.instance.StartDialogueEvent(name); break;
             default: grab = false; break;
         }
         if(index==-1) grab = false;
