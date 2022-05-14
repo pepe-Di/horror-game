@@ -37,17 +37,19 @@ public class GameManager : MonoBehaviour
     public Vector3 gameover_pos,enemy_pos;
     void Start()
     {
-        Debug.Log("START");
+      //  Debug.Log("START");
         EventController.instance.BlackOut+=BlackOut;
         EventController.instance.SayEvent+=StartDialogue;
         EventController.instance.GameOver+=GameOver;
         start_animator.SetBool("start",true);
+       // Debug.Log("START1");
         //flowchart.ExecuteBlock("0");
       //  DontDestroyOnLoad(instance.gameObject);
         if (_mainCamera == null)
         {
             _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
         }
+       // Debug.Log("START2");
         player_ = Player.GetComponent<Player>();
         cc= Player.GetComponent<CharacterController>();
         //  _input = FindObjectOfType<StarterAssetsInputs>();
@@ -56,13 +58,17 @@ public class GameManager : MonoBehaviour
         // Player = GameObject.Find("Player");
         //  Player.SetActive(true); 
         var iposes = FindObjectsOfType<ItemPos>();
+       // Debug.Log("START3");
         itemsPos.Clear();
         foreach(ItemPos itp in iposes){
             itemsPos.Add(itp.transform);
         }
+     //   Debug.Log("START4");
         menu.SetActive(false); 
+      //  Debug.Log("START5");
            //SpawnAllItems();
-         if(PlayerPrefs.HasKey("name")&&DataManager.instance.newGame)
+        if(PlayerPrefs.HasKey("name"))
+        //&&DataManager.instance.newGame)
         {
             Debug.Log("yas");
             gameover_pos = player_.transform.position;
@@ -72,6 +78,7 @@ public class GameManager : MonoBehaviour
             Debug.Log("seed: "+seed);
             Random.InitState(seed);
             player_.seed = seed;
+            //PlayerPrefs.DeleteKey("name");
             //StartDialogue("0");
         loaded=true;
         StartDialogue("Start");
@@ -145,7 +152,9 @@ public class GameManager : MonoBehaviour
     }
     IEnumerator GameOverScreen()
     {
-        SoundManager.instance.PlayAltBg(Bg.gameover);
+        player_.GetComponent<Footsteps.CharacterFootsteps>().enabled=false;
+        SoundManager.instance.PlayBg(Bg.gameover);
+        SoundManager.instance.playLock=true;
         state.state = State.Freeze; 
        // gameover_animator.gameObject.SetActive(true);
         blackout_animator.SetBool("start",true);
@@ -161,6 +170,9 @@ public class GameManager : MonoBehaviour
     bool gmanim_end=false;
     IEnumerator BlackOutGameOver()
     {
+        player_.GetComponent<Footsteps.CharacterFootsteps>().enabled=false;
+        SoundManager.instance.ResumeLastBg();
+        SoundManager.instance.playLock=true;
         state.state = State.Freeze; 
         blackout_animator.SetBool("start",true);
         yield return new WaitForSeconds(1f);
@@ -174,6 +186,8 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         blackout_animator.SetBool("end",false);
         state.state = State.Idle;
+        player_.GetComponent<Footsteps.CharacterFootsteps>().enabled=true;
+        SoundManager.instance.playLock=false;
     }
     public void SpawnAllItems(){
         foreach(Transform pos in itemsPos)

@@ -480,7 +480,7 @@ public class PlayerInteract : MonoBehaviour
             {
                 transform.localPosition += new Vector3(0, 0, 0.1f * value);
                 yield return new WaitForEndOfFrame();
-                Debug.Log(transform.localPosition.z);
+               // Debug.Log(transform.localPosition.z);
             }
             SoundManager.instance.PlaySe(Se.Open);
             // transform.localPosition += forward;

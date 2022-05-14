@@ -7617,7 +7617,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 55, y: 55}
+  m_SizeDelta: {x: 22, y: 22}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &340016056
 MonoBehaviour:
@@ -7654,7 +7654,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: f3b8b98440dea1249b3f74b09ade0c26, type: 3}
+  m_Sprite: {fileID: 21300000, guid: fe24aba145126484bb5912cc6777ddaf, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -14133,6 +14133,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5875014844338508902, guid: 6a57f0b8d3845094e8de045c4098c54e, type: 3}
+      propertyPath: newGame
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5875014844338508903, guid: 6a57f0b8d3845094e8de045c4098c54e, type: 3}
       propertyPath: m_Name
       value: DataManager
@@ -15043,10 +15047,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 651814696}
+  - component: {fileID: 651814693}
   - component: {fileID: 651814695}
   - component: {fileID: 651814694}
   - component: {fileID: 651814697}
-  - component: {fileID: 651814693}
   m_Layer: 0
   m_Name: SoundManager
   m_TagString: Untagged
@@ -15071,7 +15075,7 @@ MonoBehaviour:
   altBg: {fileID: 651814697}
   bgClips:
   - name: 0
-    clip: {fileID: 8300000, guid: 33a32a557d1c9c244bb637344b6ba300, type: 3}
+    clip: {fileID: 8300000, guid: 533b2c32e50c955428e558fac777a5d9, type: 3}
   - name: 3
     clip: {fileID: 8300000, guid: f2e8a35fb1f209d4091723dc7cc19853, type: 3}
   - name: 2
@@ -15083,7 +15087,7 @@ MonoBehaviour:
   - name: 6
     clip: {fileID: 8300000, guid: 0f872511ec800614685b9a351d20d5b8, type: 3}
   - name: 7
-    clip: {fileID: 8300000, guid: bf416c9f371e63b4a94c29412d132693, type: 3}
+    clip: {fileID: 8300000, guid: b1adf2a24c1fb7746a5f22119b9635d6, type: 3}
   seClips:
   - name: 0
     clip: {fileID: 8300000, guid: 14a396b1562834718b2d52b9c4639264, type: 3}
@@ -15099,8 +15103,10 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 3437a2c96af4a214eb2896c45ff3c958, type: 3}
   - name: 6
     clip: {fileID: 8300000, guid: db87f25ab19be4840acb3f16c32148e2, type: 3}
+  playLock: 0
   clip: 0
   lastClip: 0
+  music_volume: 0
 --- !u!82 &651814694
 AudioSource:
   m_ObjectHideFlags: 0
@@ -15111,7 +15117,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: -8437963203879060851, guid: 3f4313d3946c4eb4baa615ce8a35dbce, type: 2}
-  m_audioClip: {fileID: 8300000, guid: 33a32a557d1c9c244bb637344b6ba300, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 533b2c32e50c955428e558fac777a5d9, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -15321,7 +15327,7 @@ AudioSource:
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -27044,19 +27050,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5999351474769782302, guid: 10c8b232517d3b84581aa1980377da88, type: 3}
       propertyPath: m_Size.x
-      value: 3.7115123
+      value: 3.221793
       objectReference: {fileID: 0}
     - target: {fileID: 5999351474769782302, guid: 10c8b232517d3b84581aa1980377da88, type: 3}
       propertyPath: m_Size.z
-      value: 3.3549747
+      value: 2.6887255
       objectReference: {fileID: 0}
     - target: {fileID: 5999351474769782302, guid: 10c8b232517d3b84581aa1980377da88, type: 3}
       propertyPath: m_Center.x
-      value: 0.4192549
+      value: 0.4625188
       objectReference: {fileID: 0}
     - target: {fileID: 5999351474769782302, guid: 10c8b232517d3b84581aa1980377da88, type: 3}
       propertyPath: m_Center.z
-      value: 0.83211106
+      value: 0.49898642
       objectReference: {fileID: 0}
     - target: {fileID: 5999351474769782303, guid: 10c8b232517d3b84581aa1980377da88, type: 3}
       propertyPath: id
@@ -30417,10 +30423,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1407372494}
+  - component: {fileID: 1407372497}
   - component: {fileID: 1407372496}
   - component: {fileID: 1407372493}
   - component: {fileID: 1407372495}
-  - component: {fileID: 1407372497}
   m_Layer: 0
   m_Name: enemy
   m_TagString: Enemy
@@ -69866,7 +69872,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3500334989698634457}
   m_LocalRotation: {x: -0, y: -0.015048519, z: -0, w: 0.9998868}
-  m_LocalPosition: {x: 1.46, y: 0.091, z: -1.25}
+  m_LocalPosition: {x: 0.69, y: 0.091, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 999696854469662129}

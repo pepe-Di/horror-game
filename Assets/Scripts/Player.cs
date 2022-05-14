@@ -30,7 +30,7 @@ public class Player : MonoBehaviour
         EventController.instance.QEvent += AddQ;
         EventController.instance.endQEvent += EndQuest;
         EventController.instance.HPChange += ChangeHP;
-        EventController.instance.GameOver += GameOver;
+       // EventController.instance.GameOver += GameOver;
     }
     public void GameOver(){
         GetComponent<AudioSource>().Stop();
