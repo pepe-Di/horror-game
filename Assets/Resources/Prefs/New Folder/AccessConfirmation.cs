@@ -78,7 +78,8 @@ public class AccessConfirmation : MonoBehaviour
         c= false;
     }
     void OnDisable(){
-        StopAllCoroutines(); c=false;Debug.Log("ondis");
+        //StopAllCoroutines(); 
+        c=false;Debug.Log("ondis");
         endTxt.text = "";
         startTxt.text = "";
         inpTxt.text = "";

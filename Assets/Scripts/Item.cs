@@ -53,8 +53,9 @@ public class Item
             case "laptop": return "look0";
             case "image0": return "look1";
             case "omamori": return "look2";
-            case "vent_door": return "vent_look";
-            case "hint": EventController.instance.StartQEvent(7); return "hint";
+            case "code": return "!";
+            case "hint1": return "vent_look";
+            case "hint": if(Player.instance.FindQ(7)) EventController.instance.StartQEvent(7); return "hint";
             case "riddle_board": return "riddle";
             default: return "look0";
         }
@@ -119,12 +120,19 @@ public class Item
             case itemType.Drug: grab = true; break;
             case itemType.Flashlight: grab = true; break;
             case itemType.Key: grab = true; break;
-            case itemType.Card: grab = true; EventController.instance.StartDialogueEvent(name); break;
+            case itemType.Card: grab = true; break;
             default: grab = false; break;
         }
         if(index==-1) grab = false;
       //  Debug.Log(grab);
        
+    }
+    public void GrabSpeech(){
+        switch (type)
+        {
+            case itemType.Card: EventController.instance.StartDialogueEvent(name); break;
+            default: break;
+        }
     }
     public void Use()
     {
@@ -190,6 +198,12 @@ public class Quest
             default: break;
         }
         finish = new GameObject(s);
+    }
+}
+public class Dialogue{
+    public string value;
+    public Dialogue(string value){
+        this.value=value;
     }
 }
 public enum questType

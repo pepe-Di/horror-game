@@ -10,12 +10,13 @@ public class Player : MonoBehaviour
     public static Player instance;
     public string name_;
     public float Hp, maxHp;
-    public float hp, stamina, max_stamina=5000f,max_hp=10000f, energy, full_energy=15000f;
+    public float stamina, max_stamina=5000f, energy, full_energy=15000f;
     public State state; 
     public List<Item> items=new List<Item>();
     public List<Item> used_items=new List<Item>();
     public List<Quest> quests = new List<Quest>();
     public List<Quest> finished_quests = new List<Quest>();
+    public List<Dialogue> dialogues = new List<Dialogue>();
     public GameObject selectedItem;
     private int selectedID;
     public float speed_modifier=0;
@@ -29,6 +30,16 @@ public class Player : MonoBehaviour
         EventController.instance.QEvent += AddQ;
         EventController.instance.endQEvent += EndQuest;
         EventController.instance.HPChange += ChangeHP;
+        EventController.instance.GameOver += GameOver;
+    }
+    public void GameOver(){
+        GetComponent<AudioSource>().Stop();
+        StartCoroutine(GM());
+    }
+    IEnumerator GM(){
+        GetComponent<Footsteps.CharacterFootsteps>().enabled=false;
+        yield return new WaitForSeconds(2f);
+        GetComponent<Footsteps.CharacterFootsteps>().enabled=true;
     }
     public int HideQ()
     {
@@ -48,6 +59,7 @@ public class Player : MonoBehaviour
             i.questId = id;
             Debug.Log("i.questId "+i.questId);
         }
+        lastQIndex = id;
         quests.Add(q);
     }
     public Item FindItem(string name)
@@ -70,11 +82,13 @@ public class Player : MonoBehaviour
     {
         try
         {
-            lastQIndex = id;
+            //lastQIndex = id;
             quests.Remove(QuestManager.instance.quests[id]);
+            EventController.instance.ShowLastEvent(quests[quests.Count-1].id);
             finished_quests.Add(QuestManager.instance.quests[id]);
             if (QuestManager.instance.quests[id].isConsistent)
             {
+                Debug.Log(id + " isconsistent");
                 StartCoroutine(StartQ(id));
             }
         }
@@ -85,6 +99,15 @@ public class Player : MonoBehaviour
         yield return new WaitForEndOfFrame();
         EventController.instance.StartQEvent(id + 1);
     }
+    public bool AddDialogue(string value){
+        if(dialogues!=null){
+            foreach(Dialogue d in dialogues)
+            if(d.value==value) return false;
+        }
+        dialogues.Add(new Dialogue(value));
+        EventController.instance.StartDialogueEvent(value);
+        return true;
+    }
     void Start()
     {
         if (PlayerPrefs.HasKey("name"))
@@ -93,7 +116,6 @@ public class Player : MonoBehaviour
             name_ = PlayerPrefs.GetString("name");
             character.nameText = PlayerPrefs.GetString("name");
             PlayerPrefs.DeleteKey("name");
-            hp = max_hp;
             stamina = max_stamina;
             energy = full_energy;
         }
@@ -159,8 +181,15 @@ public class Player : MonoBehaviour
         selectedID = -1;
         StopAllCoroutines();//?
     }
+    public void UseKey(){
+        Debug.Log("use key");
+        if(FindUsedItem(items[selectedID].GetGmName())==null){
+            used_items.Add(items[selectedID]);
+        }
+    }
     public void UseItem()
     {
+        Debug.Log("-"+items[selectedID].GetGmName());
         items[selectedID].Use();
         switch (items[selectedID].type)
         {
@@ -169,7 +198,16 @@ public class Player : MonoBehaviour
             case itemType.Battery: { energy += items[selectedID].value; if (energy > full_energy) energy = full_energy; break; }
             case itemType.Drug: ChangeHP(items[selectedID].value, 1); break;
             case itemType.Flashlight: return; 
-            case itemType.Key: if(FindUsedItem("key0")==null){used_items.Add(items[selectedID]); }return; 
+            case itemType.Key:{ 
+                /*if(FindUsedItem(items[selectedID].GetGmName())==null)
+            {
+                used_items.Add(items[selectedID]);
+                 Debug.Log("+"+items[selectedID].GetGmName());
+            } 
+            else{
+                Debug.Log(FindUsedItem("!"+items[selectedID].GetGmName()));
+            }*/
+                return; }
             case itemType.Card: EventController.instance.StartDialogueEvent(items[selectedID].GetGmName()); return; 
             default: return;
         }
@@ -212,12 +250,18 @@ public class Player : MonoBehaviour
         {
            used_items.Add(new Item(data.used_items[i]));
         }
+        dialogues.Clear();
+        for (int i=0; i<data.dialogues.Length;i++)
+        {
+           dialogues.Add(new Dialogue(data.dialogues[i]));
+        }
         quests.Clear();
         for (int i=0; i<data.quests.Length;i++)
         {
            quests.Add(QuestManager.instance.quests[data.quests[i]]);
            if(i==data.quests.Length-1) { 
                lastQIndex = data.quests[i];
+               EventController.instance.ShowLastEvent(lastQIndex);
                //StartCoroutine(StartQ(data.quests[i]-1));
                }
         }
@@ -226,7 +270,9 @@ public class Player : MonoBehaviour
         {
            finished_quests.Add(QuestManager.instance.quests[data.finished_quests[i]]);
         }
+        
         EventController.instance.UpdateQEvent();
+        EventController.instance.ChangeStateEvent((State)data.state);
         loaded = true;
         Debug.Log("player loaded");
     }
@@ -238,21 +284,10 @@ public class Player : MonoBehaviour
             i.Id = gm.GetComponentInParent<ItemPos>().index;
             items.Add(i);
             GameManager.instance.inv.UpdateData();
+            i.GrabSpeech();
             return true;
         }
         return false;
-    }
-    public void RegenerateHP(float value, float speed)
-    {
-        if (hp < max_hp) 
-        {
-            StartCoroutine(Regeneration(value, speed));
-            onHpChange.Invoke(value);
-        }
-    }
-    public void ChangeStamina(float value)
-    {
-        hp -= value;
     }
     public void ChangeSpeed(float value, float time) 
     {
@@ -268,17 +303,6 @@ public class Player : MonoBehaviour
             yield return new WaitForSeconds(1);
         }
         speed_modifier = 0;
-    }
-    IEnumerator Regeneration(float value, float time)
-    {
-        float hp_ = value/time;
-        while (time != 0)
-        {
-            hp += hp_;
-            if (hp>max_hp) { hp = max_hp; break; }
-            yield return new WaitForSeconds(1);
-            time--;
-        }
     }
     public IEnumerator ChangeEnergy(float value)
     {

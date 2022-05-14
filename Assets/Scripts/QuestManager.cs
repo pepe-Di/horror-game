@@ -9,8 +9,7 @@ public class QuestManager : MonoBehaviour
     public Transform content;
     public List<Quest> quests = new List<Quest>();
     public List<GameObject> qs = new List<GameObject>();
-    public Text qName;
-    public GameObject bgImg;
+    public Text qName, bgName;
     // Start is called before the first frame update
     void Awake()
     {
@@ -32,10 +31,11 @@ public class QuestManager : MonoBehaviour
     private void Start()
     {   
         qName.text = "";
-        bgImg.SetActive(false);
+        bgName.text="";
         EventController.instance.QEvent += ChangeQName;
         EventController.instance.endQEvent += DeleteQName;
         EventController.instance.updateQEvent += UpdateContent;
+        EventController.instance.ShowLast+= ShowLast;
     }
     public void ChangeColor()
     {
@@ -43,18 +43,21 @@ public class QuestManager : MonoBehaviour
     }
     public void ChangeQName(int id)
     {
-        bgImg.SetActive(true);
-        qName.text = LocalisationSystem.TryGetLocalisedValue("quest"+id);
+        //bgImg.SetActive(true);
+        string s = LocalisationSystem.TryGetLocalisedValue("quest"+id);
+        qName.text = s;
+        bgName.text = s;
        // qName.text = quests[id].name;
     }
     public void DeleteQName(int id)
     {
         qName.text = "";
-        bgImg.SetActive(false);
-        Debug.Log("DeleteQ!!!!!!!!!!!!!");
+        bgName.text = "";
+        //bgImg.SetActive(false);
     }
     public bool TryToInvoke(int id)
     {
+        //if(id==-1) return false;
         if (!quests[id].isConsistent)
         {
             return true;
@@ -83,13 +86,23 @@ public class QuestManager : MonoBehaviour
             id++;
         }
     }
+    public void ShowLast(int id){
+       ChangeQName(id);
+    }
     void OnEnable(){
       //  Debug.Log("OnEnable!!!!!!!!!!!!!");
 
     }
     void OnDisable(){
+        try{
+        EventController.instance.ShowLast-= ShowLast;
         EventController.instance.QEvent-= ChangeQName;
         EventController.instance.endQEvent -= DeleteQName;
         EventController.instance.updateQEvent -= UpdateContent;
+
+        }
+        catch{
+
+        }
     }
 }

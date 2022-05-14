@@ -79,6 +79,7 @@ public class MouseLook : MonoBehaviour
             FreezeCamera(freeze);
     }
     void SetCamera(bool b){
+        GetComponent<AudioSource>().Stop();
         GetComponent<PlayerInteract>().enabled = b;
         _camera.transform.gameObject.SetActive(b);
         Debug.Log("SetCamera");

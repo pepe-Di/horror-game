@@ -41,7 +41,12 @@ public class PlayerInteract : MonoBehaviour
     {
 
     }
-
+    IEnumerator Click(Transform hit){
+        C_running=true;
+        yield return new WaitForSeconds(0.2f);
+        hit.transform.GetComponent<PuzzleLook>().ChangeLook();
+        C_running = false;
+    }
     public bool C_running = false, selected = false;
     int click = 0;
     Outline gm;
@@ -179,7 +184,9 @@ public class PlayerInteract : MonoBehaviour
                         try
                         {
                             StartCoroutine(OnComputer());
-                            if(GameManager.instance.state.state!=State.Freeze)hit.transform.GetComponent<PuzzleLook>().ChangeLook();
+                            if(GameManager.instance.state.state!=State.Freeze){
+                                if(!C_running)StartCoroutine(Click(hit.transform));
+                                }
                         }
                         catch{}
                     }
@@ -217,8 +224,8 @@ public class PlayerInteract : MonoBehaviour
                         {
                             try
                             {
-                                hit.transform.GetComponentInParent<ItemPos>();
-
+                                //hit.transform.GetComponentInParent<ItemPos>();
+                                
                                 QuestItem qi = hit.collider.GetComponent<QuestItem>();
                                 if (qi != null)
                                 {
@@ -308,12 +315,13 @@ public class PlayerInteract : MonoBehaviour
                                         string s = player_.GetSelectedItem().GetGmName();
                                         if (s == key_name)
                                         {
-                                            if (!Player.instance.FindQ(d.Qindex))
+                                            if (!player_.FindQ(d.Qindex))
                                             {
                                                 EventController.instance.EndQEvent(d.Qindex);
                                                 //  EventController.instance.UpdateQEvent();}
-                                                Player.instance.UseItem();
+                                                //Player.instance.UseItem();
                                             }
+                                            Player.instance.UseKey();
                                         }
                                         else
                                         {
@@ -422,8 +430,10 @@ public class PlayerInteract : MonoBehaviour
                         {
                             EventController.instance.EndQEvent(d.Qindex);
                             //  EventController.instance.UpdateQEvent();}
-                            Player.instance.UseItem();
+                            //Player.instance.UseItem();
                         }
+                       // Debug.Log("ALOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+                        Player.instance.UseKey();
                     }
                     else
                     {

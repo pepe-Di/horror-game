@@ -12,6 +12,7 @@ public class QuestTrigger : MonoBehaviour
     {
         yield return new WaitUntil(()=>GameManager.instance.loaded); 
         loaded = true;
+        Debug.Log(id+" qtrigger loaded");
         try
         {
             Debug.Log("hui");
@@ -63,6 +64,7 @@ public class QuestTrigger : MonoBehaviour
             if(!loaded) return;
             if (QuestManager.instance.TryToInvoke(id))
             {
+                Debug.Log(id + " startq");
                 EventController.instance.StartQEvent(id);
               //  EventController.instance.UpdateQEvent();
                 if (finish != null) finish.SetActive(true);

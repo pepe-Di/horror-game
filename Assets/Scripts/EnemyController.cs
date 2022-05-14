@@ -27,7 +27,6 @@ public class EnemyController : MonoBehaviour
 	}
 	void Start()
 	{
-		Debug.Log("alo");
 		var tar = targetsParent.GetComponentsInChildren<Transform>();
 		foreach(Transform t in tar){
 			targets.Add(t);
@@ -48,8 +47,7 @@ public class EnemyController : MonoBehaviour
 	{
 		// Distance to the player
 		float distance = Vector3.Distance(playerTarget.position, transform.position);
-		Debug.Log("hui");
-		if (distance <= agent.stoppingDistance)
+		if (distance <= agent.stoppingDistance&&state==aiState.Triggered)
 		{	
 			if(!wait){
 				StartCoroutine(Wait_());
@@ -83,7 +81,7 @@ public class EnemyController : MonoBehaviour
 						agent.SetDestination(target.position);
 						_anim.SetBool("walk",true);
 						triggered=true;
-						route=false; //?
+						//route=false; //?
 						return;
 					}
 				}
@@ -178,7 +176,7 @@ public class EnemyController : MonoBehaviour
 			route=true;
 			return;
 		}
-		else if(agent.velocity.magnitude<0.01f)
+		else if(agent.velocity.magnitude<0.001f)
 		{
 			if(!c)StartCoroutine(Wait());
 		}
@@ -207,10 +205,11 @@ public class EnemyController : MonoBehaviour
 	}
 	IEnumerator Wait()
 	{
+		Debug.Log("WAIT");
 		c=true;
 		state = aiState.Wait;
 		_anim.SetBool("walk",false);
-		yield return new WaitForSeconds(Random.Range(1f,5f));
+		yield return new WaitForSeconds(Random.Range(5f,10f));
 		route = false;
 		state = aiState.Idle;//?
 		c=false;

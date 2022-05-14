@@ -31,11 +31,13 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     private void Awake()
     {
+        if(instance!=null) Destroy(this);
         instance = this;
     }
     public Vector3 gameover_pos,enemy_pos;
     void Start()
     {
+        Debug.Log("START");
         EventController.instance.BlackOut+=BlackOut;
         EventController.instance.SayEvent+=StartDialogue;
         EventController.instance.GameOver+=GameOver;
@@ -60,8 +62,9 @@ public class GameManager : MonoBehaviour
         }
         menu.SetActive(false); 
            //SpawnAllItems();
-         if(PlayerPrefs.HasKey("name"))
+         if(PlayerPrefs.HasKey("name")&&DataManager.instance.newGame)
         {
+            Debug.Log("yas");
             gameover_pos = player_.transform.position;
             enemy_pos = enemy.transform.position;
             SpawnAllItems();
@@ -72,9 +75,10 @@ public class GameManager : MonoBehaviour
             //StartDialogue("0");
         loaded=true;
         StartDialogue("Start");
-        }
-        else 
+        } 
+        else if(!DataManager.instance.newGame)
         {
+            Debug.Log("load");
             LoadData(); 
             var o = FindObjectsOfType<QuestTrigger>();
             foreach(QuestTrigger t in o){
@@ -141,17 +145,17 @@ public class GameManager : MonoBehaviour
     }
     IEnumerator GameOverScreen()
     {
+        SoundManager.instance.PlayAltBg(Bg.gameover);
         state.state = State.Freeze; 
        // gameover_animator.gameObject.SetActive(true);
         blackout_animator.SetBool("start",true);
         yield return new WaitForSeconds(1f);
-         cc.enabled = false;
+        cc.enabled = false;
         Player.transform.position = new Vector3(gameover_pos.x,gameover_pos.y,gameover_pos.z);
         enemy.transform.position = new Vector3(enemy_pos.x,enemy_pos.y,enemy_pos.z);
         cc.enabled=true;
-        SoundManager.instance.PlayAltBg(Bg.gameover);
         gameover_animator.SetBool("start",true);
-        yield return new WaitForSeconds(6f);
+        yield return new WaitForSeconds(7f);
         gmanim_end=true;ToMenu();
     }
     bool gmanim_end=false;
@@ -176,7 +180,7 @@ public class GameManager : MonoBehaviour
         {
             ItemPos ip = pos.GetComponent<ItemPos>();
             try{
-                Debug.Log(ip.Name + ip.index+" loaded.");
+              //  Debug.Log(ip.Name + ip.index+" loaded.");
                  GameObject gm = Instantiate(Resources.Load<GameObject>("Prefs/Items/"+ip.Name),pos);
                 gm.name = ip.Name;
                 if(ip.look)gm.tag="Look";
@@ -204,7 +208,7 @@ public class GameManager : MonoBehaviour
                 
                 try{
                 GameObject gm = Instantiate(Resources.Load<GameObject>("Prefs/Items/"+ip.Name),pos);
-                Debug.Log(ip.Name + ip.index+" loaded.");
+              //  Debug.Log(ip.Name + ip.index+" loaded.");
                 gm.name = ip.Name;
                 gm.transform.localPosition = new Vector3(0,0,0);
                 gm.transform.localRotation = Quaternion.Euler(0,0,0);
@@ -294,20 +298,6 @@ public class GameManager : MonoBehaviour
             //    Time.timeScale = 0;
             //}
             //else Time.timeScale = 1;
-        }
-        if(_input.zoom&&state.state == State.Freeze&&!b)
-        {
-            Debug.Log("State.Freeze");
-            b=true;
-            //player_.GetComponent<MouseLook>().enabled = true;
-           // t.position = new Vector3(0.001f,1.44f,0.011f);
-           
-            CursorLock(true);
-            EventController.instance.StartCameraEvent(true);
-            EventController.instance.ChangeStateEvent(State.Idle);
-            EventController.instance.OffComputerUIEvent();
-            EventController.instance.OffPuzzleUIEvent();
-            StartCoroutine(Waiter());
         }
     }
     public IEnumerator Waiter(){

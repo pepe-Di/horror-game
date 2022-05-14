@@ -22,7 +22,7 @@ public class PasswordInput : MonoBehaviour
         noise_screen.SetActive(true);
         EventController.instance.StartCameraEvent(false);
         EventController.instance.ChangeStateEvent(State.Freeze);
-        GameManager.instance.inv.GetMessage(LocalisationSystem.GetLocalisedValue("message3"));
+        GameManager.instance.inv.GetMessage(LocalisationSystem.GetLocalisedValue("message4"));
         SoundManager.instance.PlaySe(Se.Click);
         isOn = true;
     }

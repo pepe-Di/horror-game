@@ -17,6 +17,7 @@ public class DataManager : MonoBehaviour
     public int selectedSlot = -1, selectedPalette=-1;
     public List<ColorPalette> palettes;
     public List<Color_> colors;
+    public bool newGame=false;
     public ColorPalette GetPalette()
     {
         return palettes[selectedPalette];
@@ -68,7 +69,7 @@ public class DataManager : MonoBehaviour
     }
     public void LoadGame()
     {
-        
+        newGame=false;
             loaded = true;
            // SaveSlot data = SaveSystem.LoadPlayer();
             FindObjectOfType<LevelLoader>().LoadLevel(1);

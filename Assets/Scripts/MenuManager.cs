@@ -657,6 +657,7 @@ public class MenuManager : MonoBehaviour
             //lv.LoadLevel(2);
             //DataManager.instance.NewGame();
             SaveOpts();
+            DataManager.instance.newGame = true;
             FindObjectOfType<LevelLoader>().LoadLevel(1);}
     }
     public void ResetSettings()

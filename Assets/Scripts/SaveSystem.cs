@@ -175,6 +175,7 @@ public class PlayerData
     public string[] used_items;
     public int[] quests;
     public int[] finished_quests;
+    public string[] dialogues;
     public int state;
     public int seed;
     public PlayerData(Player player)
@@ -199,6 +200,11 @@ public class PlayerData
         for(int i = 0; i < used_items.Length; i++)
         {
             used_items[i] = player.used_items[i].GetGmName();
+        }
+        dialogues = new string[player.dialogues.Count];
+        for(int i = 0; i < dialogues.Length; i++)
+        {
+            dialogues[i] = player.dialogues[i].value;
         }
         quests = new int[player.quests.Count];
         for(int i = 0; i < quests.Length; i++)

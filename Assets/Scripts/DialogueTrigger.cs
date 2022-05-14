@@ -17,8 +17,9 @@ public class DialogueTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            EventController.instance.StartDialogueEvent(value);
-            if(music) SoundManager.instance.PlayBg(clip);
+            if(Player.instance.AddDialogue(value)){
+                if(music) SoundManager.instance.PlayBg(clip);
+            }
             Destroy(this.gameObject);
         }
     }

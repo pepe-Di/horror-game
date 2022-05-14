@@ -23,6 +23,7 @@ public class EventController : MonoBehaviour
     public event Action OffPuzzleUI;
     public event Action GameOver;
     public event Action BlackOut;
+    public event Action <int> ShowLast;
     private void Awake()
     {
         if (instance == null)
@@ -38,6 +39,10 @@ public class EventController : MonoBehaviour
     public void GameOverEvent(){
         Debug.Log("GameOverEvent");
         GameOver?.Invoke();
+    }
+    public void ShowLastEvent(int id){
+        Debug.Log("ShowLastEvent");
+        ShowLast?.Invoke(id);
     }
     public void StartEnemyLoad(AIdata data)
     {
