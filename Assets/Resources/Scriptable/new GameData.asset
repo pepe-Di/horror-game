@@ -23,7 +23,7 @@ MonoBehaviour:
   lg: 0
   q: 0
   res: 10
-  style: 4
+  style: 0
   last_slot: -1
   cur_slot: 0
   frame_limit: 4
