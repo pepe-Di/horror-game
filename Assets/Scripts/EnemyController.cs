@@ -98,6 +98,7 @@ public class EnemyController : MonoBehaviour
 						agent.speed = triggered_speed;
 						target = playerTarget;
 						_anim.SetBool("walk",true);
+						//agent.re
 						agent.SetDestination(target.position);
 					//	if(c)
 					//	{

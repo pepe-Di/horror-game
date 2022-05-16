@@ -51,6 +51,7 @@ public class GameManager : MonoBehaviour
         }
        // Debug.Log("START2");
         player_ = Player.GetComponent<Player>();
+        player_.GetComponent<Footsteps.CharacterFootsteps>().enabled=false;
         cc= Player.GetComponent<CharacterController>();
         //  _input = FindObjectOfType<StarterAssetsInputs>();
         // lv = FindObjectOfType<LevelLoader>();
@@ -78,8 +79,11 @@ public class GameManager : MonoBehaviour
             Debug.Log("seed: "+seed);
             Random.InitState(seed);
             player_.seed = seed;
+            StartCoroutine(StartQ());
             //PlayerPrefs.DeleteKey("name");
             //StartDialogue("0");
+           // qtriggers.Where(c=>c.id==0).FirstOrDefault().gameObject.SetActive(true);
+        
         loaded=true;
         StartDialogue("Start");
         } 
@@ -140,6 +144,10 @@ public class GameManager : MonoBehaviour
     }
     public AIdata GetEnemyData(){
         return ai_data;
+    }
+    IEnumerator StartQ(){
+        yield return new WaitForSeconds(4f);
+        EventController.instance.StartQEvent(0);
     }
     public void GameOver()
     {   
@@ -242,10 +250,12 @@ public class GameManager : MonoBehaviour
     }
     IEnumerator StartBlackOut(){
         state.state = State.Freeze;
+        player_.GetComponent<Footsteps.CharacterFootsteps>().enabled=false;
         blackout_animator.SetTrigger("start 0");
         yield return new WaitForSeconds(2f);
         blackout_animator.SetTrigger("end 0");
         state.state = State.Idle;
+        player_.GetComponent<Footsteps.CharacterFootsteps>().enabled=true;
     }
     public void ContinueButton()
     {

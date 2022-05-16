@@ -157,6 +157,18 @@ public class MenuManager : MonoBehaviour
         fg = DataManager.instance.palettes[gameData.style].fg.color;
         
     }
+    public void CheckSlots(SaveSlot[] slots)
+    {
+        if(!buttons.Any()) return;
+        foreach(SaveSlot slot in slots){
+            if(!slot.isEmpty)
+            { 
+                buttons[0].SetActive(true);
+                return;
+            }
+        }
+        buttons[0].SetActive(false);
+    }
     public void UpdateData()
     {
         audioMixer.SetFloat("master", gameData.master_vol);
@@ -333,21 +345,7 @@ public class MenuManager : MonoBehaviour
     }
     public void LangChanger()
     {
-        //if (stDrop != null)
-      //  {
-            gameData.style = drops[3].Value;
-
-      //  }
-      //  if (lgDrop != null)
-      //  {
-       //     gameData.lg = curlg;
-
-      //  }
-       // if (lg_drop != null)
-      //  {
-           // gameData.lg = drops[4].Value;
-
-      //  }
+        gameData.style = drops[3].Value;
         Font hfont;
         switch (gameData.lg)
         {
@@ -427,6 +425,7 @@ public class MenuManager : MonoBehaviour
         }
         if (slots != null)
         {
+            CheckSlots(DataManager.saveSlots);
             int j = 0;
             foreach (GameObject slot in slots)
             {
@@ -437,7 +436,9 @@ public class MenuManager : MonoBehaviour
                    // Debug.Log(s);
                     slot.GetComponentInChildren<Text>().text = s;
                 }
-                else slot.GetComponentInChildren<Text>().text = DataManager.saveSlots[j].text;
+                else {
+                    slot.GetComponentInChildren<Text>().text = DataManager.saveSlots[j].text;
+                    }
                 j++;
             }
         }
@@ -460,7 +461,6 @@ public class MenuManager : MonoBehaviour
         if(particles_on) prts.enabled = true;}
     }
     
-
     public void FrameModeToggle()
     {
         frame_mode = frameToggle.isOn;
@@ -559,17 +559,23 @@ public class MenuManager : MonoBehaviour
             //DataManager.instance.text[selectedSlot];
             slots[selectedSlot+4].GetComponentInChildren<Text>().text = LocalisationSystem.GetLocalisedValue(selectedSlot + "slot");
             //DataManager.instance.text[selectedSlot];
+            
+            CheckSlots(DataManager.saveSlots);
         }
+    }
+    public void Continue(){
+         Debug.Log(gameData.cur_slot+" slot");
+         DataManager.instance.LoadGame();
     }
     public void LoadGame()
     {
-            if (selectedSlot != -1)
-            {
-                Debug.Log("selected slot "+  selectedSlot);
-                DataManager.instance.selectedSlot = selectedSlot;
-                gameData.cur_slot = selectedSlot;
-                SaveOpts();
-                DataManager.instance.LoadGame();
+        if (selectedSlot != -1)
+        {
+            Debug.Log("selected slot "+  selectedSlot);
+            DataManager.instance.selectedSlot = selectedSlot;
+            gameData.cur_slot = selectedSlot;
+            SaveOpts();
+            DataManager.instance.LoadGame();
             }
     }
     public void UnSelectSlot(){

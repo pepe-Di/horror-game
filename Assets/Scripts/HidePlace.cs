@@ -22,9 +22,13 @@ void OnTriggerEnter(Collider other){
         }
     }
     void OnTriggerStay(Collider other){
-        if(other.tag=="Player") {}
+        if(other.tag=="Player") {
+            other.tag="Hidden";
+        }
     }
     void OnTriggerExit(Collider other){
-        if(other.tag=="Player") {}
+        if(other.tag=="Hidden") {
+            other.tag="Player";
+        }
     }
 }

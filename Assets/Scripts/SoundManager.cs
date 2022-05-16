@@ -69,6 +69,7 @@ public class SoundManager : MonoBehaviour
       //  int i=0;
        // float vol=0f;
         while(au.volume<music_volume){
+          //  while(alt_run){ }
         ///    if(i>10){break;}
             Debug.Log("volume: "+au.volume);
             au.volume += 0.1f;
@@ -167,7 +168,10 @@ public enum Se
     Close,
     Kick,
     Screamer,
-    Click2
+    Click2,
+    Quest,
+    Woah,
+    Kiss
 }
 [System.Serializable]
 public class SeClip

@@ -7,6 +7,8 @@ public class QuestTrigger : MonoBehaviour
     public int id;
     public GameObject finish;
     bool loaded=false;
+    public bool timer=false;
+    public float secs=2f;
 
     IEnumerator Start()
     {
@@ -57,11 +59,30 @@ public class QuestTrigger : MonoBehaviour
         }
         catch{}
     }
+    bool c=false;
+    IEnumerator Timer()
+    {
+        Debug.Log("start timer");
+        c=true;
+        timer=false;
+        yield return new WaitForSeconds(secs);
+        Debug.Log(id + " startq");
+        EventController.instance.StartQEvent(id);
+    //  EventController.instance.UpdateQEvent();
+        if (finish != null) finish.SetActive(true);
+        Destroy(this.gameObject);
+        c=false;
+    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
             if(!loaded) return;
+            if(timer) {
+                StartCoroutine(Timer());
+                return;
+            }
+            if(c)return;
             if (QuestManager.instance.TryToInvoke(id))
             {
                 Debug.Log(id + " startq");
@@ -70,6 +91,12 @@ public class QuestTrigger : MonoBehaviour
                 if (finish != null) finish.SetActive(true);
                 Destroy(this.gameObject);
             }
+        }
+    }
+    private void OnTriggerStay(Collider other){
+        if (other.CompareTag("Player"))
+        {
+
         }
     }
 }

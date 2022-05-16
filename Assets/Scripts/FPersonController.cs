@@ -11,6 +11,7 @@ public class FPersonController : MonoBehaviour
     [Tooltip("Move speed of the character in m/s")]
     public float MoveSpeed = 2.0f;
     [Tooltip("Sprint speed of the character in m/s")]
+    public float kickForce = 250f;
     public float SprintSpeed = 2.4f;
     [Tooltip("Crouch speed of the character in m/s")]
     public float CrouchSpeed = 0.4f;
@@ -77,7 +78,6 @@ public class FPersonController : MonoBehaviour
     // Image img;
     private void Start()
     {
-        
         EventController.instance.StateEvent+=ChangeState;
         stateController.ChangeState(State.Idle);
         cam_animator = _mainCamera.GetComponent<Animator>();
@@ -153,7 +153,7 @@ public class FPersonController : MonoBehaviour
                 if(hit.rigidbody!=null){
                    Rigidbody rb = hit.transform.GetComponent<Rigidbody>();
                    // hit.rigidbody.isKinematic = false;
-                    hit.rigidbody.AddForce(transform.forward*150);
+                    hit.rigidbody.AddForce(transform.forward*kickForce);
                     //hit.rigidbody.isKinematic = true;
                 }
             }
@@ -189,7 +189,9 @@ public class FPersonController : MonoBehaviour
         if (_input.crouch)
         {
             if (_input.move != Vector2.zero) targetSpeed = CrouchSpeed;
-            if(!is_crouch) stateController.ChangeState(State.Crouch);
+            if(!is_crouch) {
+                GetComponent<Player>().DeselectItem();
+                stateController.ChangeState(State.Crouch);}
             //
         }
         else {
@@ -243,6 +245,8 @@ public class FPersonController : MonoBehaviour
         else if(cam_animator.GetBool("crouch")&&stateController.state != State.Crouch) {
             //check ray first
             if(CheckRayHit()){
+                //is_crouch=true;
+                if(_input.move!=Vector2.zero) speed = CrouchSpeed;
                 stateController.ChangeState(State.Crouch);
             }
             else{

@@ -51,6 +51,7 @@ public class Player : MonoBehaviour
     }
     public void AddQ(int id)
     {
+        SoundManager.instance.PlaySe(Se.Quest);
         //if(FindQ(id)) return;
         Quest q = QuestManager.instance.quests[id];
         if (q.Type==questType.Use)
@@ -145,6 +146,7 @@ public class Player : MonoBehaviour
       //  }
     }
     IEnumerator ChangeHP_(float value, float speed){
+        if(value<0) SoundManager.instance.PlaySe(Se.Woah);
         float hp_ = value/speed;
         while (speed != 0)
         {
@@ -157,7 +159,9 @@ public class Player : MonoBehaviour
             yield return new WaitForSeconds(1);
             speed--;
         }
-        if(Hp<=0) EventController.instance.GameOverEvent();
+        if(Hp<=0) {
+            EventController.instance.GameOverEvent();
+            }
     }
     public void SetItem(GameObject g, int i)
     {

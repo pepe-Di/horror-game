@@ -8,7 +8,7 @@ public class Particles : MonoBehaviour
     // Start is called before the first frame update
     public Transform parent;
     string path,pref_path="ui/particles/particle";
-    [SerializeField] public float min_duration=0.05f, max_duration = 0.2f;
+    [SerializeField] public float min_duration=0.02f, max_duration = 0.2f;
     ColorPalette cp;
     Color color;
     bool ended = false;GameData gameData;
@@ -30,7 +30,7 @@ public class Particles : MonoBehaviour
             im.sprite = Resources.Load<Sprite>(path+Random.Range(0,15));
             im.SetNativeSize();
             im.color = color;
-            switch (Random.Range(0, 3))
+            switch (Random.Range(0,8))
             {
                 case 0:
                     o.transform.eulerAngles = new Vector3(0, 0, 90); break;
