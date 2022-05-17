@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class endDialogue : MonoBehaviour
 {
+    public GameObject rain;
+    public GameObject col;
     public Bg clip;
     public bool music;
     // Start is called before the first frame update
@@ -16,6 +18,8 @@ public class endDialogue : MonoBehaviour
     void PlayEnding(){
         EventController.instance.StartDialogueEvent(value);
             if(music) SoundManager.instance.PlayBg(clip);
+            col.SetActive(true);
+            rain.SetActive(true);
             Destroy(this.gameObject);
     }
     private void OnTriggerEnter(Collider other)
@@ -30,6 +34,8 @@ public class endDialogue : MonoBehaviour
             }
             EventController.instance.StartDialogueEvent("altEnding");
             if(music) SoundManager.instance.PlayBg(clip);
+            col.SetActive(true);
+            rain.SetActive(true);
             Destroy(this.gameObject);
         }
     }

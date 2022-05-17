@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
     public List<QuestTrigger> qtriggers;
     public bool loaded=false;
     public int seed;
+    public GameObject inv_panel, opt_pan, q_pan,menu_pan;
     public Animator blackout_animator;
     public Animator gameover_animator;
     public Animator start_animator;
@@ -51,7 +52,8 @@ public class GameManager : MonoBehaviour
         }
        // Debug.Log("START2");
         player_ = Player.GetComponent<Player>();
-        player_.GetComponent<Footsteps.CharacterFootsteps>().enabled=false;
+        //player_.GetComponent<Footsteps.CharacterFootsteps>().enabled=false;
+        //StartCoroutine(Wait());
         cc= Player.GetComponent<CharacterController>();
         //  _input = FindObjectOfType<StarterAssetsInputs>();
         // lv = FindObjectOfType<LevelLoader>();
@@ -107,6 +109,10 @@ public class GameManager : MonoBehaviour
         }
         catch { Debug.Log("catch"); }
         
+    }
+    IEnumerator Wait(){
+        yield return new WaitForSeconds(1f);
+        player_.GetComponent<Footsteps.CharacterFootsteps>().enabled=true;
     }
     IEnumerator DelQTriggers(){
         yield return new WaitUntil(()=>player_.loaded);
@@ -308,6 +314,7 @@ public class GameManager : MonoBehaviour
         }
         else if (_input.esc&&!b)
         {
+            tab=false;
            // if(state.state == State.Freeze){
                //b=true;
            // }
@@ -322,6 +329,12 @@ public class GameManager : MonoBehaviour
             //    Time.timeScale = 0;
             //}
             //else Time.timeScale = 1;
+        }
+        if(_input.tab&&!b){
+            if (!C_running){
+                tab=true;
+            StartCoroutine(OpenMenu());
+            }
         }
     }
     public IEnumerator Waiter(){
@@ -351,12 +364,13 @@ public class GameManager : MonoBehaviour
         }
     }
     bool C_running = false;
+    bool tab=false;
     public IEnumerator OpenMenu()
     {
+        C_running = true;
         SoundManager.instance.PlaySe(Se.Click2);
         SoundManager.instance.PlayAltBg(Bg.noise);
         Debug.Log("openmenu()");
-        C_running = true;
         if (!menu.activeSelf)
         {
             if (player_.selectedItem != null)
@@ -371,7 +385,15 @@ public class GameManager : MonoBehaviour
             _input.locked_input = true;
             //Player.GetComponent<CharacterController>().enabled = false;
             //Player.GetComponent<MouseLook>().enabled = false;
-            menu.SetActive(true); gamePaused = true;
+            menu.SetActive(true);
+            
+            if(tab){ 
+                inv_panel.SetActive(true);
+                opt_pan.SetActive(false);
+                q_pan.SetActive(false);
+                menu_pan.SetActive(false);
+            tab=false;}
+             gamePaused = true;
         }
         else
         {

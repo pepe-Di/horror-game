@@ -12,6 +12,7 @@ namespace StarterAssets
 		public Vector2 look;
 		public Vector2 scroll;
 		public bool jump;
+		public bool tab;
 		public bool sprint;
 		public bool crouch;
 		public bool interact;
@@ -75,6 +76,11 @@ namespace StarterAssets
 		public void OnJump(InputValue value)
 		{
 			if (!locked_input) JumpInput(value.isPressed);
+		}
+		public void OnTab(InputValue value)
+		{
+			//if (!locked_input) 
+			TabInput(value.isPressed);
 		}
 		public void OnMiddleMouse(InputValue value)
 		{
@@ -147,6 +153,10 @@ namespace StarterAssets
 		public void JumpInput(bool newJumpState)
 		{
 			jump = newJumpState;
+		}
+		public void TabInput(bool newTabState)
+		{
+			tab = newTabState;
 		}
 		public void MiddleMouseInput(bool newMiddleMouseState)
 		{

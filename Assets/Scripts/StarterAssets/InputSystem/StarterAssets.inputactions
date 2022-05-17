@@ -115,7 +115,7 @@
                     "id": "e4fc24ac-2b4f-4a07-9d97-224e83684da5",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "Press(pressPoint=0.5,behavior=2)"
+                    "interactions": "Press(behavior=2)"
                 },
                 {
                     "name": "MiddleMouseUp",
@@ -124,6 +124,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "Press(pressPoint=0.5,behavior=1)"
+                },
+                {
+                    "name": "tab",
+                    "type": "Button",
+                    "id": "ce9b864f-66f2-4c8f-9dde-a76cee27af32",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)"
                 }
             ],
             "bindings": [
@@ -232,7 +240,7 @@
                     "path": "<Gamepad>/leftStick",
                     "interactions": "",
                     "processors": "StickDeadzone",
-                    "groups": "Gamepad",
+                    "groups": "Gamepad;Xbox Controller",
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -254,7 +262,7 @@
                     "path": "<Gamepad>/rightStick",
                     "interactions": "",
                     "processors": "InvertVector2(invertX=false),StickDeadzone,ScaleVector2(x=300,y=300)",
-                    "groups": "Gamepad",
+                    "groups": "Gamepad;Xbox Controller",
                     "action": "Look",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -276,7 +284,7 @@
                     "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Gamepad",
+                    "groups": "Gamepad;Xbox Controller",
                     "action": "Jump",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -298,7 +306,7 @@
                     "path": "<Gamepad>/leftTrigger",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Gamepad",
+                    "groups": "Gamepad;Xbox Controller",
                     "action": "Sprint",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -320,7 +328,7 @@
                     "path": "<Gamepad>/rightTrigger",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Gamepad",
+                    "groups": "Gamepad;Xbox Controller",
                     "action": "Crouch",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -342,7 +350,7 @@
                     "path": "<Gamepad>/buttonWest",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Gamepad",
+                    "groups": "Gamepad;Xbox Controller",
                     "action": "Interact",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -364,7 +372,7 @@
                     "path": "<Gamepad>/buttonEast",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Gamepad",
+                    "groups": "Xbox Controller;Gamepad",
                     "action": "Click",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -386,7 +394,7 @@
                     "path": "<Gamepad>/rightStick/x",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Gamepad",
+                    "groups": "Gamepad;Xbox Controller",
                     "action": "MouseX",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -408,7 +416,7 @@
                     "path": "<Gamepad>/rightStick/y",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Gamepad",
+                    "groups": "Gamepad;Xbox Controller",
                     "action": "MouseY",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -430,7 +438,7 @@
                     "path": "<Gamepad>/select",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Gamepad",
+                    "groups": "Gamepad;Xbox Controller",
                     "action": "Esc",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -452,7 +460,7 @@
                     "path": "<Gamepad>/leftShoulder",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Gamepad",
+                    "groups": "Gamepad;Xbox Controller",
                     "action": "Zoom",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -474,7 +482,7 @@
                     "path": "<Gamepad>/dpad",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Xbox Controller;Gamepad",
                     "action": "Scroll",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -496,7 +504,7 @@
                     "path": "<Gamepad>/buttonNorth",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Gamepad;Xbox Controller",
                     "action": "F",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -507,7 +515,7 @@
                     "path": "<Mouse>/middleButton",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "KeyboardMouse",
                     "action": "MiddleMouse",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -518,7 +526,7 @@
                     "path": "<Gamepad>/rightStickPress",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Gamepad;Xbox Controller",
                     "action": "MiddleMouse",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -529,7 +537,7 @@
                     "path": "<Mouse>/middleButton",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "KeyboardMouse",
                     "action": "MiddleMouseUp",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -540,8 +548,19 @@
                     "path": "<Gamepad>/rightStickPress",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Gamepad;Xbox Controller",
                     "action": "MiddleMouseUp",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c870b2c1-660e-4e77-949a-5a7ab25135a2",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "tab",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

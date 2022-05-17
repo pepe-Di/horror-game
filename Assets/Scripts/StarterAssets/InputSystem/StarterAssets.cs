@@ -128,7 +128,7 @@ public class @Controls_ : IInputActionCollection, IDisposable
                     ""id"": ""e4fc24ac-2b4f-4a07-9d97-224e83684da5"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": ""Press(pressPoint=0.5,behavior=2)""
+                    ""interactions"": ""Press(behavior=2)""
                 },
                 {
                     ""name"": ""MiddleMouseUp"",
@@ -137,6 +137,14 @@ public class @Controls_ : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Press(pressPoint=0.5,behavior=1)""
+                },
+                {
+                    ""name"": ""tab"",
+                    ""type"": ""Button"",
+                    ""id"": ""ce9b864f-66f2-4c8f-9dde-a76cee27af32"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=2)""
                 }
             ],
             ""bindings"": [
@@ -245,7 +253,7 @@ public class @Controls_ : IInputActionCollection, IDisposable
                     ""path"": ""<Gamepad>/leftStick"",
                     ""interactions"": """",
                     ""processors"": ""StickDeadzone"",
-                    ""groups"": ""Gamepad"",
+                    ""groups"": ""Gamepad;Xbox Controller"",
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -267,7 +275,7 @@ public class @Controls_ : IInputActionCollection, IDisposable
                     ""path"": ""<Gamepad>/rightStick"",
                     ""interactions"": """",
                     ""processors"": ""InvertVector2(invertX=false),StickDeadzone,ScaleVector2(x=300,y=300)"",
-                    ""groups"": ""Gamepad"",
+                    ""groups"": ""Gamepad;Xbox Controller"",
                     ""action"": ""Look"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -289,7 +297,7 @@ public class @Controls_ : IInputActionCollection, IDisposable
                     ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Gamepad"",
+                    ""groups"": ""Gamepad;Xbox Controller"",
                     ""action"": ""Jump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -311,7 +319,7 @@ public class @Controls_ : IInputActionCollection, IDisposable
                     ""path"": ""<Gamepad>/leftTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Gamepad"",
+                    ""groups"": ""Gamepad;Xbox Controller"",
                     ""action"": ""Sprint"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -333,7 +341,7 @@ public class @Controls_ : IInputActionCollection, IDisposable
                     ""path"": ""<Gamepad>/rightTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Gamepad"",
+                    ""groups"": ""Gamepad;Xbox Controller"",
                     ""action"": ""Crouch"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -355,7 +363,7 @@ public class @Controls_ : IInputActionCollection, IDisposable
                     ""path"": ""<Gamepad>/buttonWest"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Gamepad"",
+                    ""groups"": ""Gamepad;Xbox Controller"",
                     ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -377,7 +385,7 @@ public class @Controls_ : IInputActionCollection, IDisposable
                     ""path"": ""<Gamepad>/buttonEast"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Gamepad"",
+                    ""groups"": ""Xbox Controller;Gamepad"",
                     ""action"": ""Click"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -399,7 +407,7 @@ public class @Controls_ : IInputActionCollection, IDisposable
                     ""path"": ""<Gamepad>/rightStick/x"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Gamepad"",
+                    ""groups"": ""Gamepad;Xbox Controller"",
                     ""action"": ""MouseX"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -421,7 +429,7 @@ public class @Controls_ : IInputActionCollection, IDisposable
                     ""path"": ""<Gamepad>/rightStick/y"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Gamepad"",
+                    ""groups"": ""Gamepad;Xbox Controller"",
                     ""action"": ""MouseY"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -443,7 +451,7 @@ public class @Controls_ : IInputActionCollection, IDisposable
                     ""path"": ""<Gamepad>/select"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Gamepad"",
+                    ""groups"": ""Gamepad;Xbox Controller"",
                     ""action"": ""Esc"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -465,7 +473,7 @@ public class @Controls_ : IInputActionCollection, IDisposable
                     ""path"": ""<Gamepad>/leftShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Gamepad"",
+                    ""groups"": ""Gamepad;Xbox Controller"",
                     ""action"": ""Zoom"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -487,7 +495,7 @@ public class @Controls_ : IInputActionCollection, IDisposable
                     ""path"": ""<Gamepad>/dpad"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Xbox Controller;Gamepad"",
                     ""action"": ""Scroll"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -509,7 +517,7 @@ public class @Controls_ : IInputActionCollection, IDisposable
                     ""path"": ""<Gamepad>/buttonNorth"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Gamepad;Xbox Controller"",
                     ""action"": ""F"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -520,7 +528,7 @@ public class @Controls_ : IInputActionCollection, IDisposable
                     ""path"": ""<Mouse>/middleButton"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""KeyboardMouse"",
                     ""action"": ""MiddleMouse"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -531,7 +539,7 @@ public class @Controls_ : IInputActionCollection, IDisposable
                     ""path"": ""<Gamepad>/rightStickPress"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Gamepad;Xbox Controller"",
                     ""action"": ""MiddleMouse"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -542,7 +550,7 @@ public class @Controls_ : IInputActionCollection, IDisposable
                     ""path"": ""<Mouse>/middleButton"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""KeyboardMouse"",
                     ""action"": ""MiddleMouseUp"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -553,8 +561,19 @@ public class @Controls_ : IInputActionCollection, IDisposable
                     ""path"": ""<Gamepad>/rightStickPress"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Gamepad;Xbox Controller"",
                     ""action"": ""MiddleMouseUp"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c870b2c1-660e-4e77-949a-5a7ab25135a2"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""tab"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -628,6 +647,7 @@ public class @Controls_ : IInputActionCollection, IDisposable
         m_Player_F = m_Player.FindAction("F", throwIfNotFound: true);
         m_Player_MiddleMouse = m_Player.FindAction("MiddleMouse", throwIfNotFound: true);
         m_Player_MiddleMouseUp = m_Player.FindAction("MiddleMouseUp", throwIfNotFound: true);
+        m_Player_tab = m_Player.FindAction("tab", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -692,6 +712,7 @@ public class @Controls_ : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_F;
     private readonly InputAction m_Player_MiddleMouse;
     private readonly InputAction m_Player_MiddleMouseUp;
+    private readonly InputAction m_Player_tab;
     public struct PlayerActions
     {
         private @Controls_ m_Wrapper;
@@ -711,6 +732,7 @@ public class @Controls_ : IInputActionCollection, IDisposable
         public InputAction @F => m_Wrapper.m_Player_F;
         public InputAction @MiddleMouse => m_Wrapper.m_Player_MiddleMouse;
         public InputAction @MiddleMouseUp => m_Wrapper.m_Player_MiddleMouseUp;
+        public InputAction @tab => m_Wrapper.m_Player_tab;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -765,6 +787,9 @@ public class @Controls_ : IInputActionCollection, IDisposable
                 @MiddleMouseUp.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMiddleMouseUp;
                 @MiddleMouseUp.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMiddleMouseUp;
                 @MiddleMouseUp.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMiddleMouseUp;
+                @tab.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTab;
+                @tab.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTab;
+                @tab.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTab;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -814,6 +839,9 @@ public class @Controls_ : IInputActionCollection, IDisposable
                 @MiddleMouseUp.started += instance.OnMiddleMouseUp;
                 @MiddleMouseUp.performed += instance.OnMiddleMouseUp;
                 @MiddleMouseUp.canceled += instance.OnMiddleMouseUp;
+                @tab.started += instance.OnTab;
+                @tab.performed += instance.OnTab;
+                @tab.canceled += instance.OnTab;
             }
         }
     }
@@ -871,5 +899,6 @@ public class @Controls_ : IInputActionCollection, IDisposable
         void OnF(InputAction.CallbackContext context);
         void OnMiddleMouse(InputAction.CallbackContext context);
         void OnMiddleMouseUp(InputAction.CallbackContext context);
+        void OnTab(InputAction.CallbackContext context);
     }
 }
