@@ -105,10 +105,15 @@ public class Item
             case "key0": index=6;_name = Name;  type = itemType.Key; break;
             case "card0": index=7;_name = Name;  type = itemType.Card; look=true; break;
             case "key1": index=8;_name = Name;  type = itemType.Key; break;
+            case "key2": index=16;_name = Name;  type = itemType.Key; break;
+            case "key3": index=20;_name = Name;  type = itemType.Key; break;
             case "laptop": index=-1;grab = false; look=true; break;
             case "notepad": index=9; _name = Name; type=itemType.Card; look=true; grab=true; break;
             case "omamori": index=10; _name = Name; type=itemType.Card; look=true; grab=true; break;
             case "card1": index=11;_name = Name;  type = itemType.Card; look=true; break;
+            case "card2": index=17;_name = Name;  type = itemType.Card; look=true; break;
+            case "card3": index=18;_name = Name;  type = itemType.Card; look=true; break;
+            case "card4": index=19;_name = Name;  type = itemType.Card; look=true; break;
             case "ticket": index=15;_name = Name;  type = itemType.Card; look=true; break;
             default: index=-1; break;
         }
