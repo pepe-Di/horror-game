@@ -13,20 +13,20 @@ MonoBehaviour:
   m_Name: new GameData
   m_EditorClassIdentifier: 
   master_vol: -6.703843
-  music_vol: -15.8130665
-  effects_vol: -10.552387
+  music_vol: 0
+  effects_vol: -3.6381042
   vol: 0.4621765
-  vol1: 0.1619372
-  vol2: 0.2967431
+  vol1: 1
+  vol2: 0.6578014
   sens: 1.6565105
   txt_speed: 2
   lg: 0
-  q: 0
+  q: 3
   res: 8
-  style: 4
+  style: 3
   last_slot: -1
-  cur_slot: 0
+  cur_slot: 1
   frame_limit: 4
   fc: 1
   frame_mode: 0
-  particles: 0
+  particles: 1

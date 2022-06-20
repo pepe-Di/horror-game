@@ -576,6 +576,17 @@ public class @Controls_ : IInputActionCollection, IDisposable
                     ""action"": ""tab"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""50e8de2a-aa8c-424f-a0af-efe98d177846"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Xbox Controller;Gamepad"",
+                    ""action"": ""tab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
